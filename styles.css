@@ -1,0 +1,41 @@
+body {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+  justify-content: space-evenly;
+  margin: 0;
+}
+
+#div-input {
+  align-items: center;
+  border: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#div-input p{
+  width: fit-content;
+}
+
+#grid {
+  border: 1px solid black;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  height: 95vh;
+  width: 95vh;
+}
+
+.row {
+  align-items: stretch;
+  border: 0px solid black;
+  display: flex;
+  flex: 1;
+}
+
+.cell {
+  border: 1px solid black;
+  flex: 1;
+}
