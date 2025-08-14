@@ -1,0 +1,49 @@
+/* styles.css */
+
+* {
+  border: 1px solid black;
+}
+
+body {
+  align-items: center;
+  display: flex;
+  height: 195vh;
+  flex-direction: column;
+}
+
+#calculator-div {
+  display: flex;
+  height: 80vh;
+  flex-direction: column;
+  width: 30vw;
+}
+
+#display {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 5px;
+  height: 10vh;
+  justify-content: end;
+  padding: 5px 10px;
+}
+
+#diplay div {
+  flex: 0 1 fit-content;
+}
+
+#menu {
+  display: flex;
+  flex-direction: column;
+  flex: 5 5 auto;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+}
+
+.option {
+  flex: 1;
+  margin: 2px;
+  border-radius: 5px;
+}
