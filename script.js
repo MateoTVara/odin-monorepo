@@ -23,6 +23,14 @@ const backgrounds = [
   ["smoke", "smoke", "smoke", "smoke"]
 ];
 
+let aNum;
+let bNum;
+let operator;
+
+///////////////////////////////////
+//           RENDERING           //
+///////////////////////////////////
+
 for (let i = 0; i < 7; i++){
   let rowDiv = document.createElement("div");
   rowDiv.classList = "row";
@@ -37,3 +45,39 @@ for (let i = 0; i < 7; i++){
 
   divMenu.append(rowDiv);
 }
+
+///////////////////////////////////
+//           UTILITIES           //
+///////////////////////////////////
+
+function add(a, b){
+  return a + b;
+};
+
+function substract(a, b){
+  return a - b;
+};
+
+function multiply(a, b){
+  return a * b;
+};
+
+function divide(a, b){
+  if (b === 0) {
+    return "Can't divide by 0";
+  }
+  return a / b;
+};
+
+function operate(ope, a, b){
+  switch (ope){
+    case "+":
+      return add(a, b);
+    case "-":
+      return substract(a, b);
+    case "*":
+      return multiply(a, b);
+    case "/":
+      return divide(a, b);
+  };
+};
