@@ -17,13 +17,13 @@ const ids = [
 ];
 
 const classes = [
-  ["", "", "", ""],
-  ["", "displayable", "displayable", "displayable"],
-  ["displayable", "displayable", "displayable", "displayable"],
-  ["displayable", "displayable", "displayable", "displayable"],
-  ["displayable", "displayable", "displayable", "displayable"],
-  ["displayable", "displayable", "displayable", "displayable"],
-  ["displayable", "displayable", "", ""]
+  ["",            "",            "",            ""           ],   // mc, mr, m-, m+
+  ["",            "displayable", "displayable", "displayable"],   // AC, √X, %, ÷
+  ["displayable", "displayable", "displayable", "displayable"],   // 7, 8, 9, x
+  ["displayable", "displayable", "displayable", "displayable"],   // 4, 5, 6, -
+  ["displayable", "displayable", "displayable", "displayable"],   // 1, 2, 3, +
+  ["displayable", "displayable", "displayable", "displayable"],   // 0, ., +/-, =
+  ["displayable", "displayable", "",            ""           ]    // π, xy, R2, R0
 ];
 
 const altClasses = [
@@ -38,12 +38,12 @@ const altClasses = [
 
 const options = [
   ["mc", "mr", "m-", "m+"],
-  ["AC", "√X", "%", "÷"],
+  ["AC", "√", "%", "÷"],
   ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
   ["1", "2", "3", "+"],
   ["0", ".", "+/-", "="],
-  ["π", "xy", "R2", "R0"]
+  ["π", "^", "R2", "R0"]
 ];
 
 const backgrounds = [
@@ -138,8 +138,19 @@ function multiply(a, b){
 function divide(a, b){
   if (b === 0) {
     return "Can't divide by 0";
-  }
+  };
   return a / b;
+};
+
+function power(a, b){
+  if (b === 0) {
+    return 1;
+  }
+  return a ** b;
+};
+
+function root(a, b){
+  return b ** (1 / a);
 };
 
 function operate(ope, a, b){
@@ -152,5 +163,9 @@ function operate(ope, a, b){
       return multiply(a, b);
     case "÷":
       return divide(a, b);
+    case "^":
+      return power(a, b);
+    case "√":
+      return root(a, b);
   };
 };
