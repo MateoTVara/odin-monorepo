@@ -93,18 +93,11 @@ divMenu.addEventListener("click", (e) => {
 
   if (target.classList.contains("displayable")) {
     if (target.classList.contains("number")){
-      if (divRight.textContent && divLeft.textContent && divOperator.textContent) {
-        divLeft.text
-      } else {
-        if (divRight.textContent) {
-          divLeft.textContent = divRight.textContent;
-          divRight.textContent = target.textContent;
-        } else {
-          divRight.textContent = target.textContent;
-        };
-      };
+      divRight.textContent += target.textContent;
     } else {
       divOperator.textContent = target.textContent;
+      divLeft.textContent = divRight.textContent;
+      divRight.textContent = "";
     };
   };
 });
