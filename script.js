@@ -18,12 +18,12 @@ const ids = [
 
 const classes = [
   ["", "", "", ""],
-  ["", "", "", "displayable"],
+  ["", "displayable", "displayable", "displayable"],
   ["displayable", "displayable", "displayable", "displayable"],
   ["displayable", "displayable", "displayable", "displayable"],
   ["displayable", "displayable", "displayable", "displayable"],
-  ["displayable", "", "displayable", "displayable"],
-  ["", "displayable", "", ""]
+  ["displayable", "displayable", "displayable", "displayable"],
+  ["displayable", "displayable", "", ""]
 ];
 
 const altClasses = [
@@ -33,13 +33,13 @@ const altClasses = [
   ["number",   "number",   "number",   "operator"],       // 4, 5, 6, -
   ["number",   "number",   "number",   "operator"],       // 1, 2, 3, +
   ["number",   "operator", "operator", "operator"],       // 0, ., +/-, =
-  ["operator", "operator", "operator", "operator"]        // π, xy, R2, R0
+  ["number",   "operator", "operator", "operator"]        // π, xy, R2, R0
 ];
 
 const options = [
   ["mc", "mr", "m-", "m+"],
   ["AC", "√X", "%", "÷"],
-  ["7", "8", "9", "x"],
+  ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
   ["1", "2", "3", "+"],
   ["0", ".", "+/-", "="],
@@ -93,7 +93,23 @@ divMenu.addEventListener("click", (e) => {
 
   if (target.classList.contains("displayable")) {
     if (target.classList.contains("number")){
-      divRight.textContent += target.textContent;
+      if (divRight.textContent === "0"){
+        divRight.textContent = target.textContent;
+      } else {
+        divRight.textContent += target.textContent;
+      };
+    } else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
+      if (target.textContent === "=") {
+        divRight.textContent = operate(divOperator.textContent, divLeft.textContent, divRight.textContent);
+        divLeft.textContent = "";
+        divOperator.textContent = "";
+      } else {
+        divLeft.textContent = operate(divOperator.textContent, divLeft.textContent, divRight.textContent);
+        divRight.textContent = "";
+        divOperator.textContent = target.textContent;
+      };
+    } else if(target.classList.contains("operator") && !(divRight.textContent)){
+      divOperator.textContent = target.textContent;
     } else {
       divOperator.textContent = target.textContent;
       divLeft.textContent = divRight.textContent;
@@ -134,7 +150,7 @@ function operate(ope, a, b){
       return substract(a, b);
     case "*":
       return multiply(a, b);
-    case "/":
+    case "÷":
       return divide(a, b);
   };
 };
