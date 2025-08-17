@@ -8,12 +8,11 @@ const divOperator = document.querySelector("#operator");
 
 const ids = [
   ["mc", "mr", "m-minus", "m-plus"],
-  ["ac", "sqrt-x", "percent", "divide"],
-  ["seven", "eight", "nine", "multiply"],
-  ["four", "five", "six", "subtract"],
-  ["one", "two", "three", "add"],
-  ["zero", "decimal", "plus-minus", "equals"],
-  ["pi", "power", "round-2", "round-0"]
+  ["ac", "percent", "sqrt-x", "divide"],   // AC, %, √, ÷
+  ["seven", "eight", "nine", "multiply"],  // 7 8 9 ×
+  ["four", "five", "six", "subtract"],     // 4 5 6 −
+  ["one", "two", "three", "add"],          // 1 2 3 +
+  ["zero", "decimal", "power", "equals"]   // 0 . ^ =
 ];
 
 const classes = [
@@ -22,8 +21,7 @@ const classes = [
   ["displayable", "displayable", "displayable", "displayable"],   // 7, 8, 9, x
   ["displayable", "displayable", "displayable", "displayable"],   // 4, 5, 6, -
   ["displayable", "displayable", "displayable", "displayable"],   // 1, 2, 3, +
-  ["displayable", "displayable", "displayable", "displayable"],   // 0, ., +/-, =
-  ["displayable", "displayable", "",            ""           ]    // π, xy, R2, R0
+  ["displayable", "displayable", "displayable", "displayable"]    // 0, ., ^, =
 ];
 
 const altClasses = [
@@ -32,18 +30,16 @@ const altClasses = [
   ["number",   "number",   "number",   "operator"],       // 7, 8, 9, x
   ["number",   "number",   "number",   "operator"],       // 4, 5, 6, -
   ["number",   "number",   "number",   "operator"],       // 1, 2, 3, +
-  ["number",   "operator", "operator", "operator"],       // 0, ., +/-, =
-  ["number",   "operator", "operator", "operator"]        // π, xy, R2, R0
+  ["number",   "number",   "operator", "operator"]        // 0, ., ^, =
 ];
 
 const options = [
   ["mc", "mr", "m-", "m+"],
-  ["AC", "√", "%", "÷"],
+  ["AC", "%", "√", "÷"],                   // now % is preserved
   ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
   ["1", "2", "3", "+"],
-  ["0", ".", "+/-", "="],
-  ["π", "^", "R2", "R0"]
+  ["0", ".", "^", "="]                     // ^ kept at bottom row
 ];
 
 const backgrounds = [
@@ -52,8 +48,7 @@ const backgrounds = [
   ["white", "white", "white", "yellow"],
   ["white", "white", "white", "yellow"],
   ["white", "white", "white", "yellow"],
-  ["white", "white", "white", "yellow"],
-  ["smoke", "smoke", "smoke", "smoke"]
+  ["white", "white", "white", "yellow"]   // last row removed
 ];
 
 let aNum;
@@ -66,7 +61,7 @@ let operator;
 ///////////////////////////////////
 
 
-for (let i = 0; i < 7; i++){
+for (let i = 0; i < 6; i++){
   let rowDiv = document.createElement("div");
   rowDiv.classList = "row";
 
@@ -95,22 +90,30 @@ divMenu.addEventListener("click", (e) => {
     if (target.classList.contains("number")){
       if (divRight.textContent === "0"){
         divRight.textContent = target.textContent;
-      } else {
-        divRight.textContent += target.textContent;
+      } 
+      else {
+        if (divRight.textContent.includes(".") && target.id === "decimal"){} 
+        else {
+          divRight.textContent += target.textContent;
+        };
       };
-    } else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
+    } 
+    else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
       if (target.textContent === "=") {
-        divRight.textContent = operate(divOperator.textContent, divLeft.textContent, divRight.textContent);
+        divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
         divLeft.textContent = "";
         divOperator.textContent = "";
-      } else {
+      }
+      else {
         divLeft.textContent = operate(divOperator.textContent, divLeft.textContent, divRight.textContent);
         divRight.textContent = "";
         divOperator.textContent = target.textContent;
       };
-    } else if(target.classList.contains("operator") && !(divRight.textContent)){
+    } 
+    else if(target.classList.contains("operator") && !(divRight.textContent)){
       divOperator.textContent = target.textContent;
-    } else {
+    } 
+    else {
       divOperator.textContent = target.textContent;
       divLeft.textContent = divRight.textContent;
       divRight.textContent = "";
@@ -153,6 +156,10 @@ function root(a, b){
   return b ** (1 / a);
 };
 
+function percent(a, b){
+  return (a / 100) * b;
+};
+
 function operate(ope, a, b){
   switch (ope){
     case "+":
@@ -167,5 +174,7 @@ function operate(ope, a, b){
       return power(a, b);
     case "√":
       return root(a, b);
+    case "%":
+      return percent(a, b);
   };
 };
