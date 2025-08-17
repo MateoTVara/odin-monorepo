@@ -17,7 +17,7 @@ const divOperator = document.querySelector("#operator");
 
 
 const ids = [
-  ["mc", "mr", "m-minus", "m-plus"],
+  ["ms", "mr", "m-minus", "m-plus"],
   ["ac", "percent", "sqrt-x", "divide"],   // AC, %, √, ÷
   ["seven", "eight", "nine", "multiply"],  // 7 8 9 ×
   ["four", "five", "six", "subtract"],     // 4 5 6 −
@@ -26,8 +26,8 @@ const ids = [
 ];
 
 const classes = [
-  ["",            "",            "",            ""           ],   // mc, mr, m-, m+
-  ["",            "displayable", "displayable", "displayable"],   // AC, √X, %, ÷
+  ["displayable", "displayable", "displayable", "displayable"],   // mc, mr, m-, m+
+  ["displayable", "displayable", "displayable", "displayable"],   // AC, √X, %, ÷
   ["displayable", "displayable", "displayable", "displayable"],   // 7, 8, 9, x
   ["displayable", "displayable", "displayable", "displayable"],   // 4, 5, 6, -
   ["displayable", "displayable", "displayable", "displayable"],   // 1, 2, 3, +
@@ -44,7 +44,7 @@ const altClasses = [
 ];
 
 const options = [
-  ["mc", "mr", "m-", "m+"],
+  ["MS", "MR", "M-", "M+"],
   ["AC", "%", "√", "÷"],
   ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
@@ -70,6 +70,7 @@ const backgrounds = [
 let aNum;
 let bNum;
 let operator;
+let memVar = 0;
 
 
 ///////////////////////////////////
@@ -104,7 +105,7 @@ divMenu.addEventListener("click", (e) => {
 
   if (target.classList.contains("displayable")) {
     if (target.classList.contains("number")){
-      if (divRight.textContent === "0"){
+      if (divRight.textContent === "0" || divRight.textContent === "Can't divide by 0"){
         divRight.textContent = target.textContent;
       } 
       else {
@@ -114,12 +115,25 @@ divMenu.addEventListener("click", (e) => {
         };
       };
     }
+    else if (target.id === "ac") {
+      divLeft.textContent = "";
+      divOperator.textContent = "";
+      divRight.textContent = "";
+    }
     else if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
     else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
       if (target.textContent === "=") {
         divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
         divLeft.textContent = "";
         divOperator.textContent = "";
+      }
+      else if (target.id === "ms") {
+        memVar = divRight.textContent;
+        return;
+      } 
+      else if (target.id === "mr") {
+        divRight.textContent += memVar;
+        return;
       }
       else {
         divLeft.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
@@ -128,14 +142,30 @@ divMenu.addEventListener("click", (e) => {
       };
     } 
     else if(target.classList.contains("operator") && !(divRight.textContent)){
-      if (target.id == "equals") return;
-      divOperator.textContent = target.textContent;
+      if (target.id == "equals") return
+      else if (target.id === "ms") {
+        memVar = divRight.textContent;
+      } 
+      else if (target.id === "mr") {
+        divRight.textContent += memVar;
+      }
+      else {
+        divOperator.textContent = target.textContent;
+      };
     }
     else {
-      if (target.id == "equals") return;
-      divOperator.textContent = target.textContent;
-      divLeft.textContent = divRight.textContent;
-      divRight.textContent = "";
+      if (target.id == "equals") {}
+      else if (target.id === "ms") {
+        memVar = divRight.textContent;
+      } 
+      else if (target.id === "mr") {
+        divRight.textContent += memVar;
+      }
+      else {
+        divOperator.textContent = target.textContent;
+        divLeft.textContent = divRight.textContent;
+        divRight.textContent = "";
+      };
     };
   };
 });
