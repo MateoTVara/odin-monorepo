@@ -1,10 +1,20 @@
 // script.js
 
+///////////////////////////////////
+//        DOM REFERENCES         //
+///////////////////////////////////
+
 const divDisplay = document.querySelector("#display");
 const divMenu = document.querySelector("#menu");
 const divLeft = document.querySelector("#left");
 const divRight = document.querySelector("#right");
 const divOperator = document.querySelector("#operator");
+
+
+///////////////////////////////////
+//       BUTTON CONFIGS          //
+///////////////////////////////////
+
 
 const ids = [
   ["mc", "mr", "m-minus", "m-plus"],
@@ -35,11 +45,11 @@ const altClasses = [
 
 const options = [
   ["mc", "mr", "m-", "m+"],
-  ["AC", "%", "√", "÷"],                   // now % is preserved
+  ["AC", "%", "√", "÷"],
   ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
   ["1", "2", "3", "+"],
-  ["0", ".", "^", "="]                     // ^ kept at bottom row
+  ["0", ".", "^", "="]
 ];
 
 const backgrounds = [
@@ -48,8 +58,14 @@ const backgrounds = [
   ["white", "white", "white", "yellow"],
   ["white", "white", "white", "yellow"],
   ["white", "white", "white", "yellow"],
-  ["white", "white", "white", "yellow"]   // last row removed
+  ["white", "white", "white", "yellow"]
 ];
+
+
+///////////////////////////////////
+//         APP STATE             //
+///////////////////////////////////
+
 
 let aNum;
 let bNum;
@@ -78,9 +94,9 @@ for (let i = 0; i < 6; i++){
 };
 
 
-///////////////////////////////////
-//          PLACEHOLDER          //
-///////////////////////////////////
+//////////////////////////////////
+//        EVENT HANDLING        //
+//////////////////////////////////
 
 
 divMenu.addEventListener("click", (e) => {
@@ -97,7 +113,8 @@ divMenu.addEventListener("click", (e) => {
           divRight.textContent += target.textContent;
         };
       };
-    } 
+    }
+    else if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
     else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
       if (target.textContent === "=") {
         divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
@@ -105,15 +122,17 @@ divMenu.addEventListener("click", (e) => {
         divOperator.textContent = "";
       }
       else {
-        divLeft.textContent = operate(divOperator.textContent, divLeft.textContent, divRight.textContent);
+        divLeft.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
         divRight.textContent = "";
         divOperator.textContent = target.textContent;
       };
     } 
     else if(target.classList.contains("operator") && !(divRight.textContent)){
+      if (target.id == "equals") return;
       divOperator.textContent = target.textContent;
-    } 
+    }
     else {
+      if (target.id == "equals") return;
       divOperator.textContent = target.textContent;
       divLeft.textContent = divRight.textContent;
       divRight.textContent = "";
@@ -125,6 +144,7 @@ divMenu.addEventListener("click", (e) => {
 ///////////////////////////////////
 //           UTILITIES           //
 ///////////////////////////////////
+
 
 function add(a, b){
   return a + b;
