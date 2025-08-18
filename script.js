@@ -90,6 +90,20 @@ for (let i = 0; i < 6; i++){
 //        EVENT HANDLING        //
 //////////////////////////////////
 
+document.addEventListener("keydown", (e) => {
+  const key = e.key;
+  if (key === "Enter") {
+    e.preventDefault();
+    document.querySelector("#equals").click();
+    return;
+  };
+  if ("0123456789.".includes(key)){
+    if (divRight.textContent.includes(".") && key === ".") return;
+    divRight.textContent += key
+    checkOverflow();
+  };    
+  console.log(key);
+});
 
 divMenu.addEventListener("click", (e) => {
   const target = e.target;
@@ -166,7 +180,6 @@ divMenu.addEventListener("click", (e) => {
 ///////////////////////////////////
 //           UTILITIES           //
 ///////////////////////////////////
-
 
 function add(a, b){
   return a + b;
