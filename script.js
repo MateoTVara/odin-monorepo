@@ -96,12 +96,22 @@ divMenu.addEventListener("click", (e) => {
   if (target.tagName !== "BUTTON") return;
 
   if (target.id === "ms") {
-    memVar = divRight.textContent;
+    memVar = parseFloat(divRight.textContent);
     return;
   };
 
   if (target.id === "mr") {
     divRight.textContent += memVar;
+    return;
+  };
+
+  if (target.id === "m-minus") {
+    memVar -= parseFloat(divRight.textContent);
+    return;
+  };
+
+  if (target.id === "m-plus") {
+    memVar += parseFloat(divRight.textContent);
     return;
   };
 
