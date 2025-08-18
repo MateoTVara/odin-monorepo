@@ -26,15 +26,6 @@ const ids = [
 ];
 
 const classes = [
-  ["displayable", "displayable", "displayable", "displayable"],   // mc, mr, m-, m+
-  ["displayable", "displayable", "displayable", "displayable"],   // AC, √X, %, ÷
-  ["displayable", "displayable", "displayable", "displayable"],   // 7, 8, 9, x
-  ["displayable", "displayable", "displayable", "displayable"],   // 4, 5, 6, -
-  ["displayable", "displayable", "displayable", "displayable"],   // 1, 2, 3, +
-  ["displayable", "displayable", "displayable", "displayable"]    // 0, ., ^, =
-];
-
-const altClasses = [
   ["operator", "operator", "operator", "operator"],       // mc, mr, m-, m+
   ["operator", "operator", "operator", "operator"],       // AC, √X, %, ÷
   ["number",   "number",   "number",   "operator"],       // 7, 8, 9, x
@@ -85,7 +76,7 @@ for (let i = 0; i < 6; i++){
   for (let j = 0; j < 4; j++){
     let optionDiv = document.createElement("button");
     optionDiv.id = ids[i][j];
-    optionDiv.classList = `${classes[i][j]} ${altClasses[i][j]}`;
+    optionDiv.classList = `${classes[i][j]}`;
     optionDiv.textContent = options[i][j];
     optionDiv.style.backgroundColor = backgrounds[i][j];
     rowDiv.append(optionDiv);
@@ -102,70 +93,61 @@ for (let i = 0; i < 6; i++){
 
 divMenu.addEventListener("click", (e) => {
   const target = e.target;
+  if (target.tagName !== "BUTTON") return;
 
-  if (target.classList.contains("displayable")) {
-    if (target.classList.contains("number")){
-      if (divRight.textContent === "0" || divRight.textContent === "Can't divide by 0"){
-        divRight.textContent = target.textContent;
-      } 
+  if (target.id === "ms") {
+    memVar = divRight.textContent;
+    return;
+  };
+
+  if (target.id === "mr") {
+    divRight.textContent += memVar;
+    return;
+  };
+
+  if (target.id === "ac") {
+    divLeft.textContent = "";
+    divOperator.textContent = "";
+    divRight.textContent = "";
+  };
+
+  if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
+
+  if (target.classList.contains("number")){
+    if (parseFloat(divRight.textContent) === 0 || divRight.textContent === "Can't divide by 0"){
+      divRight.textContent = target.textContent;
+    } 
+    else {
+      if (divRight.textContent.includes(".") && target.id === "decimal"){} 
       else {
-        if (divRight.textContent.includes(".") && target.id === "decimal"){} 
-        else {
-          divRight.textContent += target.textContent;
-        };
+        divRight.textContent += target.textContent;
       };
-    }
-    else if (target.id === "ac") {
+    };
+  }
+  else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
+    if (target.id === "equals") {
+      divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
       divLeft.textContent = "";
       divOperator.textContent = "";
-      divRight.textContent = "";
-    }
-    else if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
-    else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
-      if (target.textContent === "=") {
-        divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
-        divLeft.textContent = "";
-        divOperator.textContent = "";
-      }
-      else if (target.id === "ms") {
-        memVar = divRight.textContent;
-        return;
-      } 
-      else if (target.id === "mr") {
-        divRight.textContent += memVar;
-        return;
-      }
-      else {
-        divLeft.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
-        divRight.textContent = "";
-        divOperator.textContent = target.textContent;
-      };
-    } 
-    else if(target.classList.contains("operator") && !(divRight.textContent)){
-      if (target.id == "equals") return
-      else if (target.id === "ms") {
-        memVar = divRight.textContent;
-      } 
-      else if (target.id === "mr") {
-        divRight.textContent += memVar;
-      }
-      else {
-        divOperator.textContent = target.textContent;
-      };
     }
     else {
-      if (target.id == "equals") {}
-      else if (target.id === "ms") {
-        memVar = divRight.textContent;
-      } 
-      else if (target.id === "mr") {
-        divRight.textContent += memVar;
-      }
-      else {
-        divOperator.textContent = target.textContent;
-        divLeft.textContent = divRight.textContent;
-        divRight.textContent = "";
-      };
+      divLeft.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
+      divRight.textContent = "";
+      divOperator.textContent = target.textContent;
+    };
+  } 
+  else if(target.classList.contains("operator") && !(divRight.textContent)){
+    if (target.id === "equals") return
+    else {
+      divOperator.textContent = target.textContent;
+    };
+  }
+  else {
+    if (target.id === "equals") {}
+    else {
+      divOperator.textContent = target.textContent;
+      divLeft.textContent = divRight.textContent;
+      divRight.textContent = "";
     };
   };
 });
