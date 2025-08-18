@@ -99,8 +99,14 @@ document.addEventListener("keydown", (e) => {
   };
   if ("0123456789.".includes(key)){
     if (divRight.textContent.includes(".") && key === ".") return;
-    divRight.textContent += key
-    checkOverflow();
+
+    if (divRight.textContent === "Can't divide by 0" ||
+        divRight.textContent === "Radicant can't be negative") {
+      divRight.textContent = key;
+      resetFontSize();
+    } else {
+      divRight.textContent += key;
+    };
   };    
   console.log(key);
 });
@@ -138,9 +144,12 @@ divMenu.addEventListener("click", (e) => {
   if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
 
   if (target.classList.contains("number")){
-    if (parseFloat(divRight.textContent) === 0 || divRight.textContent === "Can't divide by 0"){
+    if (parseFloat(divRight.textContent) === 0                || 
+        divRight.textContent === "Can't divide by 0"          ||
+        divRight.textContent === "Radicant can't be negative") {
       divRight.textContent = target.textContent;
-    } 
+      resetFontSize();
+    }
     else {
       if (divRight.textContent.includes(".") && target.id === "decimal"){} 
       else {
@@ -181,6 +190,16 @@ divMenu.addEventListener("click", (e) => {
 //           UTILITIES           //
 ///////////////////////////////////
 
+
+function showError(message) {
+  divRight.textContent = message;
+  divRight.style.fontSize = "1.2rem";
+}
+
+function resetFontSize() {
+  divRight.style.fontSize = "";
+}
+
 function add(a, b){
   return a + b;
 };
@@ -195,19 +214,22 @@ function multiply(a, b){
 
 function divide(a, b){
   if (b === 0) {
+    showError("Can't divide by 0");
     return "Can't divide by 0";
-  };
+  }
   return a / b;
 };
 
 function power(a, b){
-  if (b === 0) {
-    return 1;
-  }
+  if (b === 0) return 1;
   return a ** b;
 };
 
 function root(a, b){
+  if (b < 0) {
+    showError("Radicant can't be negative");
+    return "Radicant can't be negative";
+  }
   return b ** (1 / a);
 };
 
