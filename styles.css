@@ -7,6 +7,17 @@
   font-display: swap;
 }
 
+:root {
+  --font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --text-color: #505050;
+  --label-color: #454e59;
+  --card-bg: #ffffff;
+  --shadow-color: #DDDDDD;
+  --input-border-color: #E5E7EB;
+  --button-bg-color: #596D48;
+  --button-bg-color-active: #4C5C3D;
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -14,9 +25,6 @@
 
 body {
   display: flex;
-  --fnt-fmly: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  --fnt-clr: #505050;
-  --lbl-fnt-clr: #454e59;
   background-color: #f9fafb;
 }
 
@@ -25,14 +33,14 @@ div {
 }
 
 h2, p, button {
-  font-family: var(--fnt-fmly);
+  font-family: var(--font-family);
 }
 
 span{
   font-style: italic;
 }
 
-div#img {
+#img {
   position: relative;
   height: 170vh;
   width: 38vw;
@@ -42,7 +50,7 @@ div#img {
   background-position: center;
 }
 
-div#img > h1 {
+#img > h1 {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,89 +67,88 @@ div#img > h1 {
   text-align: center;
 }
 
-div#img > p {
+#img > p {
   position: absolute;
   bottom: 10px;
-
   width: 100%;
   text-align: center;
 }
 
-div#img > p,
-div#img > p > a:link,
-div#img > p > a:visited {
+#img > p,
+#img > p > a:link,
+#img > p > a:visited {
   color: white;
   font-size: 0.9rem;
 }
 
-div#content {
+#content {
   display: flex;
   flex-direction: column;
   justify-content: start;
 }
 
-div#content > div#titles > h2 {
+#titles > h2 {
   font-size: 1.5rem;
 }
 
-div#content > div:first-child{
+#content > div:first-child{
   padding: 9rem 9rem 4rem 3rem;
 }
 
-div#content > div {
+#content > div {
   width: 100%;
 }
 
-div#content > form {
+#content > form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-right: 5rem;
 }
 
-div#content > form > div#form {
+#form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 1rem 0 2rem 3rem;
   border: 1px solid aliceblue;
-  box-shadow: 0 0.25rem 0.25rem #DDDDDD ;
-  background-color: #ffffff;
+  box-shadow: 0 0.25rem 0.25rem var(--shadow-color);
+  background-color: var(--card-bg);
 }
 
-div#content > form > div#form > div{
+#form > div{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   max-width: 100%;
 }
 
-div#content > form > div#form > h2,
-div#content > p{
-  color: var(--fnt-clr);
+#form > h2,
+#content > p{
+  color: var(--text-color);
 }
 
-div#content > form > div#form > div > div {
+#form > div > div {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 }
 
-div#content label {
-  font-family: var(--fnt-fmly);
+#content label {
+  font-family: var(--font-family);
   font-size: 0.6rem;
   letter-spacing: 0.15rem;
   font-weight: bold;
-  color: var(--lbl-fnt-clr);
+  color: var(--label-color);
 }
 
 input {
   width: 60%;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--input-border-color);
   border-radius: 0.3rem;
   padding: 0.25rem 0.5rem;
   font-size: 0.9rem;
-  font-family: var(--fnt-fmly);
+  font-family: var(--font-family);
   color: black;
 }
 
@@ -163,22 +170,22 @@ button {
   margin: 1rem 0 2rem 3rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: #596D48;
+  background-color: var(--button-bg-color);
   color: white;
   box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.3);
 }
 
 button:active {
-  background-color: #4C5C3D;
+  background-color: var(--button-bg-color-active);
 }
 
-div#content > p#sign-in {
+#sign-in {
   margin: 0 0 0 3rem;
   gap: 32px;
   font-weight: bold;
 }
 
-div#content > p#sign-in > a {
+#sign-in > a {
   text-decoration: none;
-  color: #596D48;
+  color: var(--button-bg-color);
 }
