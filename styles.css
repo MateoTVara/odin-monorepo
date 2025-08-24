@@ -15,6 +15,9 @@
 body {
   display: flex;
   --fnt-fmly: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --fnt-clr: #505050;
+  --lbl-fnt-clr: #454e59;
+  background-color: #f9fafb;
 }
 
 div {
@@ -77,38 +80,48 @@ div#content {
   justify-content: start;
 }
 
+div#content > div#titles > h2 {
+  font-size: 1.5rem;
+}
+
 div#content > div:first-child{
-  padding: 9rem 9rem 5rem 3rem;
+  padding: 9rem 9rem 4rem 3rem;
 }
 
 div#content > div {
   width: 100%;
 }
 
-div#content > div#form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid aliceblue;
-  box-shadow: 0 0.25rem 0.25rem lightblue ;
-  padding: 0 0 3rem 3rem;
-}
-
-div#content > div#form > form {
+div#content > form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-right: 5rem;
 }
 
-div#content > div#form > form > div{
+div#content > form > div#form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1rem 0 2rem 3rem;
+  border: 1px solid aliceblue;
+  box-shadow: 0 0.25rem 0.25rem #DDDDDD ;
+  background-color: #ffffff;
+}
+
+div#content > form > div#form > div{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   max-width: 100%;
 }
 
-div#content > div#form > form > div > div {
+div#content > form > div#form > h2,
+div#content > p{
+  color: var(--fnt-clr);
+}
+
+div#content > form > div#form > div > div {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
@@ -118,22 +131,54 @@ div#content label {
   font-family: var(--fnt-fmly);
   font-size: 0.6rem;
   letter-spacing: 0.15rem;
+  font-weight: bold;
+  color: var(--lbl-fnt-clr);
 }
 
 input {
   width: 60%;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.3rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-family: var(--fnt-fmly);
+  color: black;
 }
 
-div#content > div#sign-in {
-  padding: 2rem 0 0 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+input:user-invalid {
+  border: 1px solid red;
 }
 
-div#content > div#sign-in > button {
+input:focus {
+  outline: none;
+  border: 1px solid blue;
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+button {
   width: fit-content;
-  padding: 0.5rem 2.5rem;
-  font-size: 1rem;
+  padding: 0.75rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0 2rem 3rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #596D48;
+  color: white;
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.3);
 }
 
+button:active {
+  background-color: #4C5C3D;
+}
+
+div#content > p#sign-in {
+  margin: 0 0 0 3rem;
+  gap: 32px;
+  font-weight: bold;
+}
+
+div#content > p#sign-in > a {
+  text-decoration: none;
+  color: #596D48;
+}
