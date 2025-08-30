@@ -182,7 +182,7 @@ footer img {
 }
 
 dialog {
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
 
@@ -201,17 +201,27 @@ dialog > form {
 
   padding: 2rem;
   background-color: white;
+  border-radius: 12px;
 }
 
 dialog > form > div {
   display: flex;
   flex-direction: column;
   align-items: start;
+  gap: 0.2rem
+}
+
+dialog > form input {
+  border-radius: 12px;
+  border-style: none;
+  padding: 0.25rem 0.5rem;
+  background-color: #EFEFEF;
 }
 
 dialog button {
   padding: 0.3rem 0;
   width: 100%;
+  border-radius: 12px;
 }
 
 dialog #read,
