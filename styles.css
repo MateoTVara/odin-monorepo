@@ -7,14 +7,20 @@
   font-display: swap;
 }
 
+:root {
+  --bg-color: #F9FAFB;
+  --footer-header-bg-color: #0F172A;
+  --button-bg-color: #14B8A6;        /* Teal primary */
+  --button-bg-color-hover: #0D9488;  /* Darker teal hover */
+  --font-color: #F8FAFC;
+  --box-shadow-color: rgba(0, 0, 0, 0.1);
+  --read-button-bg-color: #3B82F6;   /* Blue for "read" */
+  --not-read-button-bg-color: #EF4444; /* Red for "not-read" */
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
-}
-
-body > *,
-article {
-  border: 1px solid black;
 }
 
 img, picture, video, canvas, svg {
@@ -33,6 +39,7 @@ body {
 
 header, footer {
   min-height: clamp(5rem, 8dvh, 12rem);
+  background-color: var(--footer-header-bg-color);
 }
 
 header {
@@ -48,6 +55,7 @@ header {
 
 header > h1 {
   font-size: clamp(1.5rem, 2.5vw, 3rem);
+  color: var(--font-color);
 }
 
 header > button {
@@ -58,9 +66,16 @@ header > button {
 
   padding: 0.5em 1.2em;
   font-size: clamp(0.5rem, 2vw, 1.2rem);
+  color: var(--font-color);
   border-radius: 0.5em;
   min-width: clamp(3rem, 10vw, 10rem);
   height: clamp(2.5rem, 5vh, 3rem);
+  background-color: var(--button-bg-color);
+  border: none;
+}
+
+header > button:hover {
+  background-color: var(--button-bg-color-hover);
 }
 
 button#delete-all {
@@ -75,6 +90,8 @@ main {
   flex: 6;
   display: flex;
   flex-direction: column;
+
+  background-color: var(--bg-color);
 }
 
 main > section {
@@ -97,7 +114,18 @@ section > article {
   align-items: center;
   gap: 1rem;
 
-  padding: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  box-shadow: 0 2px 6px var(--box-shadow-color);
+}
+
+section > article > h2,
+section > article > p {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 section > article > div {
@@ -109,6 +137,7 @@ section > article > div {
 
 section > article h2 {
   font-size: clamp(1rem, 1.8vw, 2rem);
+  line-height: 1.5;
 }
 
 section > article p,
@@ -116,10 +145,15 @@ section > article button {
   font-size: clamp(0.75rem, 1.2vw, 1.5rem);
 }
 
+section > article p {
+  color: #444;
+}
+
 section > article button {
   padding: 0.25em 0.5em;
   border: none;
   min-width: auto;
+  border-radius: 0.5rem;
 }
 
 footer {
@@ -134,6 +168,7 @@ footer {
 
 footer p {
   font-size: clamp(1rem, 1.5vw, 2rem);
+  color: var(--font-color);
 }
 
 footer a {
@@ -179,18 +214,12 @@ dialog button {
   width: 100%;
 }
 
-dialog #read {
-  background-color: green;
-}
-
-#read.not-read {
-  background-color: red;
-}
-
+dialog #read,
 .card-grid .actions > button:first-child {
-  background-color: green;
+  background-color: var(--read-button-bg-color);
 }
 
+#read.not-read,
 .card-grid .actions > button:first-child.not-read {
-  background-color: red;
+  background-color: var(--not-read-button-bg-color);
 }

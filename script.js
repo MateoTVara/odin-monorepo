@@ -46,10 +46,10 @@ Book.prototype.toggleRead = function() {
 }
 
 // Create placeholders
-addBookToLibrary(crypto.randomUUID(), "test1", "title1", 110, true);
-addBookToLibrary(crypto.randomUUID(), "test2", "title2", 120, false);
-addBookToLibrary(crypto.randomUUID(), "test3", "title3", 130, true);
-addBookToLibrary(crypto.randomUUID(), "test4", "title4", 140, false);
+addBookToLibrary(crypto.randomUUID(), "Juan Emar", "Umbral", 4000, true);
+addBookToLibrary(crypto.randomUUID(), "Vyasa", "Mahābhārata", 13000, false);
+addBookToLibrary(crypto.randomUUID(), "Yumeno Kyusaku", "Dogra Magra", 700, false);
+addBookToLibrary(crypto.randomUUID(), "Alberto Laiseca", "El jardín de las máquinas parlantes", 800, false);
 
 function addBooksToLibrary() {
   // Not so sure if should comment this
@@ -64,9 +64,11 @@ function addBooksToLibrary() {
 
     const titleH2 = document.createElement("h2");
     titleH2.textContent = book.title;
+    titleH2.setAttribute("title", book.title);
     
     const authorP = document.createElement("p");
     authorP.textContent = book.author;
+    authorP.setAttribute("title", book.author);
 
     const pagesP = document.createElement("p");
     pagesP.textContent = book.pages;
