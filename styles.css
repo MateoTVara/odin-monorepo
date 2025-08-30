@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('assets/fonts/Roboto-Regular.woff2') format('woff2'),
+      url('assets/fonts/Roboto-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -12,6 +21,10 @@ img, picture, video, canvas, svg {
   display: block;
 }
 
+h1, h2, p, button, input, label {
+  font-family: Roboto, sans-serif;
+}
+
 body {
   min-height: 100dvh;
   display: flex;
@@ -19,7 +32,7 @@ body {
 }
 
 header, footer {
-  min-height: 12dvh;
+  min-height: clamp(5rem, 8dvh, 12rem);
 }
 
 header {
@@ -31,6 +44,10 @@ header {
   align-items: center;
 
   padding: 0 3rem;
+}
+
+header > h1 {
+  font-size: clamp(1.5rem, 2.5vw, 3rem);
 }
 
 header > button {
@@ -87,7 +104,22 @@ section > article > div {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 1rem;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+section > article h2 {
+  font-size: clamp(1rem, 1.8vw, 2rem);
+}
+
+section > article p,
+section > article button {
+  font-size: clamp(0.75rem, 1.2vw, 1.5rem);
+}
+
+section > article button {
+  padding: 0.25em 0.5em;
+  border: none;
+  min-width: auto;
 }
 
 footer {
@@ -101,7 +133,7 @@ footer {
 }
 
 footer p {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.5vw, 2rem);
 }
 
 footer a {
