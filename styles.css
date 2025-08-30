@@ -193,7 +193,7 @@ dialog {
 }
 
 dialog > form {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 0.5rem;
   justify-content: start;
