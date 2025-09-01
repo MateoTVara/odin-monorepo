@@ -19,14 +19,16 @@ body > * {
 
 .cell {
   border: 1px solid black;
-  height: 5rem;
-  width: 5rem;
-}
-
-.board {
+  font-size: 3rem;
+  
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.board {
+  display: grid;
+  grid-template: repeat(3, 5rem) / repeat(3, 5rem);
 }
 
 button {
