@@ -25,15 +25,14 @@ dialog.addEventListener("click", (e) => {
 
 const library = [];
 
-function Book(id, author, title, pages, read){
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
+class Book {
+  constructor(id, author, title, pages, read){
+    this.id = id;
+    this.author = author;
+    this.title = title;
+    this.pages = pages;
+    this.read = read
   }
-  this.id = id;
-  this.author = author;
-  this.title = title;
-  this.pages = pages;
-  this.read = read;
 }
 
 function addBookToLibrary(id, author, title, pages, read) {
