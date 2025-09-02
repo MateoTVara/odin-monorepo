@@ -113,6 +113,8 @@ const GameRender = (function() {
   const playerRightDiv = document.querySelector(".players>div:last-child");
   const winnerH1 = document.querySelector(".winner-msg");
   const dialog = document.querySelector("dialog");
+  const playerOneInput = document.querySelector("#player1");
+  const playerTwoInput = document.querySelector("#player2");
 
   const board = Gameboard.getBoard();
 
@@ -138,9 +140,19 @@ const GameRender = (function() {
     if (GameController.getGameState()){
       GameController.resetGame();
     }
+    let playerOneName = GameController.getPlayerOne().getName();
+    let playerTwoName = GameController.getPlayerTwo().getName();
+    if(!(gameStart)){
+      playerOneName = playerOneInput.value === "" ? GameController.getPlayerOne().getName() : GameController.getPlayerOne().setName(playerOneInput.value);
+      playerTwoName = playerTwoInput.value === "" ? GameController.getPlayerTwo().getName() : GameController.getPlayerTwo().setName(playerTwoInput.value);
+      playerOneInput.value = "";
+      playerTwoInput.value = "";
+    }
     gameStart = true;
-    playerLeftDiv.textContent = `${GameController.getPlayerOne().getName()}: ${GameController.getPlayerOne().getScore()}`;
-    playerRightDiv.textContent = `${GameController.getPlayerTwo().getName()}: ${GameController.getPlayerTwo().getScore()}`;
+    playerLeftDiv.textContent = `${playerOneName}: ${GameController.getPlayerOne().getScore()}`;
+    playerLeftDiv.setAttribute("title", playerOneName);
+    playerRightDiv.textContent = `${playerTwoName}: ${GameController.getPlayerTwo().getScore()}`;
+    playerRightDiv.setAttribute("title", playerTwoName);
   })
 
   boardDiv.addEventListener("click", (e) => {
@@ -204,6 +216,7 @@ function Player(nameInput, signInput) {
     } else {
       console.log("Not instance of String")
     }
+    return name;
   }
 
   const getSign = () => sign;
