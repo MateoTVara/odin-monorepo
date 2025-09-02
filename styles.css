@@ -10,12 +10,12 @@
 :root {
   --bg-color: #F9FAFB;
   --footer-header-bg-color: #0F172A;
-  --button-bg-color: #14B8A6;        /* Teal primary */
-  --button-bg-color-hover: #0D9488;  /* Darker teal hover */
+  --button-bg-color: #14B8A6;
+  --button-bg-color-hover: #0D9488;
   --font-color: #F8FAFC;
   --box-shadow-color: rgba(0, 0, 0, 0.1);
-  --read-button-bg-color: #3B82F6;   /* Blue for "read" */
-  --not-read-button-bg-color: #EF4444; /* Red for "not-read" */
+  --read-button-bg-color: #3B82F6;
+  --not-read-button-bg-color: #EF4444;
 }
 
 * {
