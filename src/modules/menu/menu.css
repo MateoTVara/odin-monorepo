@@ -8,10 +8,31 @@
   gap: 1rem;
 }
 
-.categories-nav {
+.categories-nav ul {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  padding-left: 0;
+  gap: 0.5rem;
+}
+
+.categories-nav input {
+  display: none;
+}
+
+.checkbox-label {
+  transition: background-color 0.25s;
+  padding: 0.5rem 1rem;
+}
+
+.checkbox-input:checked + .checkbox-label {
+  background-color: gray;
+}
+
+.categories-nav li {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
 }
 
 .menu-categories {

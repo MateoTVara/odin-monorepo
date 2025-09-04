@@ -97,25 +97,45 @@ export function renderMenu(parent){
   const titleH1 = document.createElement("h1");
   titleH1.textContent = "Menu";
 
+  // Menu categories filter
+
   const categoriesNav = document.createElement("nav");
   categoriesNav.classList.add("categories-nav");
 
+  const fieldset = document.createElement("fieldset");
+  const ul = document.createElement("ul");
+
   menuCategories.forEach((category, i) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.dataset.categoryIndex = i;
-    btn.textContent = category.title;
-    categoriesNav.appendChild(btn);
+    const li = document.createElement("li")
+    const label = document.createElement("label");
+    label.classList.add("checkbox-label");
+    label.textContent = category.title;
+    label.setAttribute("for", i);
+    const input = document.createElement("input");
+    input.classList.add("checkbox-input");
+    input.type = "checkbox";
+    input.id = i;
+    input.name = category.title.toLowerCase().split(" ").join("-");
+    li.append(input, label);
+    ul.appendChild(li);
   })
 
-  categoriesNav.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
-    if (!(btn)) return;
-    const index = btn.dataset.categoryIndex;
-    const category = menuCategories[index];
+  fieldset.appendChild(ul);
+  categoriesNav.appendChild(fieldset)
 
-    menuDiv.replaceChildren(category.render());
+  categoriesNav.addEventListener("change", (e) => {
+    if (e.target.classList.contains("checkbox-input")) {
+      menuDiv.replaceChildren();
+
+      const checkedBoxes = categoriesNav.querySelectorAll(".checkbox-input:checked");
+
+      checkedBoxes.forEach(checkBox => {
+        menuDiv.appendChild(menuCategories[checkBox.id].render());
+      })
+    }
   })
+
+  // Menu
 
   const menuDiv = document.createElement("div");
   menuDiv.classList.add("menu-categories")
