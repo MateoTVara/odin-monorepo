@@ -3,8 +3,9 @@
 import "./menu.css";
 
 class MenuItem {
-  constructor(name, description = "") {
+  constructor(name, price, description = "") {
     this.name = name;
+    this.price = Number(price);
     this.description = description;
   }
 
@@ -12,16 +13,23 @@ class MenuItem {
     const itemDiv = document.createElement("div");
     itemDiv.classList.add("menu-item");
 
+    const textDiv = document.createElement("div");
+
     const itemH3 = document.createElement("h3");
     itemH3.textContent = this.name;
 
-    itemDiv.appendChild(itemH3);
+    textDiv.appendChild(itemH3);
 
     if (this.description) {
       const itemP = document.createElement("p");
       itemP.textContent = this.description;
-      itemDiv.appendChild(itemP);
+      textDiv.appendChild(itemP);
     }
+
+    const priceP = document.createElement("p");
+    priceP.textContent = `$ ${this.price}`;
+
+    itemDiv.append(textDiv, priceP)
 
     return itemDiv;
   }
@@ -34,8 +42,8 @@ class MenuCategory {
     this.items = [];
   }
 
-  addItem (name, description = "") {
-    const item = new MenuItem(name, description);
+  addItem (name, price, description = "") {
+    const item = new MenuItem(name, price, description);
     this.items.push(item);
   }
 
@@ -54,37 +62,37 @@ class MenuCategory {
 }
 
 const breakfastAndPastries = new MenuCategory("Breakfast & Pastries", "🥐");
-breakfastAndPastries.addItem("Croissant", "Flaky, buttery classic");
-breakfastAndPastries.addItem("Pain au Chocolat", "Croissant with rich chocolate");
-breakfastAndPastries.addItem("Muffins", "Blueberry, Chocolate Chip, Banana Nut");
-breakfastAndPastries.addItem("Bagel with Cream Cheese", "Plain, Sesame, or Everything");
+breakfastAndPastries.addItem("Croissant", 2.50, "Flaky, buttery classic");
+breakfastAndPastries.addItem("Pain au Chocolat", 3.00, "Croissant with rich chocolate");
+breakfastAndPastries.addItem("Muffins", 2.25, "Blueberry, Chocolate Chip, Banana Nut");
+breakfastAndPastries.addItem("Bagel with Cream Cheese", 2.00, "Plain, Sesame, or Everything");
 
 const lightMeals = new MenuCategory("Light Meals", "🥗");
-lightMeals.addItem("Quiche Lorraine", "Egg, bacon, and cheese tart");
-lightMeals.addItem("Ham & Cheese Sandwich", "Served on fresh baguette");
-lightMeals.addItem("Caprese Salad", "Tomato, mozzarella, basil, balsamic drizzle");
-lightMeals.addItem("Soup of the Day", "Served with bread");
+lightMeals.addItem("Quiche Lorraine", 6.50, "Egg, bacon, and cheese tart");
+lightMeals.addItem("Ham & Cheese Sandwich", 5.50, "Served on fresh baguette");
+lightMeals.addItem("Caprese Salad", 7.00, "Tomato, mozzarella, basil, balsamic drizzle");
+lightMeals.addItem("Soup of the Day", 4.50, "Served with bread");
 
 const hotDrinks = new MenuCategory("Hot Drinks", "☕");
-hotDrinks.addItem("Espresso");
-hotDrinks.addItem("Americano");
-hotDrinks.addItem("Cappuccino");
-hotDrinks.addItem("Latte (vanilla, caramel, or plain)");
-hotDrinks.addItem("Hot Chocolate");
-hotDrinks.addItem("Chai Tea Latte");
+hotDrinks.addItem("Espresso", 1.75);
+hotDrinks.addItem("Americano", 2.25);
+hotDrinks.addItem("Cappuccino", 3.25);
+hotDrinks.addItem("Latte (vanilla, caramel, or plain)", 3.50);
+hotDrinks.addItem("Hot Chocolate", 3.00);
+hotDrinks.addItem("Chai Tea Latte", 3.25);
 
 const coldDrinks = new MenuCategory("Cold Drinks", "🧊");
-coldDrinks.addItem("Iced Coffee");
-coldDrinks.addItem("Iced Latte (vanilla, caramel, or mocha)");
-coldDrinks.addItem("Fresh Lemonade");
-coldDrinks.addItem("Iced Tea (black or green)");
-coldDrinks.addItem("Sparkling Water");
+coldDrinks.addItem("Iced Coffee", 2.75);
+coldDrinks.addItem("Iced Latte (vanilla, caramel, or mocha)", 3.50);
+coldDrinks.addItem("Fresh Lemonade", 2.50);
+coldDrinks.addItem("Iced Tea (black or green)", 2.25);
+coldDrinks.addItem("Sparkling Water", 1.75);
 
 const desserts = new MenuCategory("Desserts", "🍰");
-desserts.addItem("Cheesecake (classic or berry topping)");
-desserts.addItem("Chocolate Cake", "Rich, layered, decadent");
-desserts.addItem("Tiramisu", "Espresso-soaked sponge, mascarpone cream");
-desserts.addItem("Fruit Tart", "Seasonal fruits, custard filling");
+desserts.addItem("Cheesecake (classic or berry topping)", 5.00);
+desserts.addItem("Chocolate Cake", 5.50, "Rich, layered, decadent");
+desserts.addItem("Tiramisu", 5.75, "Espresso-soaked sponge, mascarpone cream");
+desserts.addItem("Fruit Tart", 4.75, "Seasonal fruits, custard filling");
 
 const menuCategories = [breakfastAndPastries, lightMeals, hotDrinks, coldDrinks, desserts];
 
@@ -129,9 +137,14 @@ export function renderMenu(parent){
 
       const checkedBoxes = categoriesNav.querySelectorAll(".checkbox-input:checked");
 
-      checkedBoxes.forEach(checkBox => {
-        menuDiv.appendChild(menuCategories[checkBox.id].render());
-      })
+      if (checkedBoxes.length === 0 ) {
+        menuCategories.forEach(menuCategory => menuDiv.append(menuCategory.render()));
+      }
+      else {
+        checkedBoxes.forEach(checkBox => {
+          menuDiv.appendChild(menuCategories[checkBox.id].render());
+        })
+      }
     }
   })
 
