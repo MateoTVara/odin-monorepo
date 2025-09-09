@@ -1,16 +1,42 @@
 /* styles.css */
 
+@font-face {
+  font-family: 'Quicksand';
+  src: url('./assets/fonts/Quicksand-Light.woff2') format('woff2'),
+      url('./assets/fonts/Quicksand-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Color palette */
+  --primary-color: #8B4513; /* Saddle brown - warm coffee color */
+  --secondary-color: #D2B48C; /* Tan - cream/milk color */
+  --accent-color: #CD853F; /* Peru - lighter brown accent */
+  --text-dark: #2F1B14; /* Dark brown for text */
+  --text-light: #F5F5DC; /* Beige for light text */
+  --background: #FFF8DC; /* Cornsilk - warm off-white */
+  --card-bg: #FAEBD7; /* Antique white */
+  --border-color: #DEB887; /* Burlywood */
+  --hover-color: #A0522D; /* Sienna - darker hover state */
+  --success-color: #228B22; /* Forest green for buttons */
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 * {
+  font-family: "Quicksand", sans-serif;
   margin: 0;
 }
 
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--background);
+  color: var(--text-dark);
 }
 
 img, picture, video, canvas, svg {
@@ -20,6 +46,7 @@ img, picture, video, canvas, svg {
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+  color: var(--primary-color);
 }
 
 p {
@@ -36,17 +63,57 @@ body {
   min-height: 100dvh;
 }
 
-body > * {
-  border: 1px solid black;
+header {
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 header > nav{
-  padding: 1rem 2rem;
-
   display: flex;
   justify-content: end;
   align-items: center;
   gap: 2rem;
+}
+
+nav button {
+  font-size: 1.2rem;
+  border: none;
+  position: relative;
+  background-color: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+nav button:hover {
+  color: var(--secondary-color);
+}
+
+nav button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease;
+}
+
+nav button:hover::after {
+  width: 100%;
 }
 
 #content {

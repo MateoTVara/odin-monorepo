@@ -8,6 +8,19 @@
   gap: 1rem;
 }
 
+.categories-nav {
+  background-color: var(--card-bg);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+}
+
+.menu-container > h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 .categories-nav ul {
   display: flex;
   flex-direction: row;
@@ -20,12 +33,25 @@
 }
 
 .checkbox-label {
-  transition: background-color 0.25s;
-  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
+  cursor: pointer;
+  font-weight: 500;
+  border: 2px solid transparent;
+}
+
+.checkbox-label:hover {
+  background-color: var(--accent-color);
+  color: var(--text-light);
 }
 
 .checkbox-input:checked + .checkbox-label {
-  background-color: gray;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-color: var(--accent-color);
 }
 
 .categories-nav li {
@@ -44,24 +70,31 @@
 }
 
 .menu-category {
-  border: 1px solid black;
+  border: 2px solid var(--border-color);
   border-radius: 1rem;
   overflow: hidden;
+  background-color: var(--card-bg);
 }
 
 .menu-category > h2 {
   text-align: center;
-  background-color: aliceblue;
+  background-color: var(--primary-color);
+  color: var(--text-light);
   padding: 0.5rem 1rem;
 }
 
 .menu-category > .menu-item {
   padding-block: 0.5rem;
   padding-inline: 1rem;
+  border-bottom: 1px solid var(--border-color);
 
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.menu-category > .menu-item:hover {
+  background-color: var(--secondary-color);
 }
 
 .menu-item > div {
@@ -69,6 +102,12 @@
 
   display: flex;
   flex-direction: column;
+}
+
+.menu-item h3 {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .menu-item > p {
