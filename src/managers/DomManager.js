@@ -41,7 +41,7 @@ export class DomManager {
    */
   static currentLocation = DomManager.#selectDomElements({
     h2Address: "div.current-location > #address",
-    pDescription: "div.current-location > #description",
+    pDescription: "div.current-location > .description",
     divIcon: "div.current-location > .icon",
     pConditions: "div.current-location > .conditions",
     pDatetime: "div.current-location > .datetime",
@@ -52,12 +52,36 @@ export class DomManager {
 
 
   /**
+   * An array of objects, each containing references to key DOM elements for displaying forecast information.
+   * @type {Array<Object>}
+   * @property {HTMLElement} h3Day - The element displaying the day of the forecast.
+   * @property {HTMLElement} pDescription - The element displaying the weather description.
+   * @property {HTMLElement} divIcon - The element displaying the weather icon.
+   * @property {HTMLElement} pConditions - The element displaying the weather conditions.
+   * @property {HTMLElement} pTemp - The element displaying the temperature.
+   * @property {HTMLElement} pFeelslike - The element displaying the feels-like temperature.
+   */
+  static forecasts = [...document.querySelectorAll(".forecast")].map(forecastEl => {
+    return DomManager.#selectDomElements({
+      h3Day: "h3.day",
+      pDescription: "p.description",
+      divIcon: "div.icon",
+      pConditions: "p.conditions",
+      pTemp: "div.temperatures > .temp",
+      pFeelslike: "div.temperatures > .feelslike",
+    }, forecastEl);
+  });
+
+
+
+  /**
    * Selects multiple DOM elements based on the provided CSS selectors.
    * @param {object} selectors - An object where keys are names and values are CSS selector strings.
+   * @param {HTMLElement} [parentEle=document] - The parent element to scope the query (default is the entire document).
    * @returns {object} An object containing the selected DOM elements.
    * @throws {TypeError} If selectors is not an object or if any selector is not a string.
    */
-  static #selectDomElements(selectors = {}) {
+  static #selectDomElements(selectors = {}, parentEle = document) {
     if (typeof selectors !== "object") {
       throw new TypeError("selector must be an object");
     }
@@ -68,7 +92,7 @@ export class DomManager {
       if (typeof value !== "string") {
         throw new TypeError("selector must be a string");
       }
-      elements[key] = document.querySelector(value);
+      elements[key] = parentEle.querySelector(value);
     });
 
     return elements
@@ -102,9 +126,21 @@ export class DomManager {
         const iconPath  = await AssetManager.getIconPath(data.currentConditions.icon);
         currentLocation.divIcon.style.backgroundImage = `url(${iconPath})`;
 
+        this.forecasts.forEach(async (forecast, index) => {
+          const dayData = data.days[index + 1];
+
+          forecast.h3Day.textContent = dayData.datetime;
+          forecast.pDescription.textContent = dayData.description;
+          forecast.pConditions.textContent = dayData.conditions;
+          forecast.pTemp.textContent = dayData.temp;
+          forecast.pFeelslike.textContent = dayData.feelslike;
+          const iconPath = await AssetManager.getIconPath(dayData.icon);
+          forecast.divIcon.style.backgroundImage = `url(${iconPath})`;
+        });
+
         this.browser.inputLocation.value = "";
 
-        TempManager.updateTemps(data.currentConditions);
+        TempManager.updateTemps(data);
 
       } catch (err) {
         console.log(err);
@@ -126,6 +162,12 @@ export class DomManager {
       const temps = TempManager.toggleTempUnit();
       this.currentLocation.pTemp.textContent = temps.temp;
       this.currentLocation.pFeelslike.textContent = temps.feelslike;
+
+      this.forecasts.forEach((forecast, index) => {
+        const forecastKey = `forecast${index + 1}`;
+        forecast.pTemp.textContent = temps[forecastKey].temp;
+        forecast.pFeelslike.textContent = temps[forecastKey].feelslike;
+      });
     });
   }
 }
