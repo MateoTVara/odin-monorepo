@@ -1,0 +1,70 @@
+/* styles.css */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* start */
+
+body {
+  min-height: 100dvh;
+}
+
+main {
+  min-height: 100%;
+  padding: 32px 64px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+div.browser {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+div.current-location {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.current-location > div.temperatures {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
