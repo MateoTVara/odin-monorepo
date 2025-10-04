@@ -9,9 +9,9 @@
 </head>
 <body>
   <main>
-    <button>Toggle</button>
+    <button>F°</button>
     <div class="browser">
-      <input type="text" id="location">
+      <input type="text" id="location" placeholder="Enter location"/>
       <button>Search</button>
     </div>
     <div class="current-location">
@@ -21,11 +21,27 @@
       <p class="conditions">  </p>
       <p class="datetime"></p>
       <div class="temperatures">
-        <p class="temp"></p>
-        <p class="feelslike"></p>
+        <div>
+          <p class="label">Temperature:</p>
+          <p class="temp"></p>
+        </div>
+        <div>
+          <p class="label">Feels like:</p>
+          <p class="feelslike"></p>
+        </div>
       </div>
     </div>
     <div class="forecasts">
+      <div class="forecast">
+        <h3 class="day"></h3>
+        <p class="description"></p>
+        <div class="icon"></div>
+        <p class="conditions"></p>
+        <div class="temperatures">
+          <p class="temp"></p>
+          <p class="feelslike"></p>
+        </div>
+      </div>
       <div class="forecast">
         <h3 class="day"></h3>
         <p class="description"></p>

@@ -23,7 +23,12 @@ export class TempManager {
   static forecastThreeFTemp;
   static forecastThreeFFeelslike;
   static forecastThreeCTemp;
-  static forecastThreeCFeelslike;  
+  static forecastThreeCFeelslike;
+
+  static forecastFourFTemp;
+  static forecastFourFFeelslike;
+  static forecastFourCTemp;
+  static forecastFourCFeelslike;
 
 
 
@@ -56,6 +61,7 @@ export class TempManager {
       forecast1: getPair("forecastOne"),
       forecast2: getPair("forecastTwo"),
       forecast3: getPair("forecastThree"),
+      forecast4: getPair("forecastFour"),
     }
   }
 
@@ -93,6 +99,11 @@ export class TempManager {
     this.forecastThreeFFeelslike = days[3].feelslike;
     this.forecastThreeCTemp = this.#toCelcius(this.forecastThreeFTemp);
     this.forecastThreeCFeelslike = this.#toCelcius(this.forecastThreeFFeelslike);
+
+    this.forecastFourFTemp = days[4].temp;
+    this.forecastFourFFeelslike = days[4].feelslike;
+    this.forecastFourCTemp = this.#toCelcius(this.forecastFourFTemp);
+    this.forecastFourCFeelslike = this.#toCelcius(this.forecastFourFFeelslike);
 
     this.currentTempUnit = "F";
   }

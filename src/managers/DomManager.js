@@ -1,3 +1,4 @@
+import { parseISO, format } from "date-fns";
 import { ApiManager, AssetManager, TempManager } from "../managers";
 
 export class DomManager {
@@ -45,8 +46,10 @@ export class DomManager {
     divIcon: "div.current-location > .icon",
     pConditions: "div.current-location > .conditions",
     pDatetime: "div.current-location > .datetime",
-    pTemp: "div.current-location > .temperatures > .temp",
-    pFeelslike: "div.current-location > .temperatures > .feelslike",
+    pTemp: "div.current-location > .temperatures .temp",
+    pFeelslike: "div.current-location > .temperatures .feelslike",
+    pTempLabel: "div.current-location > .temperatures > div:first-child > .label",
+    pFeelslikeLabel: "div.current-location > .temperatures > div:last-child > .label",
   });
 
 
@@ -116,24 +119,28 @@ export class DomManager {
 
         currentLocation.h2Address.textContent = "Loading...";
         data = await ApiManager.getWeather(location);
+        const u = TempManager.currentTempUnit;
 
         currentLocation.h2Address.textContent = data.address;
         currentLocation.pDescription.textContent = data.description;
         currentLocation.pConditions.textContent = data.currentConditions.conditions;
         currentLocation.pDatetime.textContent = data.currentConditions.datetime;
-        currentLocation.pTemp.textContent = data.currentConditions.temp;
-        currentLocation.pFeelslike.textContent = data.currentConditions.feelslike;
+        currentLocation.pTemp.textContent = `${data.currentConditions.temp}°${u}`;
+        currentLocation.pFeelslike.textContent = `${data.currentConditions.feelslike}°${u}`;
+        currentLocation.pTempLabel.classList.add("active");
+        currentLocation.pFeelslikeLabel.classList.add("active");
         const iconPath  = await AssetManager.getIconPath(data.currentConditions.icon);
         currentLocation.divIcon.style.backgroundImage = `url(${iconPath})`;
 
         this.forecasts.forEach(async (forecast, index) => {
           const dayData = data.days[index + 1];
-
-          forecast.h3Day.textContent = dayData.datetime;
+          const date = parseISO(dayData.datetime);
+          const u = TempManager.currentTempUnit;
+          forecast.h3Day.textContent = format(date, "EEEE");
           forecast.pDescription.textContent = dayData.description;
           forecast.pConditions.textContent = dayData.conditions;
-          forecast.pTemp.textContent = dayData.temp;
-          forecast.pFeelslike.textContent = dayData.feelslike;
+          forecast.pTemp.textContent = `${dayData.temp}°${u}`;
+          forecast.pFeelslike.textContent = `${dayData.feelslike}°${u}`;
           const iconPath = await AssetManager.getIconPath(dayData.icon);
           forecast.divIcon.style.backgroundImage = `url(${iconPath})`;
         });
@@ -160,13 +167,15 @@ export class DomManager {
 
     this.btnToggle.addEventListener("click", () => {
       const temps = TempManager.toggleTempUnit();
-      this.currentLocation.pTemp.textContent = temps.temp;
-      this.currentLocation.pFeelslike.textContent = temps.feelslike;
+      const u = TempManager.currentTempUnit;
+      this.currentLocation.pTemp.textContent = `${temps.temp}°${u}`;
+      this.currentLocation.pFeelslike.textContent = `${temps.feelslike}°${u}`;
+      this.btnToggle.textContent = `${TempManager.currentTempUnit}°`;
 
       this.forecasts.forEach((forecast, index) => {
         const forecastKey = `forecast${index + 1}`;
-        forecast.pTemp.textContent = temps[forecastKey].temp;
-        forecast.pFeelslike.textContent = temps[forecastKey].feelslike;
+        forecast.pTemp.textContent = `${temps[forecastKey].temp}°${u}`;
+        forecast.pFeelslike.textContent = `${temps[forecastKey].feelslike}°${u}`;
       });
     });
   }

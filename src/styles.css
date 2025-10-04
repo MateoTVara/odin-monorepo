@@ -1,5 +1,21 @@
 /* styles.css */
 
+:root {
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+
+  --bg-page: #F0F8FF;
+  --bg-card: #FFFFFF;
+  --bg-panel: #EFF8FF;
+  --border: #D9EDF8;
+  --text-primary: #062341;
+  --text-muted: #52606D;
+  --shadow-color: 0 8px 20px rgba(6,35,65,0.08);
+
+  --accent: #0077CC;
+  --accent-2: #00BFA6;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -9,6 +25,8 @@
 }
 
 body {
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -34,29 +52,64 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
+div, input, button, textarea, select,
+h1, h2, h3, h4, h5, h6, p{
+  min-height: 0;
+  min-width: 0;
+}
+
 /* start */
 
 body {
-  min-height: 100dvh;
+  height: 100dvh;
 }
 
 main {
-  min-height: 100%;
-  padding: 32px 64px;
+  padding: 48px;
   position: relative;
+  height: 100%;
+  background-color: var(--bg-page);
+  background-image: linear-gradient(135deg, #E0F7FF 0%, #F0F8FF 100%);
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "browser forecasts"
+    "current-location forecasts"
+    "current-location forecasts";
   gap: 32px;
 }
 
 main > button:first-child {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 6px;
+  right: 6px;
+  width: clamp(12px, 2vw, 36px);
+  height: clamp(12px, 2vw, 36px);
+  text-align: center;
+  border: none;
+  border-radius: 10%;
+  font-size: clamp(0.2rem, 1vw, 1.5rem);
+  background-color: var(--accent);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+main > button:first-child:hover {
+  background-color: var(--accent-2);
 }
 
 div.browser {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 24px;
+  overflow: hidden;
+  background-color: var(--bg-panel);
+  box-shadow: var(--shadow-color);
+
+  grid-area: browser;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -64,11 +117,61 @@ div.browser {
   gap: 16px;
 }
 
+div.browser input {
+  border: none;
+  padding: 8px 16px;
+  font-size: clamp(0.5rem, 1.5vw, 2rem);
+  width: 100%;
+  max-width: 400px;
+  background-color: transparent;
+}
+
+div.browser input:focus {
+  outline: none;
+}
+
+div.browser button {
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: clamp(0.5rem, 1.5vw, 2rem);
+  background-color: var(--accent);
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+div.browser button:hover {
+  background-color: var(--accent-2);
+}
+
 div.current-location {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 48px;
+  overflow: hidden;
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-color);
+
+  grid-area: current-location;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: clamp(0px, 3vh, 32px);
+}
+
+div.current-location h2 {
+  font-size: clamp(0.5rem, 2vw, 5rem);
+  text-align: center;
+}
+
+div.current-location p {
+  max-width: 100%;
+  font-size: clamp(0.2rem, 1.5vw, 3rem);
+  color: var(--text-muted);
+  text-align: center;
 }
 
 div.temperatures {
@@ -77,26 +180,80 @@ div.temperatures {
   gap: 16px;
 }
 
+div.temperatures > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+div.temperatures .label {
+  display: none;
+}
+
+div.temperatures .label.active {
+  display: inline;
+}
+
 div.icon {
-  margin-top: 12px;
+  margin: 4px 0;
   width: 128px;
   height: 128px;
   background-repeat: no-repeat;
   background-size: auto;
+  background-position: center;
 }
 
 div.forecasts {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 32px;
+  grid-area: forecasts;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "forecast1 forecast2"
+    "forecast3 forecast4";
 }
 
 div.forecast {
   flex: 1;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 0;
+  overflow: hidden;
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-color);
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 2px;
+  gap: clamp(4px, 2vh, 16px);
+}
+
+div.forecast h3 {
+  font-size: clamp(0.1rem, 1.6vw, 4.5rem);
+  text-align: center;
+}
+
+div.forecast p {
+  max-width: 75%;
+  font-size: clamp(0.1rem, 1vw, 3rem);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+div.forecast:first-child {
+  grid-area: forecast1;
+}
+
+div.forecast:nth-child(2) {
+  grid-area: forecast2;
+}
+
+div.forecast:nth-child(3) {
+  grid-area: forecast3;
+}
+
+div.forecast:last-child {
+  grid-area: forecast4;
 }
