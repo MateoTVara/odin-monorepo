@@ -1,15 +1,17 @@
+import { Calculator } from "./calculator";
+
 test('add', () => {
-  expect(true).toBe(true);
+  expect(Calculator.add(5, 4)).toBe(9);
 });
 
 test('substract', () => {
-  expect(true).toBe(true);
+  expect(Calculator.substract(5, 3)).toBe(2);
 });
 
 test('divide', () => {
-  expect(true).toBe(true);
+  expect(Calculator.divide(10, 2)).toBe(5);
 });
 
 test('multiply', () => {
-  expect(true).toBe(true);
+  expect(Calculator.multiply(10, 2)).toBe(20);
 });
