@@ -1,3 +1,5 @@
+import { reverseString } from "./reverseString";
+
 test('reverse string', () => {
-  expect(true).toBe(true);
+  expect(reverseString('mateo')).toBe('oetam');
 });
