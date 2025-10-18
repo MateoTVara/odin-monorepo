@@ -1,3 +1,5 @@
+import { capitalize } from "./capitalize";
+
 test('capitalize', () => {
-  expect(true).toBe(true);
+  expect(capitalize("mateo")).toBe("Mateo");
 });
