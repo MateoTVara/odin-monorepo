@@ -6,26 +6,39 @@ class Gameboard {
     this.board = new Array(size).fill(null).map(() => new Array(size).fill(null));
   }
 
-  isValidPosition(x, y){
+  isWithinBounds(x, y){
     return x >=0 && x < this.size && y >= 0 && y < this.size;
   }
 
-  isValidPlacement(coordinates) {
-    if(!coordinates.every(([x, y]) => this.isValidPosition(x, y))) {
-      throw new Error("Not a valid placement for this ship");
+  checkOverlapAndAdjacency(coordinates) {
+    for (const [x, y] of coordinates) {
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          const ax = x + j;
+          const ay = y + i;
+          if(this.isWithinBounds(ax, ay) && this.board[ax][ay] instanceof Ship) return false
+        }
+      }
     }
+    return true;
+  }
+
+  isValidPlacement(coordinates) {
+    if (!coordinates.every(([x, y]) => this.isWithinBounds(x, y))) {
+      return false;
+    }
+    return this.checkOverlapAndAdjacency(coordinates);
+  }
+
+  getCoordinatesStatus(ship, initialCoords, orientation) {
+    const [x, y] = initialCoords;
+    const coordinates = [];
+    for (let i = 0; i < ship.length; i++) coordinates.push(orientation === "horizontal" ? [x+i, y] : [x, y+i]);
+    return coordinates;
   }
 
   placeShip(ship, initialCoords, orientation) {
-    const [x, y] = initialCoords;
-
-    const coordinates = [];
-
-    for (let i = 0; i < ship.length; i++) {
-      coordinates.push(orientation === "horizontal" ? [x+i, y] : [x, y+i]);
-    }
-
-    this.isValidPlacement(coordinates);
+    const coordinates = this.getCoordinatesStatus(ship, initialCoords, orientation);
     coordinates.forEach(([x, y]) => this.board[x][y] = ship);
   }
 
@@ -45,7 +58,7 @@ class Gameboard {
     while(queue.length > 0) {
       const [x,y] = queue.shift();
       const key = `${x}${y}`;
-      if(visited.has(key) || !this.isValidPosition(x,y)) continue;
+      if(visited.has(key) || !this.isWithinBounds(x,y)) continue;
       if(this.board[x][y] instanceof Ship) {
         ships.add(this.board[x][y]);
       }
