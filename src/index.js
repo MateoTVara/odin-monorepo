@@ -10,7 +10,8 @@ class App {
     this.gameBoardOne = new Gameboard();
     this.boardTwo = document.querySelector("#board-two");
     this.gameBoardTwo = new Gameboard();
-    this.renderBoardCells();
+    this.renderBoardCells(this.boardOne);
+    this.renderBoardCells(this.boardTwo);
     this.placeShips(this.gameBoardOne);
     this.renderShips(this.boardOne, this.gameBoardOne);
     this.placeShips(this.gameBoardTwo);
@@ -24,19 +25,16 @@ class App {
     }, {once:true});
   }
 
-  renderBoardCells() {
+  renderBoardCells(boardElement) {
     for (let i = 0; i < 10; i++) {
+      const row = document.createElement("tr");
       for (let j = 0; j < 10; j++) {
-        const cellOne = document.createElement("button");
-        cellOne.dataset.x = j;
-        cellOne.dataset.y = i;
-        this.boardOne.appendChild(cellOne);
-
-        const cellTwo = document.createElement("button");
-        cellTwo.dataset.x = j;
-        cellTwo.dataset.y = i;
-        this.boardTwo.appendChild(cellTwo);
+        const cell = document.createElement("td");
+        cell.dataset.x = j;
+        cell.dataset.y = i;
+        row.appendChild(cell);
       }
+      boardElement.appendChild(row);
     }
   }
 
@@ -71,8 +69,26 @@ class App {
   renderShips(boardElement, gameBoard) {
     for (let i = 0; i < gameBoard.board.length; i++) {
       for (let j = 0; j < gameBoard.board[i].length; j++) {
-        if (gameBoard.board[i][j] instanceof Ship) {
-          boardElement.querySelector(`button[data-x="${j}"][data-y="${i}"]`).classList.add("ship-cell");
+        const ship = gameBoard.board[i][j];
+        if (ship instanceof Ship) {
+          const cell = boardElement.querySelector(`td[data-x="${j}"][data-y="${i}"]`);
+          cell.classList.add("ship-cell");
+          
+          if (ship.startCoords[0] === i && ship.startCoords[1] === j){
+            const shipContainer = document.createElement("div");
+            shipContainer.style.position = "relative";
+            shipContainer.style.zIndex = "-1"
+            if (ship.orientation === "horizontal") {
+              cell.dataset.orientation = "h";
+              shipContainer.style.width = '100%';
+              shipContainer.style.height = `${102 * ship.length}%`;
+            } else if (ship.orientation === "vertical") {
+              cell.dataset.orientation = "v";
+              shipContainer.style.width = `${102 * ship.length}%`;
+              shipContainer.style.height = '100%';
+            }
+            cell.appendChild(shipContainer);
+          }
         }
       }
     }

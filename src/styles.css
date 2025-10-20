@@ -85,24 +85,37 @@ main > table {
   border: 2px solid var(--brd-color, #fff);
   height: 100%;
   aspect-ratio: 1 / 1;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 0;
 }
 
-main > table button {
+main > table tr {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+}
+
+main > table td {
   border-radius: 0;
   border: 1px solid var(--brd-color, #555);
   background-color: var(--cell-bg-color, #222);
+  padding: 0;
+  flex: 1;
 }
 
-main > table button:hover {
+main > table td:hover {
   background-color: var(--cell-bg-color-hover, #444);
 }
 
 .ship-cell {
   background: navy;
+  border: 1px solid navy;
+}
+
+.ship-cell:hover {
+  background: #000080cc;
 }
 
 section.actions {

@@ -38,6 +38,8 @@ class Gameboard {
   }
 
   placeShip(ship, initialCoords, orientation) {
+    ship.orientation = orientation;
+    ship.startCoords = initialCoords;
     const coordinates = this.getCoordinatesStatus(ship, initialCoords, orientation);
     coordinates.forEach(([x, y]) => this.board[x][y] = ship);
   }
