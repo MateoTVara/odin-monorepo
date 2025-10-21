@@ -6,6 +6,7 @@ import { Gameboard, Player, Ship } from "./modules";
 class App {
   constructor (){
     this.startBtn = document.querySelector("#start-btn");
+    this.reorderBtn = document.querySelector("#reorder-btn");
 
     this.boardOne = document.querySelector("#board-one");
     this.boardOneBlocker = document.querySelector("#board-one .blocker")
@@ -32,9 +33,21 @@ class App {
    * Initialize event listeners for the game.
    */
   initEventListeners() {
+    // Reorder button logic
+    this.reorderBtn.addEventListener("click", () => {
+      if (this.startBtn.disabled) return;
+      this.clearShips(this.boardOne);
+      this.gameBoardOne = new Gameboard();
+      this.gameBoardOne.placeShips();
+      this.renderShips(this.boardOne, this.gameBoardOne);
+    });
+
     this.startBtn.addEventListener("click", () => {
       this.playerOne = new Player("real", this.gameBoardOne);
       this.playerTwo = new Player("computer", this.gameBoardTwo);
+
+      this.reorderBtn.disabled = true;
+      this.startBtn.disabled = true;
 
       this.boardTwo.querySelectorAll("td").forEach(td => {
         td.addEventListener("click", () => {
@@ -48,7 +61,24 @@ class App {
           }, 500);
         }, {once: true});
       });
+
+      document.querySelectorAll(".ship").forEach(shipEle => {
+        shipEle.classList.add("game-started");
+      });
     }, {once:true});
+  }
+
+  /**
+   * Remove all ship elements from the board.
+   * @param {HTMLElement} boardElement 
+   */
+  clearShips(boardElement) {
+    boardElement.querySelectorAll(".ship-cell").forEach(cell => {
+      cell.classList.remove("ship-cell");
+      cell.removeAttribute("data-orientation");
+      const shipDiv = cell.querySelector(".ship");
+      if (shipDiv) cell.removeChild(shipDiv);
+    });
   }
 
   /**
@@ -177,8 +207,6 @@ class App {
           if (ship.startCoords[0] === i && ship.startCoords[1] === j){
             const shipContainer = document.createElement("div");
             shipContainer.classList.add("ship")
-            shipContainer.style.position = "relative";
-            shipContainer.style.zIndex = "1"
             if (ship.orientation === "vertical") {
               cell.dataset.orientation = "v";
               shipContainer.style.width = `${102 * ship.length}%`;
