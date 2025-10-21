@@ -82,7 +82,7 @@ main {
 }
 
 main > table {
-  border: 2px solid var(--brd-color, #fff);
+  outline: 2px solid var(--brd-color, #fff);
   height: 100%;
   aspect-ratio: 1 / 1;
   display: flex;
@@ -102,20 +102,41 @@ main > table td {
   border: 1px solid var(--brd-color, #555);
   background-color: var(--cell-bg-color, #222);
   padding: 0;
+  transition: background-color 0.1s ease;
   flex: 1;
-}
 
-main > table td:hover {
-  background-color: var(--cell-bg-color-hover, #444);
+  &:hover {
+    background-color: var(--cell-bg-color-hover, #444);
+  }
+
+  &.shot {
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+    &.hit {
+      background-image: url(assets/icon-cross.svg);
+      border: 1px solid red;
+    }
+
+    &.miss {
+      background-image: url(assets/icon-dot.svg);
+    }
+  }
 }
 
 .ship-cell {
   background: navy;
   border: 1px solid navy;
-}
 
-.ship-cell:hover {
-  background: #000080cc;
+  & .ship {
+    background-color: navy;
+    transition: background-color 0.1s ease;
+
+    &:hover {
+      background-color: #00004d;
+    }
+  }
 }
 
 section.actions {

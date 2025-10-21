@@ -21,8 +21,65 @@ class App {
   initEventListeners() {
     this.startBtn.addEventListener("click", () => {
       this.playerOne = new Player("real", this.gameBoardOne);
-      this.playerTwo = new Player("computer", this.gameBoardTwo);      
+      this.playerTwo = new Player("computer", this.gameBoardTwo);
+
+      this.boardTwo.querySelectorAll("td").forEach(td => {
+        td.addEventListener("click", () => {
+          this.handleCellClick(td);
+        }, {once: true});
+      });
     }, {once:true});
+  }
+
+  removeAllEventListenersFromTd(td) {
+    const clone = td.cloneNode(true);
+    td.parentNode.replaceChild(clone, td);
+  }
+
+  markCornerNeigh(gameboard, boardEle, x, y) {
+    [[x-1, y-1], [x-1, y+1], [x+1, y-1], [x+1, y+1]].forEach(([x,y]) => {
+      if (gameboard.isWithinBounds(x, y)) {
+        const td = boardEle.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
+        td.classList.add("shot", "miss");
+        this.removeAllEventListenersFromTd(td);
+      }
+    });
+  }
+
+  markAllShipMooreNeigh(gameboard, boardEle, ship) {
+    const coordinates = gameboard.getCoordinatesStatus(ship, ship.startCoords, ship.orientation);
+    coordinates.forEach(([x,y]) => {
+      [ [x-1, y-1], [x, y-1], [x+1, y-1],
+        [x-1, y],             [x+1, y],
+        [x-1, y+1], [x, y+1], [x+1, y+1]
+      ].forEach(([x, y]) => {
+        if (gameboard.isWithinBounds(x, y) && !(gameboard.board[x][y] instanceof Ship)) {
+          const td = boardEle.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
+          if (td) {
+            td.classList.add("shot", "miss");
+            this.removeAllEventListenersFromTd(td);
+          }
+        }
+      });
+    });
+  }
+
+  handleCellClick(td) {
+    const x = Number(td.dataset.x);
+    const y = Number(td.dataset.y);
+    const entity = this.playerTwo.gameboard.board[x][y];
+    td.classList.add("shot");
+    if (entity instanceof Ship) {
+      td.classList.add("hit");
+      entity.hit();
+      if(!entity.isSunk()) {
+        this.markCornerNeigh(this.playerTwo.gameboard, this.boardTwo, x, y);
+      } else {
+        this.markAllShipMooreNeigh(this.playerTwo.gameboard, this.boardTwo, entity);
+      }
+    } else {
+      td.classList.add("miss")
+    }
   }
 
   renderBoardCells(boardElement) {
@@ -76,8 +133,9 @@ class App {
           
           if (ship.startCoords[0] === i && ship.startCoords[1] === j){
             const shipContainer = document.createElement("div");
+            shipContainer.classList.add("ship")
             shipContainer.style.position = "relative";
-            shipContainer.style.zIndex = "-1"
+            shipContainer.style.zIndex = "1"
             if (ship.orientation === "horizontal") {
               cell.dataset.orientation = "h";
               shipContainer.style.width = '100%';

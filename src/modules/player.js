@@ -1,7 +1,7 @@
 class Player {
-  constructor(type, board) {
+  constructor(type, gameboard) {
     this.type = type;
-    this.board = board;
+    this.gameboard = gameboard;
   }
 }
 
