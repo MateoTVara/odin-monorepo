@@ -10,17 +10,25 @@ class App {
     this.boardOne = document.querySelector("#board-one");
     this.boardOneBlocker = document.querySelector("#board-one .blocker")
     this.gameBoardOne = new Gameboard();
+    
     this.boardTwo = document.querySelector("#board-two");
     this.boardTwoBlocker = document.querySelector("#board-two .blocker")
     this.gameBoardTwo = new Gameboard();
+    
     this.renderBoardCells(this.boardOne);
     this.renderBoardCells(this.boardTwo);
-    this.placeShips(this.gameBoardOne);
+    
+    this.gameBoardOne.placeShips();
     this.renderShips(this.boardOne, this.gameBoardOne);
-    this.placeShips(this.gameBoardTwo);
+
+    this.gameBoardTwo.placeShips();
+    
     this.initEventListeners();
   }
 
+  /**
+   * Initialize event listeners for the game.
+   */
   initEventListeners() {
     this.startBtn.addEventListener("click", () => {
       this.playerOne = new Player("real", this.gameBoardOne);
@@ -29,28 +37,44 @@ class App {
       this.boardTwo.querySelectorAll("td").forEach(td => {
         td.addEventListener("click", () => {
           this.handleCellClick(td, this.playerTwo, this.boardTwo);
-          
-          let shot = false;
-          while(!shot) {
-            let [x, y] = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-            const boardOneTd = this.boardOne.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
-            if(boardOneTd.classList.contains("shot")){
-              continue;
-            } else {
-              this.handleCellClick(boardOneTd, this.playerOne, this.boardOne);
-              shot = true;
+          this.boardTwoBlocker.classList.add("active");
+
+          setTimeout(() => {
+            let shot = false;
+            while(!shot) {
+              let [x, y] = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+              const boardOneTd = this.boardOne.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
+              if(boardOneTd.classList.contains("shot")){
+                continue;
+              } else {
+                this.handleCellClick(boardOneTd, this.playerOne, this.boardOne);
+                shot = true;
+              }
             }
-          }
+            if(this.playerTwo.gameboard.areAllShipsSunk() || this.playerOne.gameboard.areAllShipsSunk()) return;
+            this.boardTwoBlocker.classList.remove("active");
+          }, 500);
         }, {once: true});
       });
     }, {once:true});
   }
 
+  /**
+   * Remove all event listeners from a table cell.
+   * @param {HTMLElement} td - The table cell element.
+   */
   removeAllEventListenersFromTd(td) {
     const clone = td.cloneNode(true);
     td.parentNode.replaceChild(clone, td);
   }
 
+  /**
+   * Mark the corner neighbors of a hit cell.
+   * @param {Gameboard} gameboard 
+   * @param {HTMLElement} boardEle 
+   * @param {number} x 
+   * @param {number} y 
+   */
   markCornerNeigh(gameboard, boardEle, x, y) {
     [[x-1, y-1], [x-1, y+1], [x+1, y-1], [x+1, y+1]].forEach(([x,y]) => {
       if (gameboard.isWithinBounds(x, y)) {
@@ -61,6 +85,12 @@ class App {
     });
   }
 
+  /**
+   * Mark all neighboring cells of a ship.
+   * @param {Gameboard} gameboard 
+   * @param {HTMLElement} boardEle 
+   * @param {Ship} ship 
+   */
   markAllShipMooreNeigh(gameboard, boardEle, ship) {
     const coordinates = gameboard.getCoordinatesStatus(ship, ship.startCoords, ship.orientation);
     coordinates.forEach(([x,y]) => {
@@ -79,14 +109,25 @@ class App {
     });
   }
 
+  /**
+   * Handle a cell click event.
+   * @param {HTMLElement} td - The clicked table cell.
+   * @param {Player} player - The player making the move.
+   * @param {HTMLElement} boardEle - The board element.
+   */
   handleCellClick(td, player, boardEle) {
     const x = Number(td.dataset.x);
     const y = Number(td.dataset.y);
+
+    if (Number.isNaN(x) || Number.isNaN(y) || !player.gameboard.isWithinBounds(x, y)) {
+      return;
+    }
+
     const entity = player.gameboard.board[x][y];
     td.classList.add("shot");
+    player.gameboard.receiveAttack(x, y);
     if (entity instanceof Ship) {
       td.classList.add("hit");
-      entity.hit();
       if(!entity.isSunk()) {
         this.markCornerNeigh(player.gameboard, boardEle, x, y);
       } else {
@@ -111,6 +152,10 @@ class App {
     
   }
 
+  /**
+   * Render the board cells for a game board.
+   * @param {HTMLElement} boardElement - The board element to render cells into.
+   */
   renderBoardCells(boardElement) {
     for (let i = 0; i < 10; i++) {
       const row = document.createElement("tr");
@@ -124,34 +169,11 @@ class App {
     }
   }
 
-  createShipsSet() {
-    const ships = [];
-    for (let i = 0; i < 4; i++) ships.push(new Ship(1));
-    for (let i = 0; i < 3; i++) ships.push(new Ship(2));
-    for (let i = 0; i < 2; i++) ships.push(new Ship(3));
-    ships.push(new Ship(4));
-    return ships;
-  }
-
-  placeShips(gameboard) {
-    const ships = this.createShipsSet();
-    let orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
-    let x = Math.floor(Math.random() * 10);
-    let y = Math.floor(Math.random() * 10);
-    while (ships.length > 0) {
-      const ship = ships.pop();
-      const coordinates = gameboard.getCoordinatesStatus(ship, [x, y], orientation);
-      if (!gameboard.isValidPlacement(coordinates)) {
-        ships.push(ship);
-        orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
-        x = Math.floor(Math.random() * 10);
-        y = Math.floor(Math.random() * 10);
-        continue;
-      }
-      gameboard.placeShip(ship, [x, y], orientation);
-    }
-  }
-
+  /**
+   * Render ships on the game board.
+   * @param {HTMLElement} boardElement - The board element to render ships into.
+   * @param {Gameboard} gameBoard - The game board containing ships.
+   */
   renderShips(boardElement, gameBoard) {
     for (let i = 0; i < gameBoard.board.length; i++) {
       for (let j = 0; j < gameBoard.board[i].length; j++) {
@@ -183,6 +205,3 @@ class App {
 }
 
 const app = new App();
-
-console.table(app.gameBoardOne.board);
-console.table(app.gameBoardTwo.board);
