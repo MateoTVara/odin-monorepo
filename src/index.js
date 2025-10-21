@@ -6,9 +6,12 @@ import { Gameboard, Player, Ship } from "./modules";
 class App {
   constructor (){
     this.startBtn = document.querySelector("#start-btn");
+
     this.boardOne = document.querySelector("#board-one");
+    this.boardOneBlocker = document.querySelector("#board-one .blocker")
     this.gameBoardOne = new Gameboard();
     this.boardTwo = document.querySelector("#board-two");
+    this.boardTwoBlocker = document.querySelector("#board-two .blocker")
     this.gameBoardTwo = new Gameboard();
     this.renderBoardCells(this.boardOne);
     this.renderBoardCells(this.boardTwo);
@@ -25,7 +28,19 @@ class App {
 
       this.boardTwo.querySelectorAll("td").forEach(td => {
         td.addEventListener("click", () => {
-          this.handleCellClick(td);
+          this.handleCellClick(td, this.playerTwo, this.boardTwo);
+          
+          let shot = false;
+          while(!shot) {
+            let [x, y] = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+            const boardOneTd = this.boardOne.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
+            if(boardOneTd.classList.contains("shot")){
+              continue;
+            } else {
+              this.handleCellClick(boardOneTd, this.playerOne, this.boardOne);
+              shot = true;
+            }
+          }
         }, {once: true});
       });
     }, {once:true});
@@ -64,22 +79,36 @@ class App {
     });
   }
 
-  handleCellClick(td) {
+  handleCellClick(td, player, boardEle) {
     const x = Number(td.dataset.x);
     const y = Number(td.dataset.y);
-    const entity = this.playerTwo.gameboard.board[x][y];
+    const entity = player.gameboard.board[x][y];
     td.classList.add("shot");
     if (entity instanceof Ship) {
       td.classList.add("hit");
       entity.hit();
       if(!entity.isSunk()) {
-        this.markCornerNeigh(this.playerTwo.gameboard, this.boardTwo, x, y);
+        this.markCornerNeigh(player.gameboard, boardEle, x, y);
       } else {
-        this.markAllShipMooreNeigh(this.playerTwo.gameboard, this.boardTwo, entity);
+        this.markAllShipMooreNeigh(player.gameboard, boardEle, entity);
       }
     } else {
       td.classList.add("miss")
     }
+    const tdOne = this.boardOneBlocker.querySelector("td");
+    const tdTwo = this.boardTwoBlocker.querySelector("td");
+    if (this.playerOne.gameboard.areAllShipsSunk() || this.playerTwo.gameboard.areAllShipsSunk()) {
+      if (this.playerOne.gameboard.areAllShipsSunk()){
+        tdOne.textContent = "You lose.";
+        tdTwo.textContent = "You win!";
+      } else if (this.playerTwo.gameboard.areAllShipsSunk()) {
+        tdOne.textContent = "You win!";
+        tdTwo.textContent = "You lose.";
+      }
+      this.boardOneBlocker.classList.add("active");
+      this.boardTwoBlocker.classList.add("active");
+    }
+    
   }
 
   renderBoardCells(boardElement) {
@@ -87,8 +116,8 @@ class App {
       const row = document.createElement("tr");
       for (let j = 0; j < 10; j++) {
         const cell = document.createElement("td");
-        cell.dataset.x = j;
-        cell.dataset.y = i;
+        cell.dataset.x = i;
+        cell.dataset.y = j;
         row.appendChild(cell);
       }
       boardElement.appendChild(row);
@@ -128,7 +157,7 @@ class App {
       for (let j = 0; j < gameBoard.board[i].length; j++) {
         const ship = gameBoard.board[i][j];
         if (ship instanceof Ship) {
-          const cell = boardElement.querySelector(`td[data-x="${j}"][data-y="${i}"]`);
+          const cell = boardElement.querySelector(`td[data-x="${i}"][data-y="${j}"]`);
           cell.classList.add("ship-cell");
           
           if (ship.startCoords[0] === i && ship.startCoords[1] === j){
@@ -136,14 +165,14 @@ class App {
             shipContainer.classList.add("ship")
             shipContainer.style.position = "relative";
             shipContainer.style.zIndex = "1"
-            if (ship.orientation === "horizontal") {
-              cell.dataset.orientation = "h";
-              shipContainer.style.width = '100%';
-              shipContainer.style.height = `${102 * ship.length}%`;
-            } else if (ship.orientation === "vertical") {
+            if (ship.orientation === "vertical") {
               cell.dataset.orientation = "v";
               shipContainer.style.width = `${102 * ship.length}%`;
               shipContainer.style.height = '100%';
+            } else if (ship.orientation === "horizontal") {
+              cell.dataset.orientation = "h";
+              shipContainer.style.width = '100%';
+              shipContainer.style.height = `${102 * ship.length}%`;
             }
             cell.appendChild(shipContainer);
           }
@@ -154,3 +183,6 @@ class App {
 }
 
 const app = new App();
+
+console.table(app.gameBoardOne.board);
+console.table(app.gameBoardTwo.board);
