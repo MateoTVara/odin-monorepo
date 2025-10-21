@@ -23,6 +23,8 @@ class App {
 
     this.gameBoardTwo.placeShips();
     
+    this.computerTargets = [];
+    
     this.initEventListeners();
   }
 
@@ -40,17 +42,7 @@ class App {
           this.boardTwoBlocker.classList.add("active");
 
           setTimeout(() => {
-            let shot = false;
-            while(!shot) {
-              let [x, y] = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-              const boardOneTd = this.boardOne.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
-              if(boardOneTd.classList.contains("shot")){
-                continue;
-              } else {
-                this.handleCellClick(boardOneTd, this.playerOne, this.boardOne);
-                shot = true;
-              }
-            }
+            this.computerAttack();
             if(this.playerTwo.gameboard.areAllShipsSunk() || this.playerOne.gameboard.areAllShipsSunk()) return;
             this.boardTwoBlocker.classList.remove("active");
           }, 500);
@@ -199,6 +191,52 @@ class App {
             cell.appendChild(shipContainer);
           }
         }
+      }
+    }
+  }
+
+  /**
+   * Computer makes an attack on the player's board.
+   */
+  computerAttack() {
+    let shot = false;
+    while (!shot) {
+      let x, y;
+
+      // Use smart targeting if available, otherwise pick random cell
+      if (this.computerTargets.length > 0) {
+        [x, y] = this.computerTargets.pop();
+      } else {
+        [x, y] = [
+          Math.floor(Math.random() * this.playerOne.gameboard.size),
+          Math.floor(Math.random() * this.playerOne.gameboard.size)
+        ];
+      }
+
+      const tdOneCell = this.boardOne.querySelector(`td[data-x="${x}"][data-y="${y}"]`);
+
+      // Skip if invalid or already shot
+      if (!tdOneCell || tdOneCell.classList.contains("shot")) continue;
+
+      this.handleCellClick(tdOneCell, this.playerOne, this.boardOne);
+      shot = true;
+
+      // If hit, add neighbors to targets
+      if (this.playerOne.gameboard.board[x][y] instanceof Ship) {
+        [
+          [x-1, y],
+          [x+1, y],
+          [x, y-1],
+          [x, y+1]
+        ].forEach(([nx, ny]) => {
+          if (
+            this.playerOne.gameboard.isWithinBounds(nx, ny) &&
+            !this.boardOne.querySelector(`td[data-x="${nx}"][data-y="${ny}"]`).classList.contains("shot") &&
+            !this.computerTargets.some(([cx, cy]) => cx === nx && cy === ny)
+          ) {
+            this.computerTargets.push([nx, ny]);
+          }
+        });
       }
     }
   }
