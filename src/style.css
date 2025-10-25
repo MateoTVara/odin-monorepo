@@ -139,3 +139,69 @@ main {
     }
   }
 }
+
+
+
+/* My works section */
+
+.projects {
+  margin-top: 6rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-rows: auto;
+  gap: 3rem;
+
+  & h1 {
+    grid-column: 1 / -1;
+
+    margin-bottom: -2.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: normal;
+  }
+}
+
+.project-card {
+  aspect-ratio: 19 / 20;
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+
+  & .project-image {
+    aspect-ratio: 3 / 2;
+    align-content: center;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: white;
+    padding: 3rem;
+  }
+
+  & .project-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0.5rem 1.5rem 1rem;
+
+    & > p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+    }
+
+    & .project-icons {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      & img {
+        width: 24px;
+      }
+    }
+  }
+
+  & p:last-child {
+    margin: 0 1.5rem;
+    color: #535962;
+  }
+}
