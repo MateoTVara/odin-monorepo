@@ -1,5 +1,27 @@
 /* styles.css */
 
+@font-face {
+    font-family: 'Roboto';
+    src: url('./assets/fonts/Roboto-Regular.woff2') format('woff2'),
+        url('./assets/fonts/Roboto-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('./assets/fonts/PlayfairDisplay-Regular.woff2') format('woff2'),
+        url('./assets/fonts/PlayfairDisplay-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+  font-family: Roboto, sans-serif;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -32,4 +54,88 @@ p {
 
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
+}
+
+/* start */
+
+main {
+  position: relative;
+  padding: 4rem 6rem;
+}
+
+.background-color {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0891b2;
+  z-index: -1;
+  clip-path: polygon(0 0, 100% 0, 100% 5%, 0 20%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 1);
+}
+
+.hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.image-wrapper {
+  position: relative;
+  flex: 5;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  & img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  & p {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    width: 100%;
+    text-align: center;
+    color: white;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+.about-me {
+  flex: 6;
+
+  padding: 2rem 2.5rem 1.5rem 1.5rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  & p:first-child {
+    font-family: 'Playfair Display', serif;
+    color: black;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  & p {
+    flex: 1;
+
+    font-size: 1.2rem;
+    color: #535962;
+    margin-bottom: 2rem;
+  }
+
+  & .socials {
+    justify-content: end;
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    & img {
+      width: 32px;
+    }
+  }
 }
