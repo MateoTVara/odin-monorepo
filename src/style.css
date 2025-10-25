@@ -205,3 +205,71 @@ main {
     color: #535962;
   }
 }
+
+/* footer */
+
+footer {
+  display: flex;
+  flex-direction: row;
+  background-color: #0891b2;
+  color: white;
+  padding: 3.5rem 4.5rem;
+  gap: 2rem;
+
+  & .contact-info {
+    flex: 4 4 auto;
+
+    & img {
+      width: 32px;
+    }
+
+    & p {
+      font-size: 1.3rem;
+    }
+
+    & > h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: normal;
+      margin-bottom: 1rem;
+    }
+
+    & > p:nth-child(2) {
+      margin-bottom: 2rem;
+    }
+
+    & > p:nth-child(4) {
+      margin-bottom: 2rem;
+    }
+
+    & > .phone, & > .email {
+      margin-bottom: 1rem;
+
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    & > .email {
+      margin-bottom: 2rem;
+    }
+
+    & > .socials {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+
+      & img {
+        width: 48px;
+      }
+    }
+  }
+
+  & > img {
+    flex: 6 6 auto;
+
+    width: 60%;
+    object-fit: cover;
+    aspect-ratio: 3 / 2;
+  }
+}
