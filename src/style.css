@@ -222,6 +222,7 @@ footer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
   gap: 2rem;
 
   & .contact-info {
@@ -283,7 +284,11 @@ footer {
   }
 }
 
-/* media queries */
+
+
+/* MEDIA QUERIES */
+
+/* mobile */
 
 @media (max-width: 600px) {
   main {
@@ -363,6 +368,90 @@ footer {
 
     & img {
       aspect-ratio: 2 / 3;
+    }
+  }
+}
+
+
+
+/* tablets */
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  main {
+    padding: 8rem 6rem;
+  }
+
+  .background-color {
+    clip-path: polygon(0 0, 100% 0, 100% 7.5%, 0 15%);
+  }
+
+  .hero {
+    display: block;
+  }
+
+  .image-wrapper {
+    float: left;
+    shape-outside: margin-box;
+    margin-right: 2rem;
+    margin-bottom: -2rem;
+    width: 45%;
+    transform-origin: bottom right;
+    transform: scale(1.2) translateY(-30px);
+
+    & > p {
+      top: 1px;
+      right: -200px;
+      width: fit-content;
+      font-size: 2.5rem;
+    }
+  }
+
+  .about-me {
+    display: block;
+    padding: 5rem 2rem 1.5rem;
+
+    & > p:first-child {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+
+    & > .socials {
+      display: none;
+    }
+  }
+  
+  .projects {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .project-card > .project-image {
+    padding: 1rem;
+    font-size: 2rem;
+  }
+
+  footer {
+    padding: 2rem 3rem;
+    gap: 1rem;
+
+    & > .contact-info {
+      flex: 11;
+
+      & h1 {
+        font-size: 2.5rem;
+      }
+
+      & p {
+        font-size: 1.2rem; 
+      }
+
+      & > .socials img {
+        width: 40px;
+      }
+    }
+
+    & > img {
+      flex: 9;
+      aspect-ratio: 2/ 3;
     }
   }
 }
