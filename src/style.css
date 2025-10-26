@@ -71,7 +71,7 @@ main {
   height: 100%;
   background-color: #0891b2;
   z-index: -1;
-  clip-path: polygon(0 0, 100% 0, 100% 5%, 0 20%);
+  clip-path: polygon(0 0, 100% 0, 100% 20%, 0 40%);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 1);
 }
 
@@ -79,16 +79,22 @@ main {
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .image-wrapper {
-  position: relative;
   flex: 5;
+
+  position: relative;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  min-width: 300px;
+
   & img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    
   }
 
   & p {
@@ -209,11 +215,13 @@ main {
 /* footer */
 
 footer {
-  display: flex;
-  flex-direction: row;
   background-color: #0891b2;
   color: white;
   padding: 3.5rem 4.5rem;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 2rem;
 
   & .contact-info {
@@ -269,7 +277,92 @@ footer {
     flex: 6 6 auto;
 
     width: 60%;
+    max-width: 900px;
     object-fit: cover;
     aspect-ratio: 3 / 2;
+  }
+}
+
+/* media queries */
+
+@media (max-width: 600px) {
+  main {
+    padding: 0;
+  }
+
+  .background-color {
+    clip-path: polygon(0 0, 100% 0, 100% 5%, 0 10%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 1);
+  }
+
+  .image-wrapper {
+    margin: 2rem;
+
+    & img {
+      aspect-ratio: 2 / 3;
+    }
+  }
+
+  .about-me {
+    padding: 0 1rem;
+    box-shadow: none;
+
+    & > p:first-child {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+
+    & > .socials {
+      justify-content: center;
+
+      & img {
+        width: 48px;
+      }
+    }
+  }
+
+  /* projects section */
+
+  .projects {
+    padding: 0 1rem;
+
+    & > h1 {
+      text-align: center;
+    }
+  }
+
+  /* footer contact info */
+
+  footer {
+    padding: 0;
+    margin-top: 12rem;
+
+    & > .contact-info {
+      padding: 0 1rem;
+
+      & p {
+        font-size: 1.2rem;
+      }
+
+      & > div > img {
+        display: none;
+      }
+
+      & > h1 {
+        text-align: center;
+      }
+
+      .socials {
+        justify-content: center;
+
+        & img {
+          display: block;
+        }
+      }
+    }
+
+    & img {
+      aspect-ratio: 2 / 3;
+    }
   }
 }
