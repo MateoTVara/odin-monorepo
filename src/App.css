@@ -35,3 +35,61 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* start */
+
+:root {
+  scrollbar-width: thin;
+}
+
+#root {
+  min-height: 100dvh;
+
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: auto 1fr;
+
+  & > * {
+    border: 1px solid black; /* debug section borders */
+  }
+}
+
+header {
+  grid-column: 1 / -1;
+
+  padding: 4px 16px;
+
+  display: flex;
+  justify-content: center;
+}
+
+#root > section {
+  height: 100%;
+}
+
+.form > .general-info {
+  padding: 8px 32px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+}
+
+.curriculum {
+  padding: 48px 96px;
+}
+
+.curriculum-page {
+  outline: 1px solid black;
+  aspect-ratio: 1 / 1.4142;
+
+  & > .full-name {
+    text-align: center;
+  }
+}
+
+.curriculum-page > .general-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 32px;
+}
