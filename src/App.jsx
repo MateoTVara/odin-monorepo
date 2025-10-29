@@ -1,19 +1,19 @@
+import './App.css'
 import { useState } from 'react'
 import FormSection from './components/form_section/FormSection'
 import InputGroup from './components/input_group/InputGroup'
 import InputEduExp from './components/input_edu_exp/InputEduExp'
 import CVEduExp from './components/cv_edu_exp/CVEduExp'
-import './App.css'
 import InputWorkExp from './components/input_work_exp/InputWorkExp'
 import CVWorkExp from './components/cv_work_exp/CVWorkExp'
-import InputTechSkills from './components/input_tech_skills/InputTechSkills'
+import InputSkills from './components/input_skills/InputSkills'
 
 function App() {
   const [generalInfo, setGeneralInfo] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    github: '',
+    fullName: 'Torres Vara Mateo Nicolas',
+    email: 'torresvaramateo@gmail.com',
+    phone: '+51 999999999',
+    github: 'github.com/MateoTVara',
   });
 
   function handleInputGroupChange(e) {
@@ -24,7 +24,22 @@ function App() {
 
 
 
-  const [educationalExps, setEducationalExps] = useState([]);
+  const [educationalExps, setEducationalExps] = useState([
+    {
+      id: 1,
+      schoolName: 'Universidad Tecnológica del Perú',
+      titleOfStudy: "Bachelor in System's Engineering",
+      startDate: '2024-08-01',
+      endDate: '',
+    },
+    {
+      id: 2,
+      schoolName: 'IDAT',
+      titleOfStudy: 'Technician in Systems and Information Development',
+      startDate: '2022-06-01',
+      endDate: '2024-03-01',
+    }
+  ]);
   const [activeEduExp, setActiveEduExp] = useState(null);
 
   function addEducationExperience() {
@@ -52,7 +67,16 @@ function App() {
 
 
 
-  const [workingExps, setWorkingExps] = useState([]);
+  const [workingExps, setWorkingExps] = useState([
+    {
+      id: 1,
+      companyName: 'Placeholder',
+      positionTitle: 'Placeholder',
+      responsabilities: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio perspiciatis deleniti distinctio ducimus praesentium? Cupiditate iure expedita natus, aliquam adipisci, exercitationem eius ex dolore doloremque quod eos enim amet quibusdam?',
+      startDate: '2023-05-03',
+      endDate: '',
+    }
+  ]);
   const [activeWorkExp, setActiveWorkExp] = useState(null);
 
   function addWorkingExperience() {
@@ -84,7 +108,7 @@ function App() {
   const [technicalSkills, setTechnicalSkills] = useState([
     {
       id: 1,
-      name: 'Languages',
+      name: 'Programming Languages',
       list: ['JavaScript', 'Python', 'Java']
     },
     {
@@ -127,6 +151,56 @@ function App() {
 
 
 
+  const [otherSkills, setOtherSkills] = useState([
+    {
+      id: 1,
+      name: 'Languages',
+      list: ['Spanish', 'English']
+    },
+    {
+      id: 2,
+      name: 'Certifications',
+      list: [
+        'NDG Linux Essentials course in the Cisco Networking Academy',
+        'PCAP: Programming Essentials in Python'
+      ]
+    },
+    {
+      id: 3,
+      name: 'Others',
+      list: ['CSS', 'HTML', 'LaTeX']
+    }
+  ]);
+
+  const [activeOtherSkill, setActiveOtherSkill] = useState(null);
+
+  function addOtherSkills() {
+    const newId = otherSkills.length === 0 ? 0 : otherSkills[otherSkills.length - 1].id + 1;
+    const input = document.querySelector("#input-other-skill-set");
+    const newName = input.value;
+    if (!input.value) return;
+    input.value = '';
+    setOtherSkills([
+      ...otherSkills,
+      {
+        id: newId,
+        name: newName,
+        list: [],
+      },
+    ])
+    console.log('otherSkills after add:', [...otherSkills, { id: newId, name: newName, list: [] }]);
+  }
+
+  function updateOtherSkills(updatedSkill) {
+    setOtherSkills(prevSet => 
+      prevSet.map(skill => skill.id === updatedSkill.id ? updatedSkill : skill)
+    );
+  }
+
+  function removeOtherSkills(id) {setOtherSkills(otherSkills.filter(skills => skills.id !== id))};
+
+
+
   return (
     <>
       <header><h1>CV Generator</h1></header>
@@ -142,7 +216,6 @@ function App() {
                       value={generalInfo.github} onChange={handleInputGroupChange}/>
         </FormSection>
         <FormSection className='educational-exp' title='Educational Experience'>
-          <button onClick={addEducationExperience}>Add Experience</button>
           {educationalExps.map(exp => {
             return  <InputEduExp key={exp.id} eduExp={exp}
                     isActive={activeEduExp === exp.id}
@@ -152,9 +225,9 @@ function App() {
                     onChange={updateEducationExperience}
                     onRemove={() => removeEducationExperience(exp.id)}/>
           })}
+          <button onClick={addEducationExperience}>Add Experience</button>
         </FormSection>
         <FormSection className='work-exp' title='Work Experience'>
-          <button onClick={addWorkingExperience}>Add Experience</button>
           {workingExps.map(exp => {
             return  <InputWorkExp key={exp.id} workExp={exp}
                     isActive={exp.id === activeWorkExp}
@@ -164,11 +237,13 @@ function App() {
                     onChange={updateWorkingExperience}
                     onRemove={() => removeWorkingExperience(exp.id)}/>
           })}
+          <button onClick={addWorkingExperience}>Add Experience</button>
         </FormSection>
         <FormSection className='technical-skills' title='Technical Skills'>
           {technicalSkills.map(skill => 
-            <InputTechSkills  
-              key={skill.id} techSkill={skill} 
+            <InputSkills
+              className='tech-skills-container'
+              key={skill.id} receivedSkill={skill} 
               updateSkills={updateTechnicalSkills}
               onRemove={() => removeTechnicalSkills(skill.id)}
               isActive={activeTechSkill === skill.id}
@@ -182,6 +257,26 @@ function App() {
             <button onClick={() => addTechnicalSkills()}>Add More</button>
           </div>
         </FormSection>
+
+        <FormSection className='other-skills' title='Aditional Information'>
+          {otherSkills.map(skill =>
+            <InputSkills
+              className='other-skills-container'
+              key={skill.id} receivedSkill={skill}
+              updateSkills={updateOtherSkills}
+              onRemove={() => removeOtherSkills(skill.id)}
+              isActive={activeOtherSkill === skill.id}
+              toggleActive={() => {
+                activeOtherSkill === skill.id ? setActiveOtherSkill(null) : setActiveOtherSkill(skill.id);
+              }}
+            />
+          )}
+          <div className='actions'>
+            <input type="text" id='input-other-skill-set'/>
+            <button onClick={() => addOtherSkills()}>Add More</button>
+          </div>
+        </FormSection>
+
       </section>
       <section className='curriculum'>
         <div className='curriculum-page'>
@@ -199,12 +294,20 @@ function App() {
           <section className='working-exp'>
             {workingExps.map(exp => <CVWorkExp key={exp.id} exp={exp}/>)}
           </section>
-          {technicalSkills.length > 0 && <h2>Technical Skill</h2>}
+          {technicalSkills.length > 0 && <h2>Technical Skills</h2>}
           <section className='technical-skills'>
             <ul>
               {technicalSkills.map(skill => <li><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
             </ul>
           </section>
+
+          {otherSkills.length > 0 && <h2>Aditional Information</h2>}
+          <section className='other-skills'>
+            <ul>
+              {otherSkills.map(skill => <li><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
+            </ul>
+          </section>
+
         </div>
       </section>
     </>

@@ -1,4 +1,4 @@
-.tech-skills-container {
+.container {
   width: 100%;
 
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.tech-skills-container > div:first-child {
+.container > div:first-child {
   padding: 16px 32px;
   width: 100%;
   
@@ -35,7 +35,7 @@
   }
 }
 
-.tech-skills-container > ul {
+.container > ul {
   overflow: hidden;
   max-height: 0;
   list-style: none;

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
-import './InputTechSkills.css'
+import './InputSkills.css'
 
-export default function InputTechSkills({techSkill, updateSkills, onRemove, isActive, toggleActive}) {
+export default function InputSkills({receivedSkill, updateSkills, onRemove, isActive, toggleActive, className}) {
 
   const inputRefs = useRef([]);
   const [justAdded, setJustAdded] = useState(false);
@@ -9,58 +9,58 @@ export default function InputTechSkills({techSkill, updateSkills, onRemove, isAc
   function addSkill() {
     if (!isActive) toggleActive(); 
     updateSkills({
-      ...techSkill,
-      list: [...techSkill.list, ''],
+      ...receivedSkill,
+      list: [...receivedSkill.list, ''],
     });
     setJustAdded(true);
   }
 
   useEffect(() => {
-    if (justAdded && techSkill.list.length > 0) {
-      inputRefs.current[techSkill.list.length - 1]?.focus();
+    if (justAdded && receivedSkill.list.length > 0) {
+      inputRefs.current[receivedSkill.list.length - 1]?.focus();
       setJustAdded(false);
     }
-  }, [techSkill.list.length, justAdded]);
+  }, [receivedSkill.list.length, justAdded]);
 
   function removeSkill(id) {
     updateSkills({
-      ...techSkill,
-      list: techSkill.list.filter((_, i) => i !== id)
+      ...receivedSkill,
+      list: receivedSkill.list.filter((_, i) => i !== id)
     })
   }
   
   function handleOnBlur(id) {
-    if (!techSkill.list[id].trim()) removeSkill(id);
+    if (!receivedSkill.list[id].trim()) removeSkill(id);
   }
 
   function handleOnChange(id, e) {
     updateSkills({
-      ...techSkill,
-      list: techSkill.list.map((skill, i) => id === i ? e.target.value : skill)
+      ...receivedSkill,
+      list: receivedSkill.list.map((skill, i) => id === i ? e.target.value : skill)
     })
   }
 
   function handleSkillNameChange(e) {
     updateSkills({
-      ...techSkill,
+      ...receivedSkill,
       name: e.target.value,
     });
   }
 
   return (
-    <div className="tech-skills-container">
+    <div className={`${className} container`}>
       <div>
         <button onClick={toggleActive}>{isActive ? 'O' : '-'}</button>
         <input 
           type="text"
-          value={techSkill.name}
+          value={receivedSkill.name}
           onChange={e => handleSkillNameChange(e)} 
         />
         <button onClick={onRemove}>X</button>
         <button onClick={addSkill}>+</button>
       </div>
       <ul className={isActive ? 'active' : ''}>
-        {techSkill.list.map((skill, id) =>
+        {receivedSkill.list.map((skill, id) =>
           <li key={id}>
             <input
               ref={el => inputRefs.current[id] = el}
