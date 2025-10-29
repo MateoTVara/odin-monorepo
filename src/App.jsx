@@ -6,6 +6,7 @@ import CVEduExp from './components/cv_edu_exp/CVEduExp'
 import './App.css'
 import InputWorkExp from './components/input_work_exp/InputWorkExp'
 import CVWorkExp from './components/cv_work_exp/CVWorkExp'
+import InputTechSkills from './components/input_tech_skills/InputTechSkills'
 
 function App() {
   const [generalInfo, setGeneralInfo] = useState({
@@ -80,6 +81,52 @@ function App() {
 
 
 
+  const [technicalSkills, setTechnicalSkills] = useState([
+    {
+      id: 1,
+      name: 'Languages',
+      list: ['JavaScript', 'Python', 'Java']
+    },
+    {
+      id: 2,
+      name: 'Frameworks/Libraries',
+      list: ['Django', 'Spring', 'React']
+    },
+    {
+      id: 3,
+      name: 'Dev Tools',
+      list: ['Git', 'Postman']
+    }
+  ]);
+
+  const [activeTechSkill, setActiveTechSkill] = useState(null);
+
+  function addTechnicalSkills() {
+    const newId = technicalSkills.length === 0 ? 0 : technicalSkills[technicalSkills.length - 1].id + 1;
+    const input = document.querySelector('#input-skill-set');
+    const newName = input.value;
+    if (!input.value) return;
+    input.value = '';
+    setTechnicalSkills([
+      ...technicalSkills,
+      {
+        id: newId,
+        name: newName,
+        list: []
+      }
+    ])
+  }
+
+  function updateTechnicalSkills(updatedSkill) {
+    setTechnicalSkills(prevSet =>
+      prevSet.map(skill => skill.id === updatedSkill.id ? updatedSkill : skill)
+    );
+  }
+
+  function removeTechnicalSkills(id) {setTechnicalSkills(technicalSkills.filter(skills => skills.id !== id))};
+
+
+
   return (
     <>
       <header><h1>CV Generator</h1></header>
@@ -118,6 +165,23 @@ function App() {
                     onRemove={() => removeWorkingExperience(exp.id)}/>
           })}
         </FormSection>
+        <FormSection className='technical-skills' title='Technical Skills'>
+          {technicalSkills.map(skill => 
+            <InputTechSkills  
+              key={skill.id} techSkill={skill} 
+              updateSkills={updateTechnicalSkills}
+              onRemove={() => removeTechnicalSkills(skill.id)}
+              isActive={activeTechSkill === skill.id}
+              toggleActive={() => {
+                activeTechSkill === skill.id ? setActiveTechSkill(null) : setActiveTechSkill(skill.id);
+              }}
+            />
+          )}
+          <div className='actions'>
+            <input type="text" id='input-skill-set'/>
+            <button onClick={() => addTechnicalSkills()}>Add More</button>
+          </div>
+        </FormSection>
       </section>
       <section className='curriculum'>
         <div className='curriculum-page'>
@@ -133,7 +197,13 @@ function App() {
           </section>
           {workingExps.length > 0 && <h2>Working Experience</h2>}
           <section className='working-exp'>
-            {workingExps.map(exp => <CVWorkExp id={exp.id} exp={exp}/>)}
+            {workingExps.map(exp => <CVWorkExp key={exp.id} exp={exp}/>)}
+          </section>
+          {technicalSkills.length > 0 && <h2>Technical Skill</h2>}
+          <section className='technical-skills'>
+            <ul>
+              {technicalSkills.map(skill => <li><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
+            </ul>
           </section>
         </div>
       </section>

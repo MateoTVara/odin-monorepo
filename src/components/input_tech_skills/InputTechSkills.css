@@ -1,0 +1,89 @@
+.tech-skills-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tech-skills-container > div:first-child {
+  padding: 16px 32px;
+  width: 100%;
+  
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+
+  & > input {
+    border: none;
+    flex: 1;
+    text-align: center;
+    transition: background-color 250ms ease;
+
+    &:hover {
+      background-color: #f4f4f4;
+    }
+
+    &:focus {
+      outline: 2px solid black;
+    }
+  } 
+
+  & > button {
+    width: 32px;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.tech-skills-container > ul {
+  overflow: hidden;
+  max-height: 0;
+  list-style: none;
+  padding: 0;
+  transition: padding 400ms ease,
+              max-height 400ms ease;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+
+  &.active {
+    max-height: 500px;
+    padding: 8px 16px;
+  }
+
+  & > li {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding-right: 4px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > *{
+      border: none;
+      background-color: transparent;
+      align-content: center;
+    }
+
+    & > input {
+      text-align: center;
+      border-radius: 1rem 0 0 1rem;
+      cursor: pointer;
+    }
+
+    & > button {
+      transform: translateX(2px);
+      border-radius: 0 1rem 1rem 0;
+      will-change: transform;
+      transition: transform 200ms ease;
+
+      &:hover {
+       transform: translateX(3px) scale(1.25); 
+      }
+    }
+  }
+}
+

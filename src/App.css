@@ -71,6 +71,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-bottom: 3rem;
 }
 
 /* general-info */
@@ -111,6 +112,21 @@ header {
   }
 }
 
+/* technical-skills */
+
+.form > .technical-skills {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & > .actions {
+    margin-top: 12px;
+
+    display: flex;
+    gap: 1rem;
+  }
+}
+
 
 
 
@@ -128,7 +144,7 @@ header {
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: star;
 
   & > .full-name {
     text-align: center;
@@ -146,4 +162,14 @@ header {
 
 .curriculum-page > .educational-exp {
   width: 100%;
+}
+
+.curriculum-page > .technical-skills {
+  width: 100%;
+  padding: 4px 16px;
+
+  & > ul {
+    list-style: none;
+    padding: 0;
+  }
 }
