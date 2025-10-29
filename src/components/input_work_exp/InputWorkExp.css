@@ -1,0 +1,80 @@
+.work-exp-container > * {
+  padding: 8px;
+}
+
+.work-exp-card {
+  border-block: 1px solid black; /* debug */
+  cursor: pointer;
+  transition: background-color 250ms ease;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 16px;
+
+  &:hover {
+    background-color: #f4f4f4;
+  }
+
+  & > button {
+    height: 32px;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.content {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  align-items: center;
+  align-content: center;
+  column-gap: 16px;
+  row-gap: 8px;
+
+  & > * {
+    text-align: center;
+    overflow: auto;
+  }
+
+  & > p:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+
+
+.work-exp-form {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: max-height 300ms ease,
+              padding 300ms ease,
+              border-bottom 300ms ease; /* debug */
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+
+  &.active {
+    z-index: -1;
+    max-height: 600px;
+    padding: 8px;
+    border-bottom: 1px solid black; /* debug */
+  }
+
+  & > div:last-child {
+    grid-column: 1 / -1;
+
+    & > textarea {
+      scrollbar-width: thin;
+      grid-column: 1 / -1;
+      min-height: 5rem;
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+}

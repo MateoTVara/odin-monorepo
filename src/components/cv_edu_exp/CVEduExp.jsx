@@ -5,7 +5,7 @@ export default function CVEduExp({exp}) {
     <div className="edu-exp-cv">
       <h3>{exp.schoolName}</h3>
       <p>{exp.titleOfStudy}</p>
-      <p>{exp.startDate} {exp.endDate && '-'} {exp.endDate}</p>
+      <p>{exp.startDate} - {!(exp.startDate) ? '' : !(exp.endDate) ? 'Present' : exp.endDate}</p>
     </div>
   );
 }

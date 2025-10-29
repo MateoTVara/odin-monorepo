@@ -4,6 +4,8 @@ import InputGroup from './components/input_group/InputGroup'
 import InputEduExp from './components/input_edu_exp/InputEduExp'
 import CVEduExp from './components/cv_edu_exp/CVEduExp'
 import './App.css'
+import InputWorkExp from './components/input_work_exp/InputWorkExp'
+import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 
 function App() {
   const [generalInfo, setGeneralInfo] = useState({
@@ -47,6 +49,37 @@ function App() {
   
   function removeEducationExperience(id) {setEducationalExps(educationalExps.filter(exp  => exp.id !== id))};
 
+
+
+  const [workingExps, setWorkingExps] = useState([]);
+  const [activeWorkExp, setActiveWorkExp] = useState(null);
+
+  function addWorkingExperience() {
+    const newId = workingExps.length === 0 ? 0 : workingExps[workingExps.length - 1].id + 1;
+    setWorkingExps([
+      ...workingExps,
+      {
+        id: newId,
+        companyName: '',
+        positionTitle: '',
+        responsabilities: '',
+        startDate: '',
+        endDate: '',
+      }
+    ]);
+    setActiveWorkExp(newId)
+  }
+
+  function updateWorkingExperience(updatedExp) {
+    setWorkingExps(workingExps => 
+      workingExps.map(e => e.id === updatedExp.id ? updatedExp : e)
+    );
+  }
+
+  function removeWorkingExperience(id) {setWorkingExps(workingExps.filter(exp => exp.id !== id))};
+
+
+
   return (
     <>
       <header><h1>CV Generator</h1></header>
@@ -74,7 +107,16 @@ function App() {
           })}
         </FormSection>
         <FormSection className='work-exp' title='Work Experience'>
-
+          <button onClick={addWorkingExperience}>Add Experience</button>
+          {workingExps.map(exp => {
+            return  <InputWorkExp key={exp.id} workExp={exp}
+                    isActive={exp.id === activeWorkExp}
+                    onClick={() => {
+                      activeWorkExp === exp.id ? setActiveWorkExp(null) : setActiveWorkExp(exp.id)
+                    }}
+                    onChange={updateWorkingExperience}
+                    onRemove={() => removeWorkingExperience(exp.id)}/>
+          })}
         </FormSection>
       </section>
       <section className='curriculum'>
@@ -88,6 +130,10 @@ function App() {
           {educationalExps.length > 0 && <h2>Educational Experience</h2>}
           <section className='educational-exp'>
             {educationalExps.map(exp => <CVEduExp key={exp.id} exp={exp}/>)}
+          </section>
+          {workingExps.length > 0 && <h2>Working Experience</h2>}
+          <section className='working-exp'>
+            {workingExps.map(exp => <CVWorkExp id={exp.id} exp={exp}/>)}
           </section>
         </div>
       </section>
