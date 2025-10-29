@@ -65,22 +65,56 @@ header {
   height: 100%;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* general-info */
+
 .form > .general-info {
   padding: 8px 32px;
 
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto 1fr;
-  gap: 16px;
+  gap: 8px;
 }
+
+/* educational-exp */
+
+.form > .educational-exp {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+
+  & > button {
+    align-self: center;
+    margin-bottom: 8px;
+  }
+}
+
+
+
+
+
+/* curriculum */
 
 .curriculum {
   padding: 48px 96px;
 }
 
 .curriculum-page {
+  padding: 16px 32px;
   outline: 1px solid black;
   aspect-ratio: 1 / 1.4142;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   & > .full-name {
     text-align: center;
@@ -88,8 +122,14 @@ header {
 }
 
 .curriculum-page > .general-info {
+  margin-bottom: 16px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 32px;
+}
+
+.curriculum-page > .educational-exp {
+  width: 100%;
 }

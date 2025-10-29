@@ -1,0 +1,15 @@
+.edu-exp-cv {
+  padding: 4px 16px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+
+  & > h3 {
+    grid-column: 1 / -1;
+  }
+
+  & > p:last-child {
+    text-align: end;
+  }
+}
