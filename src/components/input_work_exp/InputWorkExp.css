@@ -1,11 +1,17 @@
 .work-exp-container > * {
   padding: 8px;
+  margin: 0 1rem;
 }
 
 .work-exp-card {
-  border-block: 1px solid black; /* debug */
+  border-inline: 2px white solid;
+  border-top: 2px white solid;
+  border-bottom: 2px white solid;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 250ms ease;
+  transition: max-height 300ms ease,
+              padding 300ms ease,
+              border-bottom 300ms ease; /* debug */
 
   display: flex;
   flex-direction: row;
@@ -13,13 +19,25 @@
   align-items: center;
   column-gap: 16px;
 
+  &.active {
+    border-bottom: 0px solid transparent;
+    border-radius: 12px 12px 0 0;
+  }
+
   &:hover {
-    background-color: #f4f4f4;
+    background-color: #202020;
   }
 
   & > button {
     height: 32px;
     aspect-ratio: 1 / 1;
+    background-color: transparent;
+    border: none;
+    transition: transform 250ms ease-in-out;
+
+    &:hover {
+      transform: scale(1.25);
+    }
   }
 }
 
@@ -63,7 +81,9 @@
     z-index: -1;
     max-height: 600px;
     padding: 8px;
-    border-bottom: 1px solid black; /* debug */
+    border-inline: 2px solid white; /* debug */
+    border-bottom: 2px solid white;
+    border-radius: 0 0 12px 12px;
   }
 
   & > div:last-child {

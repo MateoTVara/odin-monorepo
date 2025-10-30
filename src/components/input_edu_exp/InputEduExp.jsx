@@ -1,6 +1,7 @@
 import './InputEduExp.css';
 import InputGroup from '../input_group/InputGroup';
-import { useState } from 'react';
+import Icon from '@mdi/react';
+import { mdiCloseCircleOutline } from '@mdi/js';
 
 export default function InputEduExp({eduExp, onRemove, onChange, isActive, onClick}) {
   function handleInputChange(e) {
@@ -18,13 +19,19 @@ export default function InputEduExp({eduExp, onRemove, onChange, isActive, onCli
 
   return (
     <div className="edu-exp-container" id={eduExp.id}>
-      <div className='edu-exp-card' onClick={onClick}>
+      <div className={`edu-exp-card ${isActive && "active"}`} onClick={onClick}>
         <div className='content'>
           <h3>{eduExp.schoolName}</h3>
           <p>{eduExp.titleOfStudy}</p>
           <p>{eduExp.startDate} {eduExp.endDate && '-'} {eduExp.endDate}</p>
         </div>
-        <button onClick={onRemove}>X</button>
+        <button onClick={onRemove}>
+          <Icon 
+            path={mdiCloseCircleOutline} 
+            size={1} 
+            color='#c9184a'
+          />
+        </button>
       </div>
       <form className={`edu-exp-form ${isActive && "active"}`}>
         <InputGroup id="school-name" type="text" label="School Name"

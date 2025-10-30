@@ -1,5 +1,7 @@
 import './InputWorkExp.css'
 import InputGroup from "../input_group/InputGroup";
+import Icon from '@mdi/react';
+import { mdiCloseCircleOutline } from '@mdi/js';
 
 export default function InputWorkExp({workExp, onRemove, onChange, isActive, onClick}) {
   function handleInputChange(e) {
@@ -16,13 +18,19 @@ export default function InputWorkExp({workExp, onRemove, onChange, isActive, onC
   
   return (
     <div className="work-exp-container" id={workExp.id}>
-      <div className="work-exp-card" onClick={onClick}>
+      <div className={`work-exp-card ${isActive && 'active'}`} onClick={onClick}>
         <div className="content">
           <h3>{workExp.companyName}</h3>
           <h4>{workExp.positionTitle}</h4>
           <p>{workExp.startDate} {workExp.endDate && '-'} {workExp.endDate}</p>
         </div>
-        <button onClick={onRemove}>X</button>
+        <button onClick={onRemove}>
+          <Icon
+            path={mdiCloseCircleOutline} 
+            size={1} 
+            color='#c9184a'
+          />
+        </button>
       </div>
       <form className={`work-exp-form ${isActive && 'active'} `}>
         <InputGroup id='company-name' type='text' label='Company Name' 
@@ -35,7 +43,7 @@ export default function InputWorkExp({workExp, onRemove, onChange, isActive, onC
                     value={workExp.endDate} onChange={handleInputChange}/>
         <div>
           <label htmlFor="responsabilities">Responsabilities</label>
-          <textarea name="responsabilities" id="responsabilities" onChange={handleInputChange}></textarea>
+          <textarea value={workExp.responsabilities} name="responsabilities" id="responsabilities" onChange={handleInputChange}></textarea>
         </div>
       </form>
     </div>

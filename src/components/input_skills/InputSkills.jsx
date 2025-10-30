@@ -1,4 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
+import { mdiArrowRightDropCircleOutline, mdiCloseCircleOutline, mdiPlus, mdiClose } from '@mdi/js';
+import Icon from '@mdi/react';
 import './InputSkills.css'
 
 export default function InputSkills({receivedSkill, updateSkills, onRemove, isActive, toggleActive, className}) {
@@ -50,14 +52,30 @@ export default function InputSkills({receivedSkill, updateSkills, onRemove, isAc
   return (
     <div className={`${className} container`}>
       <div>
-        <button onClick={toggleActive}>{isActive ? 'O' : '-'}</button>
+        <button onClick={toggleActive}>
+          <Icon path={mdiArrowRightDropCircleOutline}
+            size={1}
+            color="white"
+            rotate={isActive ? 90 : 0}
+          />
+        </button>
         <input 
           type="text"
           value={receivedSkill.name}
           onChange={e => handleSkillNameChange(e)} 
         />
-        <button onClick={onRemove}>X</button>
-        <button onClick={addSkill}>+</button>
+        <button onClick={onRemove}>
+          <Icon path={mdiCloseCircleOutline}
+            size={1}
+            color='#c9184a'
+          />
+        </button>
+        <button onClick={addSkill}>
+          <Icon path={mdiPlus}
+            size={1}
+            color='#a7c957'
+          />
+        </button>
       </div>
       <ul className={isActive ? 'active' : ''}>
         {receivedSkill.list.map((skill, id) =>
@@ -68,10 +86,15 @@ export default function InputSkills({receivedSkill, updateSkills, onRemove, isAc
               onBlur={() => handleOnBlur(id)}
               onChange={(e) => handleOnChange(id, e)}
               style={{
-                width: `${skill.length + 2.5}ch`
+                width: `${skill.length*0.8 + 2.5}ch`
               }}
             />
-            <button onClick={() => removeSkill(id)}>x</button>
+            <button onClick={() => removeSkill(id)}>
+              <Icon path={mdiClose}
+                size={0.6}
+                color='black'
+              />
+            </button>
           </li>
         )}
       </ul>

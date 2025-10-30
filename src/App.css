@@ -36,8 +36,34 @@ h1, h2, h3, h4, h5, h6 {
 
 /* start */
 
+input {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: none;
+  transition: outline 50ms ease;
+  
+  &:focus {
+    outline: 2px solid white;
+  }
+}
+
+@font-face {
+  font-family: 'Baloo 2';
+  src: url('./assets/fonts/Baloo2-Regular.woff2') format('woff2'),
+      url('./assets/fonts/Baloo2-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
+  font-family: 'Baloo 2';
   scrollbar-width: thin;
+  background-color: #181818;
+  color: white;
+
+  --primary-btn-bg-color: #e8e8e8;
+  --hover-primary-btn-bg-color: #d8d8d8;
 }
 
 #root {
@@ -72,6 +98,11 @@ header {
   flex-direction: column;
   gap: 16px;
   padding-bottom: 3rem;
+  direction: rtl;
+
+  & > * {
+    direction: ltr;
+  }
 }
 
 /* general-info */
@@ -97,6 +128,14 @@ header {
   & > button {
     align-self: center;
     margin-bottom: 8px;
+    background-color: var(--primary-btn-bg-color);
+    border: none;
+    border-radius: 8px;
+    transition: background-color 250ms ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-primary-btn-bg-color);
+    }
   }
 }
 
@@ -109,6 +148,14 @@ header {
 
   & > button {
     align-self: center;
+    background-color: var(--primary-btn-bg-color);
+    border: none;
+    border-radius: 8px;
+    transition: background-color 250ms ease-in-out;
+
+    &:hover {
+      background-color: var(--hover-primary-btn-bg-color);
+    }
   }
 }
 
@@ -133,6 +180,17 @@ header {
 
   display: flex;
   gap: 1rem;
+
+  & > button {
+    background-color: var(--primary-btn-bg-color);
+    border: none;
+    border-radius: 8px;
+    transition: background-color 100ms ease;
+
+    &:hover {
+      background-color: var(--hover-primary-btn-bg-color);
+    }
+  }
 }
 
 
@@ -146,9 +204,13 @@ header {
 }
 
 .curriculum-page {
+  background-color: white;
+  color: #181818;
+  font-family: Helvetica, sans-serif;
   padding: 16px 32px;
   outline: 1px solid black;
   aspect-ratio: 1 / 1.4142;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
