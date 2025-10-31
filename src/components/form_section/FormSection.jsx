@@ -1,11 +1,10 @@
 import  './FormSection.css'
 
-export default function FormSection({className, title, children}) {
-  const classList = className + ' form-section';
+export default function FormSection({className, title, children, isActive, onClick}) {
   return (
-    <section className={classList}>
-      <h2>{title}</h2>
-      {children}
+    <section className={`form-section ${className} ${isActive && 'active'}`}>
+      <h2 onClick={onClick}>{title}</h2>
+      <div className={isActive ? 'active': ''}>{children}</div>
     </section>
   );
 }

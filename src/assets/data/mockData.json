@@ -1,0 +1,71 @@
+{
+  "generalInfo": {
+    "fullName": "Torres Vara Mateo Nicolas",
+    "email": "torresvaramateo@gmail.com",
+    "phone": "+51 999999999",
+    "github": "github.com/MateoTVara"
+  },
+  "educationalExps": [
+    {
+      "id": 1,
+      "schoolName": "Universidad Tecnológica del Perú",
+      "titleOfStudy": "Bachelor in System's Engineering",
+      "startDate": "2024-08-01",
+      "endDate": ""
+    },
+    {
+      "id": 2,
+      "schoolName": "IDAT",
+      "titleOfStudy": "Technician in Systems and Information Development",
+      "startDate": "2022-06-01",
+      "endDate": "2024-03-01"
+    }
+  ],
+  "workingExps": [
+    {
+      "id": 1,
+      "companyName": "Placeholder",
+      "positionTitle": "Placeholder",
+      "responsabilities": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio perspiciatis deleniti distinctio ducimus praesentium? Cupiditate iure expedita natus, aliquam adipisci, exercitationem eius ex dolore doloremque quod eos enim amet quibusdam?",
+      "startDate": "2023-05-03",
+      "endDate": ""
+    }
+  ],
+  "technicalSkills": [
+    {
+      "id": 1,
+      "name": "Programming Languages",
+      "list": ["JavaScript", "Python", "Java"]
+    },
+    {
+      "id": 2,
+      "name": "Frameworks/Libraries",
+      "list": ["Django", "Spring", "React"]
+    },
+    {
+      "id": 3,
+      "name": "Dev Tools",
+      "list": ["Git", "Postman"]
+    }
+  ],
+  "otherSkills": [
+    {
+      "id": 1,
+      "name": "Languages",
+      "list": ["Spanish", "English"]
+    },
+    {
+      "id": 2,
+      "name": "Certifications",
+      "list": [
+        "NDG Linux Essentials course in the Cisco Networking Academy",
+        "PCAP: Programming Essentials in Python"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Others",
+      "list": ["CSS", "HTML", "LaTeX"]
+    }
+  ]
+}

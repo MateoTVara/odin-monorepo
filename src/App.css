@@ -47,6 +47,12 @@ input {
   }
 }
 
+.separator {
+  border: 1px solid white;
+  margin-inline: 1rem;
+  margin-block: 1rem;
+}
+
 @font-face {
   font-family: 'Baloo 2';
   src: url('./assets/fonts/Baloo2-Regular.woff2') format('woff2'),
@@ -72,16 +78,14 @@ input {
   display: grid;
   grid-template-columns: 2fr 3fr;
   grid-template-rows: auto 1fr;
-
-  & > * {
-    border: 1px solid black; /* debug section borders */
-  }
 }
 
 header {
   grid-column: 1 / -1;
 
   padding: 4px 16px;
+  border-bottom: 1px solid #2f2f2f;
+  box-shadow: 12px 0 12px #0f0f0f;
 
   display: flex;
   justify-content: center;
@@ -97,7 +101,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-bottom: 3rem;
+  padding-block: 2rem;
   direction: rtl;
 
   & > * {
@@ -107,8 +111,8 @@ header {
 
 /* general-info */
 
-.form > .general-info {
-  padding: 8px 32px;
+.form > .general-info > div {
+  padding: 0 16px;
 
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -116,9 +120,10 @@ header {
   gap: 8px;
 }
 
+
 /* educational-exp */
 
-.form > .educational-exp {
+.form > .educational-exp > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -127,7 +132,6 @@ header {
 
   & > button {
     align-self: center;
-    margin-bottom: 8px;
     background-color: var(--primary-btn-bg-color);
     border: none;
     border-radius: 8px;
@@ -141,7 +145,7 @@ header {
 
 /* work-exp */
 
-.work-exp {
+.work-exp > div {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -161,7 +165,7 @@ header {
 
 /* technical-skills */
 
-.form > .technical-skills {
+.form > .technical-skills > div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,14 +173,14 @@ header {
 
 /* other-skills */
 
-.form > .other-skills {
+.form > .other-skills > div {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .actions {
-  margin-top: 12px;
+  margin-top: 4px;
 
   display: flex;
   gap: 1rem;
@@ -200,7 +204,7 @@ header {
 /* curriculum */
 
 .curriculum {
-  padding: 48px 96px;
+  padding: 48px 80px;
 }
 
 .curriculum-page {

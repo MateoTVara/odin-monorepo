@@ -1,4 +1,38 @@
+.form-section {
+  margin-inline: 1rem;
+  border-inline: 2px solid white;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  border-radius: 12px;
+  
+  &.active {
+    padding-block: 0 8px;
+  }
+}
+
 .form-section > h2 {
   grid-column: 1 / -1;
   text-align: center;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #202020;
+  }
+}
+
+.form-section > div {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 200ms ease-out,
+              margin-top 250ms ease-out;
+  
+
+  &.active {
+    max-height: 1000px;
+    margin-top: 1rem;
+    transition: max-height 500ms ease-in-out,
+                margin-top 250ms ease-in-out;
+  }
 }

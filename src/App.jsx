@@ -1,4 +1,5 @@
 import './App.css'
+import mockData from './assets/data/mockData.json'
 import { useState } from 'react'
 import FormSection from './components/form_section/FormSection'
 import InputGroup from './components/input_group/InputGroup'
@@ -9,12 +10,8 @@ import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 import InputSkills from './components/input_skills/InputSkills'
 
 function App() {
-  const [generalInfo, setGeneralInfo] = useState({
-    fullName: 'Torres Vara Mateo Nicolas',
-    email: 'torresvaramateo@gmail.com',
-    phone: '+51 999999999',
-    github: 'github.com/MateoTVara',
-  });
+  const [generalInfo, setGeneralInfo] = useState(mockData.generalInfo);
+  const [activeSections, setActiveSections] = useState([]);
 
   function handleInputGroupChange(e) {
     const mapper = {'full-name': 'fullName', email: 'email', phone: 'phone', github: 'github'}
@@ -24,22 +21,7 @@ function App() {
 
 
 
-  const [educationalExps, setEducationalExps] = useState([
-    {
-      id: 1,
-      schoolName: 'Universidad Tecnológica del Perú',
-      titleOfStudy: "Bachelor in System's Engineering",
-      startDate: '2024-08-01',
-      endDate: '',
-    },
-    {
-      id: 2,
-      schoolName: 'IDAT',
-      titleOfStudy: 'Technician in Systems and Information Development',
-      startDate: '2022-06-01',
-      endDate: '2024-03-01',
-    }
-  ]);
+  const [educationalExps, setEducationalExps] = useState(mockData.educationalExps);
   const [activeEduExp, setActiveEduExp] = useState(null);
 
   function addEducationExperience() {
@@ -67,16 +49,7 @@ function App() {
 
 
 
-  const [workingExps, setWorkingExps] = useState([
-    {
-      id: 1,
-      companyName: 'Placeholder',
-      positionTitle: 'Placeholder',
-      responsabilities: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio perspiciatis deleniti distinctio ducimus praesentium? Cupiditate iure expedita natus, aliquam adipisci, exercitationem eius ex dolore doloremque quod eos enim amet quibusdam?',
-      startDate: '2023-05-03',
-      endDate: '',
-    }
-  ]);
+  const [workingExps, setWorkingExps] = useState(mockData.workingExps);
   const [activeWorkExp, setActiveWorkExp] = useState(null);
 
   function addWorkingExperience() {
@@ -105,24 +78,7 @@ function App() {
 
 
 
-  const [technicalSkills, setTechnicalSkills] = useState([
-    {
-      id: 1,
-      name: 'Programming Languages',
-      list: ['JavaScript', 'Python', 'Java']
-    },
-    {
-      id: 2,
-      name: 'Frameworks/Libraries',
-      list: ['Django', 'Spring', 'React']
-    },
-    {
-      id: 3,
-      name: 'Dev Tools',
-      list: ['Git', 'Postman']
-    }
-  ]);
-
+  const [technicalSkills, setTechnicalSkills] = useState(mockData.technicalSkills);
   const [activeTechSkill, setActiveTechSkill] = useState(null);
 
   function addTechnicalSkills() {
@@ -151,27 +107,7 @@ function App() {
 
 
 
-  const [otherSkills, setOtherSkills] = useState([
-    {
-      id: 1,
-      name: 'Languages',
-      list: ['Spanish', 'English']
-    },
-    {
-      id: 2,
-      name: 'Certifications',
-      list: [
-        'NDG Linux Essentials course in the Cisco Networking Academy',
-        'PCAP: Programming Essentials in Python'
-      ]
-    },
-    {
-      id: 3,
-      name: 'Others',
-      list: ['CSS', 'HTML', 'LaTeX']
-    }
-  ]);
-
+  const [otherSkills, setOtherSkills] = useState(mockData.otherSkills);
   const [activeOtherSkill, setActiveOtherSkill] = useState(null);
 
   function addOtherSkills() {
@@ -205,7 +141,16 @@ function App() {
     <>
       <header><h1>CV Generator</h1></header>
       <section className='form'>
-        <FormSection className='general-info' title='General Information'>
+        <FormSection 
+          className='general-info'
+          title='General Information'
+          isActive={activeSections.includes(1)}
+          onClick={() => setActiveSections(
+            activeSections.includes(1) ? 
+              activeSections.filter(section => section !== 1) : 
+              [...activeSections, 1]
+          )}
+        >
           <InputGroup id="full-name" type="text" label="Full Name" 
                       value={generalInfo.fullName} onChange={handleInputGroupChange}/>
           <InputGroup id="email" type="email" label="Email" 
@@ -215,31 +160,61 @@ function App() {
           <InputGroup id="github" type="text" label="GitHub"
                       value={generalInfo.github} onChange={handleInputGroupChange}/>
         </FormSection>
-        <FormSection className='educational-exp' title='Educational Experience'>
-          {educationalExps.map(exp => {
-            return  <InputEduExp key={exp.id} eduExp={exp}
-                    isActive={activeEduExp === exp.id}
-                    onClick={() => {
-                      activeEduExp === exp.id ? setActiveEduExp(null) : setActiveEduExp(exp.id)
-                    }}
-                    onChange={updateEducationExperience}
-                    onRemove={() => removeEducationExperience(exp.id)}/>
-          })}
+
+        <FormSection
+          className='educational-exp' 
+          title='Educational Experience'
+          isActive={activeSections.includes(2)}
+          onClick={() => setActiveSections(
+            activeSections.includes(2) ? 
+              activeSections.filter(section => section !== 2) : 
+              [...activeSections, 2]
+          )}
+        >
+          {educationalExps.map(exp => 
+            <InputEduExp 
+              key={exp.id} eduExp={exp}
+              isActive={activeEduExp === exp.id}
+              onClick={() => {activeEduExp === exp.id ? setActiveEduExp(null) : setActiveEduExp(exp.id)}}
+              onChange={updateEducationExperience}
+              onRemove={() => removeEducationExperience(exp.id)}
+            />
+          )}
           <button onClick={addEducationExperience}>Add Experience</button>
         </FormSection>
-        <FormSection className='work-exp' title='Work Experience'>
-          {workingExps.map(exp => {
-            return  <InputWorkExp key={exp.id} workExp={exp}
-                    isActive={exp.id === activeWorkExp}
-                    onClick={() => {
-                      activeWorkExp === exp.id ? setActiveWorkExp(null) : setActiveWorkExp(exp.id)
-                    }}
-                    onChange={updateWorkingExperience}
-                    onRemove={() => removeWorkingExperience(exp.id)}/>
-          })}
+
+        <FormSection
+          className='work-exp'
+          title='Work Experience'
+          isActive={activeSections.includes(3)}
+          onClick={() => setActiveSections(
+            activeSections.includes(3) ? 
+              activeSections.filter(section => section !== 3) : 
+              [...activeSections, 3]
+          )}
+        >
+          {workingExps.map(exp => 
+            <InputWorkExp 
+              key={exp.id} workExp={exp}
+              isActive={exp.id === activeWorkExp}
+              onClick={() => {activeWorkExp === exp.id ? setActiveWorkExp(null) : setActiveWorkExp(exp.id)}}
+              onChange={updateWorkingExperience}
+              onRemove={() => removeWorkingExperience(exp.id)}
+            />
+          )}
           <button onClick={addWorkingExperience}>Add Experience</button>
         </FormSection>
-        <FormSection className='technical-skills' title='Technical Skills'>
+
+        <FormSection 
+          className='technical-skills'
+          title='Technical Skills'
+          isActive={activeSections.includes(4)}
+          onClick={() => setActiveSections(
+            activeSections.includes(4) ? 
+              activeSections.filter(section => section !== 4) : 
+              [...activeSections, 4]
+          )}
+        >
           {technicalSkills.map(skill => 
             <InputSkills
               className='tech-skills-container'
@@ -258,7 +233,16 @@ function App() {
           </div>
         </FormSection>
 
-        <FormSection className='other-skills' title='Aditional Information'>
+        <FormSection
+          className='other-skills'
+          title='Aditional Information'
+          isActive={activeSections.includes(5)}
+          onClick={() => setActiveSections(
+            activeSections.includes(5) ? 
+              activeSections.filter(section => section !== 5) : 
+              [...activeSections, 5]
+          )}
+        >
           {otherSkills.map(skill =>
             <InputSkills
               className='other-skills-container'
@@ -297,14 +281,14 @@ function App() {
           {technicalSkills.length > 0 && <h2>Technical Skills</h2>}
           <section className='technical-skills'>
             <ul>
-              {technicalSkills.map(skill => <li><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
+              {technicalSkills.map(skill => <li key={skill.id}><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
             </ul>
           </section>
 
           {otherSkills.length > 0 && <h2>Aditional Information</h2>}
           <section className='other-skills'>
             <ul>
-              {otherSkills.map(skill => <li><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
+              {otherSkills.map(skill => <li key={skill.id}><b>{skill.name}</b>: {skill.list.join(', ')}</li>)}
             </ul>
           </section>
 
