@@ -199,6 +199,19 @@ header {
   align-items: center;
 }
 
+/* form-actions */
+
+.form > .form-actions {
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background-color: #101010;
+  padding: 8px 16px;
+  justify-content: center;
+
+  display: none;
+}
+
 .actions {
   margin-top: 4px;
 
@@ -227,21 +240,28 @@ header {
   padding: 48px 80px;
   position: relative;
 
-  & > .download {
+  & > .actions {
     position: absolute;
     top: 16px;
     right: 16px;
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    transition: transform 150ms ease;
+    
+    & > .download {
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: transform 150ms ease;
 
-    display: flex;
-    align-items: center;
+      display: flex;
+      align-items: center;
 
-    &:hover {
-      transform: scale(1.1);
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    & > .close {
+      display: none;
     }
   }
 }
@@ -337,19 +357,51 @@ header {
     grid-template-rows: auto 1fr;
   }
 
+  .form {
+    padding-bottom: 0;
+  }
+
+  .form > .form-actions {
+    display: flex;
+  }
+
   .curriculum {
     padding: 24px 16px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
 
-    & > .download {
-      width: 16px;
-      height: 16px;
-      top: 2px;
-      right: 2px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+
+    &.active {
+      display: flex;
+    }
+
+    & .actions {
+      position: static;
+
+      justify-content: center;
+      padding: 8px 0;
+      
+      & > .download {
+        position: static;
+        padding: 8px;
+        border: 2px solid white;
+      }
+
+      & > .close {
+        background-color: transparent;
+        padding: 8px;
+        border: 2px solid white;
+
+        display: block;
+      }
     }
   }
 
   .curriculum-page {
-    font-size: 2.25vw;
+    font-size: 2vw;
     padding: 3vw 4vw;
 
     & .general-info {

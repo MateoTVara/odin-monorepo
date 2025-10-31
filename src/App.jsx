@@ -10,7 +10,7 @@ import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 import InputSkills from './components/input_skills/InputSkills'
 
 import Icon from '@mdi/react'
-import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb, mdiDownload } from '@mdi/js'
+import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb, mdiDownload, mdiClose } from '@mdi/js'
 
 import jsPDF from 'jspdf'
 
@@ -150,6 +150,10 @@ function App() {
 
 
 
+  const [preview, setPreview] = useState(false);
+
+
+
   return (
     <>
       <header><h1>CV Generator</h1></header>
@@ -282,21 +286,12 @@ function App() {
           </div>
         </FormSection>
 
-      </section>
-      <section className='curriculum'>
-        <button className='download' onClick={
-          () => {
-            doc.html(document.querySelector('.curriculum-page'), {
-              callback: function (doc) {
-                if (doc.getNumberOfPages() > 1) doc.deletePage(doc.getNumberOfPages());
-                doc.save('cv.pdf');
-              },
-              width: doc.internal.pageSize.getWidth(),
-              windowWidth: document.querySelector('.curriculum-page').scrollWidth
-            });
-          }
-        }><Icon path={mdiDownload} size={1} color='white'/></button>  
+        <div className='form-actions'>
+          <button onClick={() => {preview ? setPreview(false) : setPreview(true)}}>Show Preview</button>
+        </div>
 
+      </section>
+      <section className={`curriculum ${preview ? 'active' : ''}`}>
         <div className='curriculum-page'>
 
           <h1 className='full-name'>{generalInfo.fullName}</h1>
@@ -337,6 +332,25 @@ function App() {
             </ul>
           </section>
 
+        </div>
+
+        <div className='actions'>
+          <button className='download' onClick={
+            () => {
+              doc.html(document.querySelector('.curriculum-page'), {
+                callback: function (doc) {
+                  if (doc.getNumberOfPages() > 1) doc.deletePage(doc.getNumberOfPages());
+                  doc.save('cv.pdf');
+                },
+                width: doc.internal.pageSize.getWidth(),
+                windowWidth: document.querySelector('.curriculum-page').scrollWidth
+              });
+            }
+          }><Icon path={mdiDownload} size={1} color='white'/></button>
+
+          <button className='close' onClick={() => setPreview(false)}>
+            <Icon path={mdiClose} size={1} color='white'/>
+          </button>
         </div>
       </section>
     </>
