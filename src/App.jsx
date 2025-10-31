@@ -9,12 +9,20 @@ import InputWorkExp from './components/input_work_exp/InputWorkExp'
 import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 import InputSkills from './components/input_skills/InputSkills'
 
+import Icon from '@mdi/react';
+import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb } from '@mdi/js'
+
 function App() {
   const [generalInfo, setGeneralInfo] = useState(mockData.generalInfo);
   const [activeSections, setActiveSections] = useState([]);
 
   function handleInputGroupChange(e) {
-    const mapper = {'full-name': 'fullName', email: 'email', phone: 'phone', github: 'github'}
+    const mapper = {
+      'full-name': 'fullName', email: 'email',
+      phone: 'phone', github: 'github',
+      linkedin: 'linkedin', portfolio: 'portfolio',
+      profile: 'profile'
+    };
     const id = e.target.id;
     setGeneralInfo({...generalInfo, [mapper[id]]: e.target.value})
   }
@@ -159,6 +167,14 @@ function App() {
                       value={generalInfo.phone} onChange={handleInputGroupChange}/>
           <InputGroup id="github" type="text" label="GitHub"
                       value={generalInfo.github} onChange={handleInputGroupChange}/>
+          <InputGroup id="linkedin" type="text" label="LinkedIn"
+                      value={generalInfo.linkedin} onChange={handleInputGroupChange}/>
+          <InputGroup id="portfolio" type="text" label="Portfolio"
+                      value={generalInfo.portfolio} onChange={handleInputGroupChange}/>
+          <div className='input-group'>
+            <label htmlFor="profile">Profile</label>
+            <textarea id="profile" value={generalInfo.profile} onChange={handleInputGroupChange}></textarea>
+          </div>
         </FormSection>
 
         <FormSection
@@ -264,20 +280,31 @@ function App() {
       </section>
       <section className='curriculum'>
         <div className='curriculum-page'>
-          <h2 className='full-name'>{generalInfo.fullName}</h2>
+
+          <h1 className='full-name'>{generalInfo.fullName}</h1>
           <section className='general-info'>
-            <p className='email'>{generalInfo.email}</p>
-            <p className='phone'>{generalInfo.phone}</p>
-            <p className='github'>{generalInfo.github}</p>
+            {generalInfo.email && <p className='email'><Icon path={mdiEmail} size={0.5}/>{generalInfo.email}</p>}
+            {generalInfo.phone && <p className='phone'><Icon path={mdiPhone} size={0.5}/>{generalInfo.phone}</p>}
+            {generalInfo.github && <a href={generalInfo.github} target="_blank" rel="noopener noreferrer"><Icon path={mdiGithub} size={0.5}/>GitHub</a>}
+            {generalInfo.linkedin && <a href={generalInfo.linkedin} target="_blank" rel="noopener noreferrer"><Icon path={mdiLinkedin} size={0.5}/>LinkedIn</a>}
+            {generalInfo.portfolio && <a href={generalInfo.portfolio} target="_blank" rel="noopener noreferrer"><Icon path={mdiWeb} size={0.5}/>Portfolio</a>}
           </section>
+
+          <h2>Profile</h2>
+          <section className='profile'>
+            {generalInfo.profile && <p className='profile'>{generalInfo.profile}</p>}
+          </section>
+
           {educationalExps.length > 0 && <h2>Educational Experience</h2>}
           <section className='educational-exp'>
             {educationalExps.map(exp => <CVEduExp key={exp.id} exp={exp}/>)}
           </section>
+
           {workingExps.length > 0 && <h2>Working Experience</h2>}
           <section className='working-exp'>
             {workingExps.map(exp => <CVWorkExp key={exp.id} exp={exp}/>)}
           </section>
+
           {technicalSkills.length > 0 && <h2>Technical Skills</h2>}
           <section className='technical-skills'>
             <ul>
