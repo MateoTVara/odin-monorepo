@@ -9,10 +9,15 @@ import InputWorkExp from './components/input_work_exp/InputWorkExp'
 import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 import InputSkills from './components/input_skills/InputSkills'
 
-import Icon from '@mdi/react';
-import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb } from '@mdi/js'
+import Icon from '@mdi/react'
+import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb, mdiDownload } from '@mdi/js'
+
+import jsPDF from 'jspdf'
 
 function App() {
+
+  const doc = new jsPDF();
+
   const [generalInfo, setGeneralInfo] = useState(mockData.generalInfo);
   const [activeSections, setActiveSections] = useState([]);
 
@@ -279,6 +284,19 @@ function App() {
 
       </section>
       <section className='curriculum'>
+        <button className='download' onClick={
+          () => {
+            doc.html(document.querySelector('.curriculum-page'), {
+              callback: function (doc) {
+                if (doc.getNumberOfPages() > 1) doc.deletePage(doc.getNumberOfPages());
+                doc.save('cv.pdf');
+              },
+              width: doc.internal.pageSize.getWidth(),
+              windowWidth: document.querySelector('.curriculum-page').scrollWidth
+            });
+          }
+        }><Icon path={mdiDownload} size={1} color='white'/></button>  
+
         <div className='curriculum-page'>
 
           <h1 className='full-name'>{generalInfo.fullName}</h1>

@@ -225,6 +225,25 @@ header {
 
 .curriculum {
   padding: 48px 80px;
+  position: relative;
+
+  & > .download {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 150ms ease;
+
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .curriculum-page {
@@ -235,6 +254,7 @@ header {
   padding: 1.5vw 3vw;
   outline: 1px solid black;
   aspect-ratio: 1 / 1.4142;
+  position: relative;
   overflow: hidden;
 
   display: flex;
@@ -319,6 +339,13 @@ header {
 
   .curriculum {
     padding: 24px 16px;
+
+    & > .download {
+      width: 16px;
+      height: 16px;
+      top: 2px;
+      right: 2px;
+    }
   }
 
   .curriculum-page {
