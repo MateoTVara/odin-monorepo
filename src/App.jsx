@@ -10,7 +10,12 @@ import CVWorkExp from './components/cv_work_exp/CVWorkExp'
 import InputSkills from './components/input_skills/InputSkills'
 
 import Icon from '@mdi/react'
-import { mdiEmail, mdiPhone, mdiGithub, mdiLinkedin, mdiWeb, mdiDownload, mdiClose } from '@mdi/js'
+import {
+  mdiEmail, mdiPhone, mdiGithub,
+  mdiLinkedin, mdiWeb, mdiDownload,
+  mdiClose, mdiAccountCircle, mdiSchool,
+  mdiBriefcase, mdiXml, mdiInformationOutline
+} from '@mdi/js'
 
 import jsPDF from 'jspdf'
 
@@ -161,6 +166,7 @@ function App() {
         <FormSection 
           className='general-info'
           title='General Information'
+          icon={mdiAccountCircle}
           isActive={activeSections.includes(1)}
           onClick={() => setActiveSections(
             activeSections.includes(1) ? 
@@ -189,6 +195,7 @@ function App() {
         <FormSection
           className='educational-exp' 
           title='Educational Experience'
+          icon={mdiSchool}
           isActive={activeSections.includes(2)}
           onClick={() => setActiveSections(
             activeSections.includes(2) ? 
@@ -211,6 +218,7 @@ function App() {
         <FormSection
           className='work-exp'
           title='Work Experience'
+          icon={mdiBriefcase}
           isActive={activeSections.includes(3)}
           onClick={() => setActiveSections(
             activeSections.includes(3) ? 
@@ -233,6 +241,7 @@ function App() {
         <FormSection 
           className='technical-skills'
           title='Technical Skills'
+          icon={mdiXml}
           isActive={activeSections.includes(4)}
           onClick={() => setActiveSections(
             activeSections.includes(4) ? 
@@ -261,6 +270,7 @@ function App() {
         <FormSection
           className='other-skills'
           title='Aditional Information'
+          icon={mdiInformationOutline}
           isActive={activeSections.includes(5)}
           onClick={() => setActiveSections(
             activeSections.includes(5) ? 

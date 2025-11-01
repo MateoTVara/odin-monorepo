@@ -11,7 +11,7 @@
   cursor: pointer;
   transition: max-height 300ms ease,
               padding 300ms ease,
-              border-bottom 300ms ease; /* debug */
+              border-bottom 300ms ease;
 
   display: flex;
   flex-direction: row;

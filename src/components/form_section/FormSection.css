@@ -1,9 +1,14 @@
 .form-section {
+  --form-section-color: #009688;
+
   margin-inline: 1rem;
-  border-inline: 2px solid white;
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
+  border-inline: 2px solid var(--form-section-color);
+  border-top: 2px solid var(--form-section-color);
+  border-bottom: 2px solid var(--form-section-color);
   border-radius: 12px;
+  background-color: #181818;
+  box-shadow: 0 0 12px black;
+  transition: padding-block 300ms ease;
   
   &.active {
     padding-block: 0 8px;
@@ -16,9 +21,20 @@
   padding: 8px 16px;
   border-radius: 12px;
   cursor: pointer;
+  color: var(--form-section-color);
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 
   &:hover {
     background-color: #202020;
+  }
+
+  & svg {
+    display: inline;
   }
 }
 
@@ -34,5 +50,11 @@
     margin-top: 1rem;
     transition: max-height 500ms ease-in-out,
                 margin-top 250ms ease-in-out;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-section > div.active {
+    margin-top: 0;
   }
 }

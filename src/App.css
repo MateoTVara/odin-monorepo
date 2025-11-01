@@ -75,7 +75,7 @@ textarea {
 :root {
   font-family: 'Baloo 2';
   scrollbar-width: thin;
-  background-color: #181818;
+  background-color: #202020;
   color: white;
 
   --primary-btn-bg-color: #e8e8e8;
@@ -96,6 +96,7 @@ header {
   padding: 4px 16px;
   border-bottom: 1px solid #2f2f2f;
   box-shadow: 12px 0 12px #0f0f0f;
+  color: #009688;
 
   display: flex;
   justify-content: center;
@@ -151,14 +152,17 @@ header {
   gap: 8px;
 
   & > button {
+    color: white;
     align-self: center;
-    background-color: var(--primary-btn-bg-color);
-    border: none;
-    border-radius: 8px;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 16px;
+    padding: 4px 8px;
     transition: background-color 250ms ease-in-out;
+    cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-primary-btn-bg-color);
+      background-color: #202020;
     }
   }
 }
@@ -171,14 +175,17 @@ header {
   gap: 8px;
 
   & > button {
+    color: white;
     align-self: center;
-    background-color: var(--primary-btn-bg-color);
-    border: none;
-    border-radius: 8px;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 16px;
+    padding: 4px 8px;
     transition: background-color 250ms ease-in-out;
+    cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-primary-btn-bg-color);
+      background-color: #202020;
     }
   }
 }
@@ -212,24 +219,6 @@ header {
   display: none;
 }
 
-.actions {
-  margin-top: 4px;
-
-  display: flex;
-  gap: 1rem;
-
-  & > button {
-    background-color: var(--primary-btn-bg-color);
-    border: none;
-    border-radius: 8px;
-    transition: background-color 100ms ease;
-
-    &:hover {
-      background-color: var(--hover-primary-btn-bg-color);
-    }
-  }
-}
-
 
 
 
@@ -248,7 +237,9 @@ header {
     & > .download {
       padding: 0;
       background-color: transparent;
-      border: none;
+      border: 2px solid white;
+      padding: 4px;
+      border-radius: 50%;
       cursor: pointer;
       transition: transform 150ms ease;
 
@@ -257,11 +248,13 @@ header {
 
       &:hover {
         transform: scale(1.1);
+        background-color: #202020;
       }
     }
 
     & > .close {
       display: none;
+      border-radius: 50%;
     }
   }
 }
@@ -282,7 +275,7 @@ header {
   align-items: star;
 
   & > .full-name {
-    font-size: 1.5em;
+    font-size: 2em;
     text-align: center;
   }
 
@@ -363,6 +356,15 @@ header {
 
   .form > .form-actions {
     display: flex;
+
+    & > button {
+      color: white;
+      background-color: transparent;
+      border: 2px solid white;
+      border-radius: 16px;
+      padding: 4px 8px;
+      transition: background-color 250ms ease-in-out;
+    }
   }
 
   .curriculum {
@@ -376,6 +378,7 @@ header {
 
     &.active {
       display: flex;
+      animation: slide-in 300ms ease;
     }
 
     & .actions {
@@ -411,5 +414,14 @@ header {
     & h2 {
       margin-top: 0.5em;
     }
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
