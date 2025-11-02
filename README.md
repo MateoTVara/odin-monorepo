@@ -1,5 +1,7 @@
 # Animanga Memory Card Game
 
+![Game Screenshot](./public/sample.png)
+
 This project is part of [The Odin Project](https://www.theodinproject.com/) React course. It is a memory card game built with React, where players must click on unique anime/manga character cards without repeating any selection. The game fetches character data from the Jikan API and displays a responsive grid of cards.
 
 ## Features
@@ -36,6 +38,10 @@ This project is part of [The Odin Project](https://www.theodinproject.com/) Reac
 ## Usage
 
 Click on character cards to increase your score. Avoid clicking the same character twice in a row. If you reach the maximum score, you win!
+
+## Credits
+
+[Cards icons created by Victoruler - Flaticon](https://www.flaticon.com/free-icons/cards)
 
 ## License
 
