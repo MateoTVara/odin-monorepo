@@ -3,7 +3,7 @@ import './App.css'
 import Card from './card/Card'
 
 function App() {
-  const [bestScore, setBestScore] = useState(score);
+  const [bestScore, setBestScore] = useState(0);
   const [characters, setCharacters] = useState([]);
   const [clickedCharacters, setClickedCharacters] = useState([]);
   const [currentFive, setCurrentFive] = useState([]);
