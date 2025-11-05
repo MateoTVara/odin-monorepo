@@ -28,15 +28,26 @@ p {
   text-wrap: pretty;
 }
 
+a {
+  display: block;
+}
+
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
 /* Layout */
 
+:root {
+  --bg-color: #1f1f1f;
+  --secondary-bg-color: #080808;
+}
+
 #root {
   min-height: 100dvh;
+  background-color: var(--bg-color);
+  color: white;
 
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr auto;
 }
