@@ -1,16 +1,53 @@
-# React + Vite
+# Odin Shopping Cart
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive shopping cart web application built for [The Odin Project](https://www.theodinproject.com/) React course. This project demonstrates key React concepts including state management, routing, component composition, and localStorage persistence, with a focus on modern UI/UX and mobile responsiveness.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** (v19)
+- **Vite** (bundler)
+- **React Router DOM** (v7)
+- **@mdi/react** & **@mdi/js** (Material Design Icons)
+- **CSS Modules** (scoped styling)
+- **LocalStorage** (cart persistence)
+- **DummyJSON & FakeStoreAPI** (product/image data)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Product listing with quantity controls
+- Add/remove items from cart
+- Cart summary with itemized pricing
+- Delete items from cart
+- Responsive design for desktop and mobile
+- Persistent cart state via localStorage
+- Animated UI and polished styles
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Install dependencies:**
+   ```sh
+   pnpm install
+   ```
+2. **Run the development server:**
+   ```sh
+   pnpm dev
+   ```
+3. **Build for production:**
+   ```sh
+   pnpm build
+   ```
+
+## Project Structure
+
+- `src/components/` – Reusable UI components
+- `src/pages/` – Route-based pages (Shop, Cart, Homepage)
+- `src/modules/` – Utility functions
+- `src/assets/` – Fonts and icons
+- `src/routes/` – App routing
+
+## Credits
+
+- [The Odin Project](https://www.theodinproject.com/)
+- [FakeStoreAPI](https://fakestoreapi.com/)
+- [DummyJSON](https://dummyjson.com/)
+- [Material Design Icons](https://materialdesignicons.com/)
