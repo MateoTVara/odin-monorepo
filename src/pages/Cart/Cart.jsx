@@ -37,7 +37,7 @@ const Cart = () => {
           />
         )}
       </div>
-      <div className={styles.details}>
+      <div className={styles.pricing}>
         {products.map(product => <ProductCartPrice key={product.id} product={product}/>)}
         <p>Total:  {products.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0).toFixed(2)} $</p>
       </div>

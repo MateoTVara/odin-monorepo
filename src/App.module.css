@@ -1,15 +1,52 @@
 .header {
-  background-color: var(--secondary-bg-color);
+  background-color: var(--secondary-alpha-bg-color);
+  backdrop-filter: blur(10px);
   padding: 8px 16px;
   font-size: 1.5rem;
+  font-weight: bold;
   width: 100%;
   position: fixed;
   z-index: 1;
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+
+  & a {
+    text-decoration: none;
+    color: white
+  }
+
+  & > a:first-child,
+  & > a:last-child {
+    position: absolute;
+    top: 8px;
+    z-index: 2;
+  }
+
+  & > a:first-child {
+    left: 16px;
+  }
+
+  & > a:last-child {
+    right: 16px;
+
+    & p {
+      margin: 12px;
+      padding: 0;
+      position: relative;
+
+      display: inline;
+
+      & span {
+        font-size: 0.75em;
+        position: absolute;
+        right: -12px;
+        top: -4px;
+      }
+    }
+  }
 }
 
 .main {
@@ -21,6 +58,11 @@
 .footer {
   background-color: var(--secondary-bg-color);
   padding: 8px 16px;
+
+  & a {
+    text-decoration: none;
+    color: white;
+  }
 
   & > div:first-child {
     margin-block: 1.5rem 3rem;
@@ -48,6 +90,12 @@
         margin-bottom: 0;
       }
     }
+
+    & div:last-child > div:last-child {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
   }
 
   & > div:last-child {
@@ -55,5 +103,6 @@
     border-top: 1px solid #9f9f9f;
     padding-block: 1rem;
     margin-inline: 1rem;
+    font-weight: bold;
   }
 }

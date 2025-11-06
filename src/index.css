@@ -36,17 +36,34 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Layout */
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Thin.woff2') format('woff2'),
+      url('./assets/fonts/Montserrat-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --bg-color: #1f1f1f;
   --secondary-bg-color: #080808;
+  --secondary-alpha-bg-color: rgba(8, 8, 8, 0.8);
 }
 
 #root {
   min-height: 100dvh;
   background-color: var(--bg-color);
   color: white;
+  font-family: 'Montserrat', sans-serif;
 
   display: grid;
   grid-template-rows: 1fr auto;
