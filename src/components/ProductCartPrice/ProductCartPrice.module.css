@@ -12,8 +12,9 @@
     text-align: start;
   }
 
-  & > p:last-child {
-    flex-shrink: 0;
-    align-self: end;
+  & > div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

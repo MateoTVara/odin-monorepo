@@ -24,10 +24,18 @@ const Cart = () => {
     }))
   }
 
+  /**
+   * Deletes a product from the cart.
+   * @param {number} i - The index of the product to delete. 
+   */
+  const deleteProduct = (i) => {
+    setProducts(products.filter((_, idx) => idx !== i));
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.itemsContainer}>
-        {products.map((product, i) => 
+        {products.length > 0 ? products.map((product, i) => 
           <ProductCartDetail 
             key={product.id} 
             product={product}
@@ -35,10 +43,29 @@ const Cart = () => {
             increaseQty={() => setProducts(updateQty(i, products, {op: '+'}))}
             decreaseQty={() => setProducts(updateQty(i, products, {op: '-'}))}
           />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              alignContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            Your cart is empty
+          </div>
         )}
       </div>
       <div className={styles.pricing}>
-        {products.map(product => <ProductCartPrice key={product.id} product={product}/>)}
+        {products.length > 0 ? products.map((product, i) => 
+          <ProductCartPrice
+            key={product.id}
+            product={product}
+            deleteProduct={() => deleteProduct(i)}
+          />
+        ) : (
+          <p>Your cart is empty</p>
+        )}
         <p>Total:  {products.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0).toFixed(2)} $</p>
       </div>
     </div>
