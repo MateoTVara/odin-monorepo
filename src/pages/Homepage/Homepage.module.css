@@ -6,8 +6,13 @@
 }
 
 .hero {
-  margin-inline: 10rem;
+  --margin-sides: 10rem;
+  margin-inline: var(--margin-sides);
   padding-block: 4rem;
+
+  & > *{
+    animation: slideIn 1s ease-in-out;
+  }
 
   & > *:first-child {
     font-size: 4rem;
@@ -39,10 +44,17 @@
 }
 
 .imageGrid {
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
   padding: 6dvw 2dvw;
   border-radius: 64px;
   background-color: var(--secondary-bg-color);
+
+  /* animation: fadeIn 1s linear; */
+
+  /* Not supported by firefox */
+  animation: fadeIn linear both;
+  animation-timeline: view();
+  animation-range: entry 20% cover 25%;
 
   display: grid;
   grid-template-columns: repeat(4, 20dvw);
@@ -54,14 +66,15 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+
+    /* Not supported by firefox */
+    animation: revealImage ease-in-out both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 20%
   }
 
-  & > div {
-    border: 1px solid black;
-
-    &:hover {
-      box-shadow: 0 0 12px white;
-    }
+  & > div :hover {
+    box-shadow: 0 0 12px white;
   }
 
   & > div:first-child {
@@ -111,5 +124,50 @@
   & > div:last-child {
     grid-column: 2 / -1;
     grid-row: 5;
+  }
+}
+
+
+@-moz-document url-prefix() {
+  .imageGrid {
+    animation: fadeIn 1s linear;
+
+    & img {
+      animation: none;
+    }
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealImage {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-105% - var(--margin-sides)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
