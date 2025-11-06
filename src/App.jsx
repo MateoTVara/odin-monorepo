@@ -9,8 +9,9 @@ function App() {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("cart"))
+    if (!data) return
     if (data.length > 0) {
-      setProducts(data);
+      setProducts(data)
     }
   }, [])
 

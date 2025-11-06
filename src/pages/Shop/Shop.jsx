@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import Icon from '@mdi/react';
-import { mdiLoading } from '@mdi/js';
-import styles from './Shop.module.css'
-import { mdiPlus } from '@mdi/js';
-import { mdiMinus } from '@mdi/js';
 import { useOutletContext } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { mdiLoading, mdiPlus, mdiMinus } from '@mdi/js';
+import Icon from '@mdi/react';
+import styles from './Shop.module.css'
+import { updateQty } from '../../modules';
+import ProductShopCard from '../../components/ProductShopCard/ProductShopCard';
 
 const Shop = () => {
   const [data, setData] = useState([])
@@ -35,19 +35,39 @@ const Shop = () => {
     fetchImages()
   }, [])
 
-  const decreaseQty = (i) => {
+  /**
+   * Handles changes to the quantity input field.
+   * @param {Event} e - The change event.
+   * @param {number} i - The index of the product being updated. 
+   */
+  const onChange = (e, i) => {
     setData(data.map((d, idx) => {
-      return idx === i ?
-        d.quantity <= 1 ?
-          d : {...d, quantity: d.quantity - 1} :
-        d
+      if (idx !== i) return d
+
+      const value = Number(e.target.value)
+      if (value === NaN) return d
+      if (value < 1) return {...d, quantity: 1}
+
+      return {...d,quantity: value,}
     }))
   }
 
-  const increaseQty = (i) => {
-    setData(data.map((d, idx) => {
-      return idx === i ? {...d, quantity: d.quantity + 1} : d
-    }))
+  /**
+   * Handles adding a product to the cart.
+   * @param {Object} d - The product data.
+   */
+  const onClickAddToCart = (d) => {
+    setProducts(prevProducts => {
+      if (prevProducts.find(prevProduct => prevProduct.id === d.id)) {
+        return prevProducts.map(prevProduct => 
+          prevProduct.id === d.id ? 
+            {...prevProduct, quantity: prevProduct.quantity + d.quantity} :
+            prevProduct
+        )
+      }
+
+      return [...prevProducts, {...d}]
+    })
   }
 
   return (
@@ -61,66 +81,13 @@ const Shop = () => {
           spin
         /> :
         data.map((d, i) =>
-          <div key={i} className={styles.productCard}>
-            <img src={d.image} alt={d.title} />
-            <div className={styles.info}>
-              <p>{d.title}</p>
-              <p>{`$ ${d.price}`}</p>
-            </div>
-            <div className={styles.actions}>
-              <button
-                onClick={() => decreaseQty(i)}
-              >
-                <Icon
-                  path={mdiMinus}
-                  size={1}
-                />
-              </button>
-              <input
-                type="number"
-                value={d.quantity}
-                onChange={(e) => {setData(data.map((d, idx) => {
-                  if (idx !== i) return d;
-
-                  return {
-                    ...d,
-                    quantity: e.target.value,
-                  }
-                }))}}
-              />
-              <button
-                onClick={() => increaseQty(i)}
-              >
-                <Icon
-                  path={mdiPlus}
-                  size={1}
-                />
-              </button>
-            </div>
-            <button
-              onClick={() => {
-                setProducts(prevProducts => {
-                  if (prevProducts.find(prevProduct => prevProduct.id === d.id)) {
-                    return prevProducts.map(prevProduct => 
-                      prevProduct.id === d.id ? 
-                        {
-                          ...prevProduct,
-                          quantity: prevProduct.quantity + d.quantity
-                        } :
-                        prevProduct
-                    )
-                  }
-
-                  return [
-                    ...prevProducts,
-                    {...d}
-                  ]
-                })
-              }}
-            >
-              Add to Cart
-            </button>
-          </div>
+          <ProductShopCard
+            d={d}
+            onChange={(e) => onChange(e, i)}
+            onClickAddToCart={onClickAddToCart}
+            onClickDecrease={() => setData(updateQty(i, data, {op: '-'}))}
+            onClickIncrease={() => setData(updateQty(i, data, {op: '+'}))}
+          />
         )
       }
     </div>

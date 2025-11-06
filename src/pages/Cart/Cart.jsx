@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import styles from './Cart.module.css'
+import { updateQty } from '../../modules';
 import ProductCartPrice from '../../components/ProductCartPrice/ProductCartPrice';
 import ProductCartDetail from '../../components/ProductCartDetail/ProductCartDetail';
 
@@ -23,23 +24,6 @@ const Cart = () => {
     }))
   }
 
-  /**
-   * Updates the quantity of a product in the cart.
-   * @param {number} i - The index of the product in the products array.
-   * @param {{op: ('+'|'-')}} options - The options object. 'op' must be '+' or '-'.
-   */
-  function updateProductQuantity(i, {op = '+'}) {
-    if (op !== '+' && op !== '-') throw new Error('Invalid operation: op must be "+" or "-"')
-
-    setProducts(products.map((p, idx) => 
-      idx === i ?
-        (p.quantity <= 1 && op === '-') ?
-          p : {...p, quantity: p.quantity + (op === '+' ? 1 : -1)} :
-        p
-    ))
-  }
-  
-
   return (
     <div className={styles.container}>
       <div className={styles.itemsContainer}>
@@ -48,8 +32,8 @@ const Cart = () => {
             key={product.id} 
             product={product}
             onChange={(e) => onChange(e, i)}
-            increaseQty={() => updateProductQuantity(i, {op: '+'})}
-            decreaseQty={() => updateProductQuantity(i, {op: '-'})}
+            increaseQty={() => setProducts(updateQty(i, products, {op: '+'}))}
+            decreaseQty={() => setProducts(updateQty(i, products, {op: '-'}))}
           />
         )}
       </div>
