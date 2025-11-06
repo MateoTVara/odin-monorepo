@@ -4,10 +4,12 @@ import { mdiLoading } from '@mdi/js';
 import styles from './Shop.module.css'
 import { mdiPlus } from '@mdi/js';
 import { mdiMinus } from '@mdi/js';
+import { useOutletContext } from 'react-router-dom';
 
 const Shop = () => {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [products, setProducts] = useOutletContext()
 
   useEffect(() => {
     async function fetchImages() {
@@ -95,7 +97,29 @@ const Shop = () => {
                 />
               </button>
             </div>
-            <button>Add to Cart</button>
+            <button
+              onClick={() => {
+                setProducts(prevProducts => {
+                  if (prevProducts.find(prevProduct => prevProduct.id === d.id)) {
+                    return prevProducts.map(prevProduct => 
+                      prevProduct.id === d.id ? 
+                        {
+                          ...prevProduct,
+                          quantity: prevProduct.quantity + d.quantity
+                        } :
+                        prevProduct
+                    )
+                  }
+
+                  return [
+                    ...prevProducts,
+                    {...d}
+                  ]
+                })
+              }}
+            >
+              Add to Cart
+            </button>
           </div>
         )
       }

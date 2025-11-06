@@ -2,19 +2,32 @@ import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import styles from './App.module.css'
 import './index.css'
+import { useEffect } from 'react';
 
 function App() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("cart"))
+    if (data.length > 0) {
+      setProducts(data);
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(products))
+  }, [products])
 
   return (
     <>
       <header className={styles.header}>
         <Link to="shop">Shop</Link>
         <Link to="/">Homepage</Link>
-        <Link to="cart">Cart</Link>
+        <Link to="cart">Cart: {products.length === 0 ? 0 : products.reduce((acc, curr) => acc + curr.quantity, 0)}</Link>
       </header>
       
       <main className={styles.main}>
-        <Outlet/>
+        <Outlet context={[products, setProducts]}/>
       </main>
 
       <footer className={styles.footer}>
