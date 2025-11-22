@@ -1,8 +1,8 @@
 const Message = require('./models/Message');
 const User = require('./models/User');
 
-const amanda = new User(crypto.randomUUID(), 'Amanda', '/person.webp');
-const charles = new User(crypto.randomUUID(), 'Charles', '/person.webp');
+const amanda = new User(crypto.randomUUID(), 'Amanda', 'amanda', '/person.webp');
+const charles = new User(crypto.randomUUID(), 'Charles', 'charles', '/person.webp');
 
 const users = [ amanda, charles ]
 

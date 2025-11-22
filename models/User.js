@@ -1,8 +1,16 @@
 class User {
-  constructor(id, name, pic) {
+  #name;
+  constructor(id, name, password, pic) {
     this.id = id;
-    this.name = name;
+    this.setName(name);
+    this.password = password;
     this.pic = pic;
+  }
+  
+  get name() { return this.#name; }
+
+  setName(name) {
+    this.#name = name;
   }
 }
 

@@ -7,20 +7,83 @@
   <title>Mini Message Board</title>
 </head>
 <body>
+  <div class="userCard">
+    <img src="<%= currentUser ? currentUser.pic : '' %>" alt="<%= currentUser ? currentUser.name : 'guest-pic' %>">
+    <p>
+      <%= currentUser ? currentUser.name : 'guest' %>
+    </p>
+
+    <div>
+      <button type="button" class="openModal">Log In</button>
+      <% if (currentUser) {%>
+        <button type="button" class="logout">Log Out</button>
+      <% } %>
+    </div>
+  </div>
   <div>
-    <% messages.forEach((message) => { %>
+    <% messages.forEach(function(message) { %>
       <div class="message">
-        <img src="<%= users.find(user => user.id === message.userId).pic %>" alt="<%= message.user %>">
+        <img 
+          src="<%= users.find(function(user) { return user.id === message.userId; }) ? users.find(function(user) { return user.id === message.userId; }).pic : "" %>" 
+          alt="<%= users.find(function(user) { return user.id === message.userId; }) ? users.find(function(user) { return user.id === message.userId; }).name : "guest" %>"
+        >
         <p><%= message.text %></p>
         <p><%= message.added %></p>
       </div>
     <% }); %>
   </div>
-  <form action="/new" method="POST">
+  <form action="/newMsg" method="POST">
     <input type="text" placeholder="Write a message" name="text" required>
     <button type="submit">
       Send
     </button>
   </form>
+
+  <% if (open) { %>
+    <dialog open>
+  <% } else { %>
+    <dialog>
+  <% } %>
+    <form action="/newUser" method="POST">
+      <% if (authError) { %>
+        <p><%= authError %></p>
+      <% } %>
+      <input type="text" placeholder="Your name" name="name" required>
+      <input type="password" placeholder="Your password" name="password" required>
+      <button type="submit">
+        Enter
+      </button>
+    </form>
+  </dialog>
+
+  <script>
+    const modal = document.querySelector('dialog');
+    const openModalBtn = document.querySelector('.userCard button.openModal');
+    const logoutBtn = document.querySelector('.userCard button.logout');
+    const loginForm = document.querySelector('dialog form');
+
+    openModalBtn.addEventListener('click', (e) => {
+      modal.showModal();
+    });
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        const response = await fetch('/logout', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await response.json();
+        if (data && data.ok) {
+          location.reload();
+        }
+      });
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target !== modal) return;
+      modal.close(); 
+    });
+
+  </script>
 </body>
 </html>
