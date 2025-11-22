@@ -1,5 +1,6 @@
 const { messages, users } = require('../db')
-const Message = require('../models/Message')
+const Message = require('../models/Message');
+const User = require('../models/User');
 
 let currentUser = null;
 let authError = null;
@@ -23,16 +24,27 @@ module.exports = {
   newUser: (req, res) => {
     const { name, password } = req.body;
 
-    const user = users.find(user => (user.name === name) && (user.password === password));
-    
-    if (!user) {
-      authError = 'Not Found User'
+    if (!users.map(user => user.name).includes(name)) {
+      const newUser = new User(
+        crypto.randomUUID(),
+        name,
+        password,
+        null
+      );
+      users.push(newUser);
+      currentUser = newUser;
+      res.redirect('/');
+    }
+
+    const user = users.find(user => user.name === name);
+
+    if (password != user.password) {
+      authError = 'Wrong password';
       res.render('index', { currentUser, authError, open: true });
       return;
     }
 
     currentUser = user;
-
     res.redirect('/');
   },
   logout: (req, res) => {

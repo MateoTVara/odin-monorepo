@@ -62,6 +62,12 @@
     const logoutBtn = document.querySelector('.userCard button.logout');
     const loginForm = document.querySelector('dialog form');
 
+    const messageBoard = document.querySelector('.messageBoard');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      messageBoard.scrollTop = messageBoard.scrollHeight;
+    });
+
     openModalBtn.addEventListener('click', (e) => {
       modal.showModal();
     });
