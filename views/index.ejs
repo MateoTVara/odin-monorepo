@@ -7,37 +7,37 @@
   <title>Mini Message Board</title>
 </head>
 <body>
-  <div class="userCard">
-    <img src="<%= currentUser ? currentUser.pic : '' %>" alt="<%= currentUser ? currentUser.name : 'guest-pic' %>">
-    <p>
-      <%= currentUser ? currentUser.name : 'guest' %>
-    </p>
+  <main>
+    <div class="userCard">
+      <img src="<%= currentUser ? currentUser.pic : '/guest.webp' %>" alt="<%= currentUser ? currentUser.name : 'guest-pic' %>">
+      <p>
+        <%= currentUser ? currentUser.name : 'guest' %>
+      </p>
 
-    <div>
-      <button type="button" class="openModal">Log In</button>
-      <% if (currentUser) {%>
-        <button type="button" class="logout">Log Out</button>
-      <% } %>
-    </div>
-  </div>
-  <div>
-    <% messages.forEach(function(message) { %>
-      <div class="message">
-        <img 
-          src="<%= users.find(function(user) { return user.id === message.userId; }) ? users.find(function(user) { return user.id === message.userId; }).pic : "" %>" 
-          alt="<%= users.find(function(user) { return user.id === message.userId; }) ? users.find(function(user) { return user.id === message.userId; }).name : "guest" %>"
-        >
-        <p><%= message.text %></p>
-        <p><%= message.added %></p>
+      <div>
+        <button type="button" class="openModal">Log In</button>
+        <% if (currentUser) {%>
+          <button type="button" class="logout">Log Out</button>
+        <% } %>
       </div>
-    <% }); %>
-  </div>
-  <form action="/newMsg" method="POST">
-    <input type="text" placeholder="Write a message" name="text" required>
-    <button type="submit">
-      Send
-    </button>
-  </form>
+    </div>
+    <div class="messageBoard">
+      <% messages.forEach(function(message) { %>
+        <% const user = users.find(function(user) { return user.id === message.userId; }); %>
+        <div class="message <%= currentUser && user ? currentUser.id === user.id ? 'activeUser' : '' : '' %>">
+          <img src="<%= user ? user.pic : '/guest.webp' %>" alt="<%= user ? user.name : 'guest' %>">
+          <p><%= message.text %></p>
+          <p><%= message.added %></p>
+        </div>
+      <% }); %>
+    </div>
+    <form class="newMsgForm" action="/newMsg" method="POST">
+      <input type="text" placeholder="Write a message" name="text" required>
+      <button type="submit">
+        Send
+      </button>
+    </form>
+  </main>
 
   <% if (open) { %>
     <dialog open>
