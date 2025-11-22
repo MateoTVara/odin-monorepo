@@ -10,11 +10,17 @@
   <div>
     <% messages.forEach((message) => { %>
       <div class="message">
-        <img src="<%= message.image %>" alt="<%= message.user %>">
+        <img src="<%= users.find(user => user.id === message.userId).pic %>" alt="<%= message.user %>">
         <p><%= message.text %></p>
         <p><%= message.added %></p>
       </div>
     <% }); %>
   </div>
+  <form action="/new" method="POST">
+    <input type="text" placeholder="Write a message" name="text" required>
+    <button type="submit">
+      Send
+    </button>
+  </form>
 </body>
 </html>
