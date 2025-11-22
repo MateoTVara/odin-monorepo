@@ -1,0 +1,65 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* start */
+
+.message {
+  position: relative;
+  margin-bottom: 24px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 12px;
+}
+
+.message > img:first-child {
+  width: 50px;
+  height: 50px;
+}
+
+.message > p:nth-child(2) {
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+}
+
+.message > p:nth-child(3) {
+  position: absolute;
+  bottom: -20px;
+  left: 64px;
+}
