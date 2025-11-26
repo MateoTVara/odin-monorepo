@@ -23,6 +23,11 @@ const getMangaDetailById = async (id) => {
 
 // Staff
 
+const getAllStaff = async () => {
+  const { rows } = await pool.query("SELECT * FROM staff");
+  return rows;
+}
+
 const getStaffDetailById = async (id) => {
   const { rows: [staff] } = await pool.query("SELECT * FROM staff WHERE id = $1", [id]);
   const { rows: manga } = await pool.query(`
@@ -43,6 +48,7 @@ module.exports = {
   getAllManga,
   getMangaDetailById,
 
+  getAllStaff,
   getStaffDetailById,
 }
 
