@@ -11,8 +11,8 @@ const getAll = async (req, res) => {
   });
 }
 
-const getById = async (req, res) => {
-  const manga = await db.getMangaById(req.params.id);
+const getDetail = async (req, res) => {
+  const manga = await db.getMangaDetailById(req.params.id);
   title = `${manga.title} - Detail`;
   res.render('detail', {
     title,
@@ -22,5 +22,5 @@ const getById = async (req, res) => {
 
 module.exports = {
   getAll,
-  getById,
+  getDetail,
 }
