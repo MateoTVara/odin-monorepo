@@ -16,6 +16,9 @@
         <% if (item.enddate) { %>
           <p><%= format(new Date(item.enddate), 'PPP') %></p> 
         <% } %>
+        <div>
+          <a href="<%= item.id %>/detail">Details</a>
+        </div>
       </li>
     <% }); %>
   </ul>
