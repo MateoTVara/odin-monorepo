@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS manga_staff (
 INSERT INTO manga (title, description, status, startDate, endDate)
 VALUES
   ('Kiichi!!', '${sqlEscape(DESCRIPTIONS.kiichi)}', 'Finished', '2001-07-27', '2006-03-28'),
-  ('No. 5', '${sqlEscape(DESCRIPTIONS.no5)}', 'Finished', '2000-10-30', '2005-10-25'),
+  ('No. 5', '${sqlEscape(DESCRIPTIONS.no5)}', 'Finished', '2000-11-30', '2005-10-25'),
   ('Bokutachi ga Yarimashita', '${sqlEscape(DESCRIPTIONS.bokugaya)}', 'Finished', '2015-04-06', '2017-01-23');
 
 INSERT INTO genres (title)

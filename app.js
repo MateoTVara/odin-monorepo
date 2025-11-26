@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('node:path');
 const { env } = require('node:process');
+const { format } = require('date-fns');
 
 require('dotenv').config();
 
@@ -15,6 +16,14 @@ app.use(express.urlencoded({extended: true}));
 
 const assetsPath = path.join(__dirname, 'public');
 app.use(express.static(assetsPath));
+
+app.locals.format = format;
+
+const mangaRouter = require('./routes/mangaRouter');
+
+
+app.use('/', mangaRouter);
+
 
 app.use((err, req, res, next) => {
   console.log(err);
