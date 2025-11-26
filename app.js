@@ -20,9 +20,11 @@ app.use(express.static(assetsPath));
 app.locals.format = format;
 
 const mangaRouter = require('./routes/mangaRouter');
+const staffRouter = require('./routes/staffRouter');
 
 
 app.use('/', mangaRouter);
+app.use('/staff', staffRouter);
 
 
 app.use((err, req, res, next) => {
