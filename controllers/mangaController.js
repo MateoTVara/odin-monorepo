@@ -25,7 +25,17 @@ const getDetail = async (req, res) => {
   });
 }
 
+const getAdd = async (req, res) => {
+  const status = ['Finished', 'Releasing', 'Hiatus', 'Cancelled'];
+  title = 'Add new manga';
+  res.render('addManga', {
+    title,
+    status,
+  });
+}
+
 module.exports = {
   getAll,
   getDetail,
+  getAdd,
 }

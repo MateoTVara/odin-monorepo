@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS manga (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  status VARCHAR(50),
-  startDate DATE,
+  status VARCHAR(50) NOT NULL,
+  startDate DATE NOT NULL,
   endDate DATE
 );
 
