@@ -23,6 +23,12 @@
       </li>
     <% }) %>
   </ul>
+  <p><b>Tags</b></p>
+  <p>
+    <% manga.genres.forEach(genre => { %>
+      <a href="/?genre=<%= genre.id %>"><%= genre.title %></a>
+    <% }) %>
+  </p>
   <a href="/">Back to list</a>
 </body>
 </html>

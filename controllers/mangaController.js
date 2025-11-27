@@ -3,12 +3,17 @@ const db = require('../db/queries');
 let title;
 
 const getAll = async (req, res) => {
-  const manga = await db.getAllManga();
   title = 'Manga List'
-  res.render('index', {
-    title,
-    manga,
-  });
+  const object = {};
+  object.title = title;
+  if (req.query.genre) {
+    object.genre = Number(req.query.genre);
+    object.manga = await db.getMangaListByGenre(req.query.genre);
+    res.render('index', object);
+    return;
+  }
+  object.manga = await db.getAllManga();
+  res.render('index', object);
 }
 
 const getDetail = async (req, res) => {

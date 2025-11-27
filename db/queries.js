@@ -13,10 +13,25 @@ const getMangaDetailById = async (id) => {
     LEFT JOIN roles r ON r.id = ms.role_id
     WHERE ms.manga_id = $1
   `, [id]);
+  const { rows: genres } = await pool.query(`
+    SELECT g.* FROM genres g
+    LEFT JOIN manga_genres mg ON mg.genre_id = g.id
+    WHERE mg.manga_id = $1
+  `, [id]);
   return {
     ...manga,
     staff,
+    genres,
   }
+}
+
+const getMangaListByGenre = async (id) => {
+  const { rows } = await pool.query(`
+    SELECT m.* FROM manga m
+    LEFT JOIN manga_genres mg ON mg.manga_id = m.id
+    WHERE mg.genre_id = $1
+  `, [id]);
+  return rows;
 }
 
 
@@ -47,6 +62,7 @@ const getStaffDetailById = async (id) => {
 module.exports = {
   getAllManga,
   getMangaDetailById,
+  getMangaListByGenre,
 
   getAllStaff,
   getStaffDetailById,
