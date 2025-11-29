@@ -34,6 +34,43 @@ const getMangaListByGenre = async (id) => {
   return rows;
 }
 
+const addManga = async (object) => {
+  const values = [
+    object.title,
+    object.description ?? null,
+    object.status,
+    object.startdate,
+    object.enddate ?? null
+  ];
+
+  const staff = Array.isArray(object.staff) ? object.staff : [];
+
+  const { rows: [newManga] } = await pool.query(`
+    INSERT INTO manga (title, description, status, startdate, enddate)
+    VALUES ($1, $2, $3, $4, $5) RETURNING *
+  `, values);
+
+  if (staff.length) {
+    for (const member of staff) {
+      let staffId, roleId;
+
+      // handle modern shape: { staffId, roleId }
+      if (member && (member.staffId !== undefined || member.roleId !== undefined)) {
+        staffId = Number(member.staffId ?? member.staffid);
+        roleId = Number(member.roleId ?? member.roleid);
+      }
+
+      // skip invalid entries
+      if (!Number.isInteger(staffId) || !Number.isInteger(roleId)) continue;
+
+      await pool.query(`
+        INSERT INTO manga_staff (manga_id, staff_id, role_id)
+        VALUES ($1, $2, $3)
+      `, [newManga.id, staffId, roleId]);
+    }
+  }
+}
+
 
 
 // Staff
@@ -59,12 +96,37 @@ const getStaffDetailById = async (id) => {
   
 }
 
+
+
+// Genres
+
+const getAllGenres = async () => {
+  const { rows } = await pool.query("SELECT * FROM genres");
+  return rows;
+}
+
+
+
+// Roles
+
+const getAllRoles = async () => {
+  const { rows } = await pool.query("SELECT * FROM roles");
+  return rows;
+}
+
+
+
 module.exports = {
   getAllManga,
   getMangaDetailById,
   getMangaListByGenre,
+  addManga,
 
   getAllStaff,
   getStaffDetailById,
+
+  getAllGenres,
+
+  getAllRoles,
 }
 
