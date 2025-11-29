@@ -1,0 +1,11 @@
+<div style="position: relative;">
+  <input type="text" id="<%= inputId %>" data-<%= dataAttr %>="">
+  <div
+    class="<%= containerClass || (inputId + '-buttons') %>"
+    style="position: absolute; display: none;"
+  >
+    <% list.forEach(item => { %>
+      <button type="button" data-<%= dataAttr %>="<%= item[valueProp] %>"><%= item[displayProp] %></button>
+    <% }); %>
+  </div>
+</div>

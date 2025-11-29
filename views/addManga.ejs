@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/scripts/addManga.js" defer></script>
   <title><%= title %></title>
   <style>
     form {
@@ -14,6 +15,7 @@
   </style>
 </head>
 <body>
+
   <h1><%= title %></h1>
 
   <%- include('partials/errors.ejs') %>
@@ -45,43 +47,23 @@
         gap: 16px;
       "
     >
-      <div
-        style="
-          position: relative;
-        "
-      >
-        <input type="text" id="staff" data-memberid="">
-        <div
-          class="staff-buttons"
-          style="
-            position: absolute;
-            display: none;
-          "
-        >
-          <% staff.forEach(member => { %>
-            <button type="button" data-memberid="<%= member.id %>"><%= member.fullname %></button>
-          <% }); %>
-        </div>
-      </div>
+      <%- include('partials/filterDropdown', {
+            inputId: 'staff',
+            dataAttr: 'memberid',
+            list: staff,
+            displayProp: 'fullname',
+            valueProp: 'id',
+            containerClass: 'staff-buttons'
+      }) %>
 
-      <div
-        style="
-          position: relative;
-        "
-      >
-        <input type="text" id="roles" data-roleid="">
-        <div
-          class="roles-buttons"
-          style="
-            position: absolute;
-            display: none;
-          "
-        >
-          <% roles.forEach(role => { %>
-            <button type="button" data-roleid="<%= role.id %>"><%= role.title %></button>
-          <% }); %>
-        </div>
-      </div>
+      <%- include('partials/filterDropdown', {
+            inputId: 'roles',
+            dataAttr: 'roleid',
+            list: roles,
+            displayProp: 'title',
+            valueProp: 'id',
+            containerClass: 'roles-buttons'
+      }) %>
 
       <button type="button">Add</button>
     </div>
@@ -95,170 +77,5 @@
 
   <a href="/">Back to Home</a>
 
-  <script>
-  const endDateInput = document.getElementById('enddate');
-  const statusSelect = document.getElementById('status');
-
-  statusSelect.addEventListener('change', () => {
-    if (statusSelect.value === 'Releasing') {
-      endDateInput.disabled = true;
-      endDateInput.value = '';
-    } else {
-      endDateInput.disabled = false;
-    }
-  })
-
-
-
-
-
-  const staffInput = document.getElementById('staff');
-  const staffButtonsContainer = document.querySelector('div.staff-buttons');
-  const staffButtons = document.querySelectorAll('.staff-buttons > button');
-
-  staffInput.addEventListener('focus', () => {
-    staffButtonsContainer.style.display = 'block';
-  });
-
-  staffInput.addEventListener('blur', () => {
-    staffButtonsContainer.style.display = 'none';
-    
-    const memberid = staffInput.dataset.memberid;
-
-    if (!memberid) {
-      staffInput.value = '';
-    } else if (memberid) {
-      const selectedButton = [...staffButtons].find(button => button.dataset.memberid === memberid);
-      staffInput.value = selectedButton.textContent;
-    }
-  });
-  
-  staffInput.addEventListener('input', () => {
-    const staff = [...staffButtons].map(btn => ({
-        id: btn.getAttribute('data-memberid'), 
-        title: btn.textContent,
-    }));
-    const query = staffInput.value.toLowerCase();
-    const filteredStaff = staff.filter(member => {
-      return member.title.toLowerCase().includes(query);
-    });
-    staffButtonsContainer.replaceChildren(
-      ...filteredStaff.map(member => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = member.title;
-        button.dataset.memberid = member.id;
-        button.addEventListener('mousedown', () => {
-          staffInput.value = button.textContent;
-          staffInput.dataset.memberid = button.dataset.memberid;
-        });
-        return button;
-      })
-    );
-  });
-
-  staffButtons.forEach(btn => {
-    btn.addEventListener('mousedown', () => {
-      staffInput.value = btn.textContent;
-      staffInput.dataset.memberid = btn.dataset.memberid;
-    });
-  });
-
-
-
-
-
-  const rolesInput = document.querySelector('#roles');
-  const rolesButtonsContainer = document.querySelector('div.roles-buttons');
-  const rolesButtons = document.querySelectorAll('.roles-buttons > button');
-
-  rolesInput.addEventListener('focus', () => {
-    rolesButtonsContainer.style.display = 'block';
-  });
-
-  rolesInput.addEventListener('blur', () => {
-    rolesButtonsContainer.style.display = 'none';
-
-    const roleid = rolesInput.dataset.roleid;
-    if (!roleid) {
-      rolesInput.value = '';
-    } else if (roleid) {
-      const selectedButton = [...rolesButtons].find(button => button.dataset.roleid === roleid);
-      rolesInput.value = selectedButton.textContent;
-    }
-  });
-
-  rolesInput.addEventListener('input', () => {
-    const roles = [...rolesButtons].map(btn => ({
-      id: btn.getAttribute('data-roleid'),
-      title: btn.textContent,
-    }));
-    const query = rolesInput.value.toLowerCase();
-    const filteredRoles = roles.filter(role => {
-      return role.title.toLowerCase().includes(query);
-    });
-    rolesButtonsContainer.replaceChildren(
-      ...filteredRoles.map(role => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = role.title;
-        button.dataset.roleid = role.id;
-        button.addEventListener('mousedown', () => {
-          rolesInput.value = button.textContent;
-          rolesInput.dataset.roleid = button.dataset.roleid;
-        });
-        return button;
-      })
-    );
-  });
-
-  rolesButtons.forEach(btn => {
-    btn.addEventListener('mousedown', () => {
-      rolesInput.value = btn.textContent;
-      rolesInput.dataset.roleid = btn.dataset.roleid;
-    });
-  });
-
-
-
-
-
-  const addButton = document.querySelector('form > div > button[type="button"]');
-  const assignedStaffRolesContainer = document.querySelector('ul.assigned-staff-roles');
-  const staffHiddenInput = document.querySelector('input[name="staff"]');
-  
-  const assignments = [];
-
-  addButton.addEventListener('click', () => {
-    staffInput.blur();
-    rolesInput.blur();
-
-    const staffId = staffInput.dataset.memberid;
-    const roleId = rolesInput.dataset.roleid;
-
-    if (staffId && roleId) {
-      const entryLi = document.createElement('li');
-      entryLi.textContent = `${staffInput.value} - ${rolesInput.value}`;
-      entryLi.dataset.memberid = staffId;
-      entryLi.dataset.roleid = roleId;
-
-      assignments.push({ staffId: Number(staffId), roleId: Number(roleId) });
-      staffHiddenInput.value = JSON.stringify(assignments);
-
-      assignedStaffRolesContainer.appendChild(entryLi);
-    }
-
-    staffInput.value = '';    staffInput.dataset.memberid = '';
-    rolesInput.value = '';    rolesInput.dataset.roleid = '';
-  });
-
-
-
-
-
-  document.addEventListener('DOMContentLoaded', () => {
-    staffHiddenInput.value = '';
-  });
-  </script>
 </body>
 </html>
