@@ -44,6 +44,7 @@ const addManga = async (object) => {
   ];
 
   const staff = Array.isArray(object.staff) ? object.staff : [];
+  const genres = Array.isArray(object.genres) ? object.genres : [];
 
   const { rows: [newManga] } = await pool.query(`
     INSERT INTO manga (title, description, status, startdate, enddate)
@@ -54,19 +55,34 @@ const addManga = async (object) => {
     for (const member of staff) {
       let staffId, roleId;
 
-      // handle modern shape: { staffId, roleId }
       if (member && (member.staffId !== undefined || member.roleId !== undefined)) {
         staffId = Number(member.staffId ?? member.staffid);
         roleId = Number(member.roleId ?? member.roleid);
       }
 
-      // skip invalid entries
       if (!Number.isInteger(staffId) || !Number.isInteger(roleId)) continue;
 
       await pool.query(`
         INSERT INTO manga_staff (manga_id, staff_id, role_id)
         VALUES ($1, $2, $3)
       `, [newManga.id, staffId, roleId]);
+    }
+  }
+
+  if (genres.length) {
+    for (const genre of genres) {
+      let genreId;
+
+      if (genre && (genre.genreId !== undefined || genre.genreid !== undefined)) {
+        genreId = Number(genre.genreId ?? genre.genreid);
+      }
+
+      if (!Number.isInteger(genreId)) continue;
+
+      await pool.query(`
+        INSERT INTO manga_genres (manga_id, genre_id)
+        VALUES ($1, $2)
+      `, [newManga.id, genreId]);
     }
   }
 }

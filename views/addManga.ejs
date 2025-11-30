@@ -65,13 +65,36 @@
             containerClass: 'roles-buttons'
       }) %>
 
-      <button type="button">Add</button>
+      <button class="add-staff-role" type="button">Add</button>
     </div>
     <ul class="assigned-staff-roles">
       <!-- Assigned staff and roles will appear here -->
     </ul>
     <input type="hidden" name="staff" value="">
     
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+      "
+    >
+      <%- include('partials/filterDropdown', {
+            inputId: 'genres',
+            dataAttr: 'genreid',
+            list: genres,
+            displayProp: 'title',
+            valueProp: 'id',
+            containerClass: 'genres-buttons'
+      }) %>
+
+      <button class="add-genre" type="button">Add</button>
+    </div>
+    <ul class="assigned-genres">
+      <!-- Assigned genres will appear here -->
+    </ul>
+    <input type="hidden" name="genres" value="">
+
     <button type="submit">Add Manga</button>
   </form>
 

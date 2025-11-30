@@ -24,13 +24,13 @@ setupFilterDropdown(rolesInput, 'roles-buttons', 'roleid');
 
 
 
-const addButton = $('form > div > button[type="button"]');
+const addStaffRole = $('.add-staff-role');
 const assignedStaffRolesContainer = $('ul.assigned-staff-roles');
 const staffHiddenInput = $('input[name="staff"]');
 
-const assignments = [];
+const staffRoleAssignments = [];
 
-addButton.addEventListener('click', () => {
+addStaffRole.addEventListener('click', () => {
   staffInput.blur();
   rolesInput.blur();
 
@@ -43,8 +43,8 @@ addButton.addEventListener('click', () => {
     entryLi.dataset.memberid = staffId;
     entryLi.dataset.roleid = roleId;
 
-    assignments.push({ staffId: Number(staffId), roleId: Number(roleId) });
-    staffHiddenInput.value = JSON.stringify(assignments);
+    staffRoleAssignments.push({ staffId: Number(staffId), roleId: Number(roleId) });
+    staffHiddenInput.value = JSON.stringify(staffRoleAssignments);
 
     assignedStaffRolesContainer.appendChild(entryLi);
   }
@@ -55,6 +55,38 @@ addButton.addEventListener('click', () => {
 
 
 
+const genreInput = $('#genres');
+setupFilterDropdown(genreInput, 'genres-buttons', 'genreid');
+
+const addGenre = $('.add-genre');
+const assignedGenresContainer = $('.assigned-genres');
+const genreHiddenInput = $('input[name="genres"]');
+
+const genresAssignments = [];
+
+addGenre.addEventListener('click', () => {
+  genreInput.blur();
+
+  const genreId = genreInput.dataset.genreid
+
+  if (genreId) {
+    const entryLi = document.createElement('li');
+    entryLi.textContent = genreInput.value;
+    entryLi.dataset.genreid = genreId;
+
+    genresAssignments.push({ genreId: Number(genreId)});
+    genreHiddenInput.value = JSON.stringify(genresAssignments);
+
+    assignedGenresContainer.appendChild(entryLi);
+  }
+
+  genreInput.value = '';
+  genreInput.dataset.genreid = '';
+});
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   staffHiddenInput.value = '';
+  genreHiddenInput.value = '';
 });

@@ -4,6 +4,17 @@ const { body, validationResult, matchedData } = require('express-validator');
 let title;
 const statuses = ['Finished', 'Releasing', 'Hiatus', 'Cancelled'];
 
+const arraySanitizer = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 const titleLengthErr = (field, {min = 1, max}) => `${field} must be between ${min} and ${max}`;
 const dateErr = (field) => `${field} must be a valid date.`;
 const notInErr = 'The option selected is not among the options'
@@ -26,20 +37,12 @@ const validateManga = [
     .isDate().withMessage(dateErr('end date')),
 
   body('staff')
-    .customSanitizer(value => {
-      // normalize falsy (empty string, undefined, null) to empty array
-      if (!value) return [];
-      // if already an array, return as-is
-      if (Array.isArray(value)) return value;
-      // otherwise try to parse JSON string
-      try {
-        const parsed = JSON.parse(value);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        return []; // invalid JSON => empty array
-      }
-    })
+    .customSanitizer(arraySanitizer)
     .isArray().withMessage('Staff must be properly formatted'),
+
+  body('genres')
+    .customSanitizer(arraySanitizer)
+    .isArray().withMessage('Genres must be properly formatted'),
 ];
 
 const getAll = async (req, res) => {
@@ -84,17 +87,11 @@ const postAdd = [
   async (req, res) => {
     title = 'Add new manga';
 
-    // debug: raw body and files
-    console.log('>>> POST /add req.body:', req.body);
-
     const errors = validationResult(req);
-    console.log('>>> validation errors:', errors.array());
-
     if (!errors.isEmpty()) {
       const staff = await db.getAllStaff();
       const roles = await db.getAllRoles();
       const genres = await db.getAllGenres();
-
       return res.status(400).render('addManga', {
         title,
         statuses,
@@ -106,8 +103,6 @@ const postAdd = [
     }
 
     const object = matchedData(req);
-    console.log('>>> matchedData object:', object);
-
     await db.addManga(object);
     res.redirect('/');
   }
