@@ -21,10 +21,14 @@ app.locals.format = format;
 
 const mangaRouter = require('./routes/mangaRouter');
 const staffRouter = require('./routes/staffRouter');
+const genresRotuer = require('./routes/genresRouter');
+const rolesRouter = require('./routes/rolesRouter');
 
 
 app.use('/', mangaRouter);
 app.use('/staff', staffRouter);
+app.use('/genres', genresRotuer);
+app.use('/roles', rolesRouter);
 
 
 app.use((err, req, res, next) => {

@@ -108,8 +108,11 @@ const getStaffDetailById = async (id) => {
   return {
     ...staff,
     manga,
-  }
-  
+  } 
+}
+
+const addStaffOnlyFullname = async fullname => {
+  await pool.query("INSERT INTO staff (fullname) VALUES ($1)", [fullname]);
 }
 
 
@@ -121,6 +124,10 @@ const getAllGenres = async () => {
   return rows;
 }
 
+const addGenre = async title => {
+  await pool.query("INSERT INTO genres (title) VALUES ($1)", [title]);
+}
+
 
 
 // Roles
@@ -128,6 +135,10 @@ const getAllGenres = async () => {
 const getAllRoles = async () => {
   const { rows } = await pool.query("SELECT * FROM roles");
   return rows;
+}
+
+const addRole = async title => {
+  await pool.query("INSERT INTO roles (title) VALUES ($1)", [title]);
 }
 
 
@@ -140,9 +151,12 @@ module.exports = {
 
   getAllStaff,
   getStaffDetailById,
+  addStaffOnlyFullname,
 
   getAllGenres,
+  addGenre,
 
   getAllRoles,
+  addRole,
 }
 

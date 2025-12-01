@@ -95,8 +95,28 @@
     </ul>
     <input type="hidden" name="genres" value="">
 
+    
+
     <button type="submit">Add Manga</button>
   </form>
+
+  <%- include('partials/dialogForm', {
+    singular: 'staff',
+    plural: 'staff',
+    value: 'fullname', 
+  }) %>
+
+  <%- include('partials/dialogForm', {
+    singular: 'role',
+    plural: 'roles',
+    value: 'title', 
+  }) %>
+
+  <%- include('partials/dialogForm', {
+    singular: 'genre',
+    plural: 'genres',
+    value: 'title', 
+  }) %>
 
   <a href="/">Back to Home</a>
 

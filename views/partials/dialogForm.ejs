@@ -1,0 +1,8 @@
+<dialog id="add-<%= plural %>-dialog">
+  <form action="/<%= plural %>/add" method="POST">
+    <label for="new-<%= singular %>-title">New <%= singular.charAt(0).toUpperCase() + singular.slice(1) %> <%= value %>:</label>
+    <input type="text" id="value" name="<%= value %>" required>
+    <button type="submit">Add <%= singular.charAt(0).toUpperCase() + singular.slice(1) %></button>
+    <button type="button" onclick="document.getElementById('add-<%= plural %>-dialog').close()">Cancel</button>
+  </form>
+</dialog>

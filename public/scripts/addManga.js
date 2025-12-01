@@ -24,12 +24,14 @@ endDateInput.addEventListener('change', () => {
 
 
 const staffInput = $('#staff');
-setupFilterDropdown(staffInput, 'staff-buttons', 'memberid');
+const addStaffDialog = $('#add-staff-dialog');
+setupFilterDropdown(staffInput, addStaffDialog, 'staff-buttons', 'memberid');
 
 
 
 const rolesInput = $('#roles');
-setupFilterDropdown(rolesInput, 'roles-buttons', 'roleid');
+const addRolesDialog = $('#add-roles-dialog');
+setupFilterDropdown(rolesInput, addRolesDialog, 'roles-buttons', 'roleid');
 
 
 
@@ -65,7 +67,8 @@ addStaffRole.addEventListener('click', () => {
 
 
 const genreInput = $('#genres');
-setupFilterDropdown(genreInput, 'genres-buttons', 'genreid');
+const addGenresDialog = $('#add-genres-dialog');
+setupFilterDropdown(genreInput, addGenresDialog, 'genres-buttons', 'genreid');
 
 const addGenre = $('.add-genre');
 const assignedGenresContainer = $('.assigned-genres');

@@ -1,5 +1,9 @@
 <div style="position: relative;">
-  <input type="text" id="<%= inputId %>" data-<%= dataAttr %>="">
+  <div style="display: flex; flex-direction: row; gap: 4px;">
+    <input type="text" id="<%= inputId %>" data-<%= dataAttr %>="">
+    <button type="button">+</button>
+  </div>
+
   <div
     class="<%= containerClass || (inputId + '-buttons') %>"
     style="position: absolute; display: none;"

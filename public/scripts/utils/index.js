@@ -6,10 +6,26 @@ const $ = (selector) => {
   }
 };
 
-const setupFilterDropdown = (input, containerClass, dataId) => {
+/**
+ * Sets up a filterable dropdown for the given input element.
+ * @param {HTMLInputElement} input - The input element to attach the dropdown to.
+ * @param {HTMLDialogElement} dialog - The ID of the dialog element containing the dropdown buttons.
+ * @param {string} containerClass - The class name of the container holding the dropdown buttons.
+ * @param {string} dataId - The data attribute name used to store the ID of the selected item.
+ */
+const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
   const buttonsContainer = $(`div.${containerClass}`);
   const buttons = document.querySelectorAll(`.${containerClass} > button`);
-  
+  const addButton = input.nextElementSibling;
+
+  addButton.addEventListener('click', () => {
+    dialog.showModal();
+  });
+
+  dialog.addEventListener('click', e => {
+    if (e.target === dialog) dialog.close();
+  });
+
   input.addEventListener('focus', () => {
     buttonsContainer.style.display = 'block';
   });
