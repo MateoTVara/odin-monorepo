@@ -126,7 +126,7 @@ VALUES
 const usage = () => {
   console.log('Usage: node db/populatedb.js <connection-string>');
   console.log('Examples:');
-  console.log('  node db/populatedb.js "postgresql://<user>:<password>@localhost:5432/top_inventory"');
+  console.log('  node db/populatedb.js "postgresql://<user>:<password>@localhost:5432/top_management"');
   console.log('  node db/populatedb.js "postgresql://<user>:<password>@prod-host:5432/prod_db"');
 }
 

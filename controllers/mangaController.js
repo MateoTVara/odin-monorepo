@@ -31,10 +31,49 @@ const validateManga = [
     .isIn(statuses).withMessage(notInErr),
   
   body('startdate').trim()
-    .isDate().withMessage(dateErr('start date')),
+    .isDate().withMessage(dateErr('start date'))
+    .custom((startdate, { req }) => {
+      const raw = req.body.enddate;
+      const enddate = (raw instanceof Date) ? raw : new Date(raw);
+
+      if (!(enddate instanceof Date) || isNaN(enddate)) {
+        throw new Error('End date must be a valid date');
+      }
+
+      if (startdate > enddate) {
+        throw new Error('Start date cannot be after end date');
+      }
+
+      return true;
+    }),
   
   body('enddate').optional({ values: 'falsy' }).trim()
-    .isDate().withMessage(dateErr('end date')),
+    .isDate().withMessage(dateErr('end date'))
+    .custom((enddate, { req }) => {
+
+      const status = req.body.status;
+
+      if (status === 'Finished' || status === 'Cancelled') {
+        if (!enddate) {
+          throw new Error('End date is required when status is Finished or Cancelled');
+        }
+      }
+
+      if (enddate && req.body.startdate) {
+        const startDate = new Date(req.body.startdate);
+        const endDate = new Date(enddate);
+        if (endDate < startDate) {
+          throw new Error('End date cannot be before start date');
+        }
+      }
+
+      const mustBeNull = ['Releasing', 'Hiatus'].includes(status);
+      if (mustBeNull && enddate) {
+        throw new Error('End date must be empty when status is Releasing or Hiatus');
+      }
+
+      return true;
+    }),
 
   body('staff')
     .customSanitizer(arraySanitizer)

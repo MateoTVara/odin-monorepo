@@ -1,16 +1,25 @@
 import { $, setupFilterDropdown } from './utils/index.js'
 
+const startDateInput = $('#startdate');
 const endDateInput = $('#enddate');
 const statusSelect = $('#status');
 
 statusSelect.addEventListener('change', () => {
-  if (statusSelect.value === 'Releasing') {
+  if (statusSelect.value === 'Releasing' || statusSelect.value === 'Hiatus') {
     endDateInput.disabled = true;
     endDateInput.value = '';
   } else {
     endDateInput.disabled = false;
   }
-})
+});
+
+startDateInput.addEventListener('change', () => {
+  endDateInput.min = startDateInput.value;
+});
+
+endDateInput.addEventListener('change', () => {
+  startDateInput.max = endDateInput.value;
+});
 
 
 
