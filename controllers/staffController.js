@@ -35,8 +35,14 @@ const postAdd = [
   }
 ]
 
+const del = async (req, res) => {
+  await db.delStaff(req.params.id);
+  res.redirect('/staff')
+}
+
 module.exports = {
   getAll,
   getDetail,
   postAdd,
+  del,
 }

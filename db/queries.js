@@ -87,6 +87,10 @@ const addManga = async (object) => {
   }
 }
 
+const delManga = async id => {
+  await pool.query("DELETE FROM manga WHERE id = $1", [id]);
+}
+
 
 
 // Staff
@@ -115,6 +119,10 @@ const addStaffOnlyFullname = async fullname => {
   await pool.query("INSERT INTO staff (fullname) VALUES ($1)", [fullname]);
 }
 
+const delStaff = async id => {
+  await pool.query("DELETE FROM staff WHERE id = $1", [id]);
+}
+
 
 
 // Genres
@@ -126,6 +134,10 @@ const getAllGenres = async () => {
 
 const addGenre = async title => {
   await pool.query("INSERT INTO genres (title) VALUES ($1)", [title]);
+}
+
+const delGenre = async id => {
+  await pool.query("DELETE FROM staff WHERE id = $1", [id]);
 }
 
 
@@ -141,6 +153,10 @@ const addRole = async title => {
   await pool.query("INSERT INTO roles (title) VALUES ($1)", [title]);
 }
 
+const delRole = async id => {
+  await pool.query("DELETE FROM roles WHERE id = $1", [id]);
+}
+
 
 
 module.exports = {
@@ -148,15 +164,19 @@ module.exports = {
   getMangaDetailById,
   getMangaListByGenre,
   addManga,
+  delManga,
 
   getAllStaff,
   getStaffDetailById,
   addStaffOnlyFullname,
+  delStaff,
 
   getAllGenres,
   addGenre,
+  delGenre,
 
   getAllRoles,
   addRole,
+  delRole,
 }
 

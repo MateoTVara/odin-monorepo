@@ -19,7 +19,10 @@
           <p><%= format(new Date(item.enddate), 'PPP') %></p> 
         <% } %>
         <div>
-          <a href="<%= item.id %>/detail">Details</a>
+          <a href="/<%= item.id %>/detail">Details</a>
+          <form action="/<%= item.id %>/delete" method="POST">
+            <button type="submit">Delete</button>
+          </form>
         </div>
       </li>
     <% }); %>

@@ -6,5 +6,6 @@ mangaRouter.get('/', mangaController.getAll);
 mangaRouter.get('/:id/detail', mangaController.getDetail);
 mangaRouter.get('/add', mangaController.getAdd);
 mangaRouter.post('/add', mangaController.postAdd);
+mangaRouter.post('/:id/delete', mangaController.del);
 
 module.exports = mangaRouter;

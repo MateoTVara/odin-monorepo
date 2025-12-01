@@ -147,9 +147,15 @@ const postAdd = [
   }
 ]
 
+const del = async (req, res) => {
+  await db.delManga(req.params.id)
+  res.redirect('/');
+}
+
 module.exports = {
   getAll,
   getDetail,
   getAdd,
   postAdd,
+  del,
 }

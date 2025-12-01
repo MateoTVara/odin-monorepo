@@ -23,5 +23,11 @@
       </li>
     <% }) %>
   </ul>
+  <div>
+    <a href="/staff">Back to Staff List</a>
+    <form action="/staff/<%= staff.id %>/delete" method="POST">
+      <button type="submit">Delete</button>
+    </form>
+  </div>
 </body>
 </html>
