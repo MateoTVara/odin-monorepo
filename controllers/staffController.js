@@ -31,7 +31,8 @@ const postAdd = [
   async (req, res) => {
     const { fullname } = matchedData(req);
     await db.addStaffOnlyFullname(fullname);
-    res.redirect('/add');
+    const redirectTo = req.body.redirect || req.get('Referer') || '/add';
+    res.redirect(redirectTo);
   }
 ]
 

@@ -39,7 +39,21 @@ const addStaffRole = $('.add-staff-role');
 const assignedStaffRolesContainer = $('ul.assigned-staff-roles');
 const staffHiddenInput = $('input[name="staff"]');
 
-const staffRoleAssignments = [];
+const staffRoles = [...assignedStaffRolesContainer.children].map(li => {
+  const button = li.querySelector('button');
+  button.addEventListener('click', () => {
+    assignedStaffRolesContainer.removeChild(li);
+    const index = staffRoleAssignments.findIndex(assignment => assignment.staffId === Number(li.dataset.memberid) && assignment.roleId === Number(li.dataset.roleid));
+    staffRoleAssignments.splice(index, 1);
+    staffHiddenInput.value = JSON.stringify(staffRoleAssignments);
+  });
+  return {
+    staffId: Number(li.dataset.memberid),
+    roleId: Number(li.dataset.roleid),
+  };
+});
+const staffRoleAssignments = staffRoles.length ? [...staffRoles] : [];
+staffHiddenInput.value = staffRoles.length ? JSON.stringify(staffRoles) : '';
 
 addStaffRole.addEventListener('click', () => {
   staffInput.blur();
@@ -53,6 +67,18 @@ addStaffRole.addEventListener('click', () => {
     entryLi.textContent = `${staffInput.value} - ${rolesInput.value}`;
     entryLi.dataset.memberid = staffId;
     entryLi.dataset.roleid = roleId;
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.textContent = 'X';
+    entryLi.appendChild(deleteBtn);
+
+    deleteBtn.addEventListener('click', () => {
+      assignedStaffRolesContainer.removeChild(entryLi);
+      const index = staffRoleAssignments.findIndex(assignment => assignment.staffId === Number(staffId) && assignment.roleId === Number(roleId));
+      staffRoleAssignments.splice(index, 1);
+      staffHiddenInput.value = JSON.stringify(staffRoleAssignments);
+    });
 
     staffRoleAssignments.push({ staffId: Number(staffId), roleId: Number(roleId) });
     staffHiddenInput.value = JSON.stringify(staffRoleAssignments);
@@ -74,7 +100,20 @@ const addGenre = $('.add-genre');
 const assignedGenresContainer = $('.assigned-genres');
 const genreHiddenInput = $('input[name="genres"]');
 
-const genresAssignments = [];
+const genres = [...assignedGenresContainer.children].map(li => {
+  const button = li.querySelector('button');
+  button.addEventListener('click', () => {
+    assignedGenresContainer.removeChild(li);
+    const index = genresAssignments.findIndex(assignment => assignment.genreId === Number(li.dataset.genreid));
+    genresAssignments.splice(index, 1);
+    genreHiddenInput.value = JSON.stringify(genresAssignments);
+  });
+  return {
+    genreId: Number(li.dataset.genreid),
+  };
+});
+const genresAssignments = genres.length ? [...genres] : [];
+genreHiddenInput.value = genres.length ? JSON.stringify(genres) : '';
 
 addGenre.addEventListener('click', () => {
   genreInput.blur();
@@ -85,6 +124,19 @@ addGenre.addEventListener('click', () => {
     const entryLi = document.createElement('li');
     entryLi.textContent = genreInput.value;
     entryLi.dataset.genreid = genreId;
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.textContent = 'X';
+
+    entryLi.appendChild(deleteBtn);
+
+    deleteBtn.addEventListener('click', () => {
+      assignedGenresContainer.removeChild(entryLi);
+      const index = genresAssignments.findIndex(assignment => assignment.genreId === Number(genreId));
+      genresAssignments.splice(index, 1);
+      genreHiddenInput.value = JSON.stringify(genresAssignments);
+    });
 
     genresAssignments.push({ genreId: Number(genreId)});
     genreHiddenInput.value = JSON.stringify(genresAssignments);
@@ -99,6 +151,19 @@ addGenre.addEventListener('click', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  staffHiddenInput.value = '';
-  genreHiddenInput.value = '';
+  if (!staffHiddenInput.value) {
+    staffHiddenInput.value = staffRoleAssignments.length ? JSON.stringify(staffRoleAssignments) : '';
+  }
+  if (!genreHiddenInput.value) {
+    genreHiddenInput.value = genresAssignments.length ? JSON.stringify(genresAssignments) : '';
+  }
+
+  const currentUrl = window.location.pathname;
+  const redirectStaffInput = $('#redirect-staff');
+  const redirectRolesInput = $('#redirect-roles');
+  const redirectGenresInput = $('#redirect-genres');
+  
+  if (redirectStaffInput) redirectStaffInput.value = currentUrl;
+  if (redirectRolesInput) redirectRolesInput.value = currentUrl;
+  if (redirectGenresInput) redirectGenresInput.value = currentUrl;
 });

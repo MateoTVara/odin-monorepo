@@ -13,7 +13,8 @@ const postAdd = [
   async (req, res) => {
     const { title } = matchedData(req);
     await db.addGenre(title);
-    res.redirect('/add');
+    const redirectTo = req.body.redirect || req.get('Referer') || '/add';
+    res.redirect(redirectTo);
   }
 ]
 

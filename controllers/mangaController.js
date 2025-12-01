@@ -34,13 +34,22 @@ const validateManga = [
     .isDate().withMessage(dateErr('start date'))
     .custom((startdate, { req }) => {
       const raw = req.body.enddate;
-      const enddate = (raw instanceof Date) ? raw : new Date(raw);
+      const status = req.body.status;
 
+      if (!raw) {
+        if (status === 'Finished' || status === 'Cancelled') {
+          throw new Error('End date must be a valid date');
+        }
+        return true;
+      }
+
+      const enddate = (raw instanceof Date) ? raw : new Date(raw);
       if (!(enddate instanceof Date) || isNaN(enddate)) {
         throw new Error('End date must be a valid date');
       }
 
-      if (startdate > enddate) {
+      const start = (startdate instanceof Date) ? startdate : new Date(startdate);
+      if (start > enddate) {
         throw new Error('Start date cannot be after end date');
       }
 
@@ -147,15 +156,74 @@ const postAdd = [
   }
 ]
 
+const getUpdate = async (req, res) => {
+  title = 'Update manga';
+  const manga =  await db.getMangaDetailById(req.params.id);
+
+  const toDateValue = (d) => {
+    if (!d) return '';
+    const dt = new Date(d);
+    if (isNaN(dt)) return '';
+    return dt.toISOString().slice(0, 10);
+  }
+
+  manga.startdate = toDateValue(manga.startdate);
+  manga.enddate = toDateValue(manga.enddate);
+
+  const staff = await db.getAllStaff();
+  const roles = await db.getAllRoles();
+  const genres = await db.getAllGenres();
+  res.render('updateManga', {
+    title,
+    manga,
+    statuses,
+    staff,
+    roles,
+    genres,
+  });
+}
+
+const postUpdate = [
+  validateManga,
+  async (req, res) => {
+    title = 'Update manga';
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const manga =  await db.getMangaDetailById(req.params.id);
+      const staff = await db.getAllStaff();
+      const roles = await db.getAllRoles();
+      const genres = await db.getAllGenres();
+      return res.status(400).render('updateManga', {
+        title,
+        manga,
+        statuses,
+        staff,
+        roles,
+        genres,
+        errors: errors.array(),
+      });
+    }
+
+    const object = matchedData(req);
+    object.id = Number(req.params.id);
+    await db.updateManga(object);
+    res.redirect(`/`);
+  }
+]
+
 const del = async (req, res) => {
   await db.delManga(req.params.id)
   res.redirect('/');
 }
+
 
 module.exports = {
   getAll,
   getDetail,
   getAdd,
   postAdd,
+  getUpdate,
+  postUpdate,
   del,
 }

@@ -1,3 +1,8 @@
+/**
+ * Selects and returns the first DOM element that matches the given CSS selector.
+ * @param {string} selector - The CSS selector to match.
+ * @returns {Element|null} The first matching DOM element, or null if no match is found.
+ */
 const $ = (selector) => {
   try {
     return document.querySelector(selector);
