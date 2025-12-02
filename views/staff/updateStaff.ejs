@@ -6,26 +6,30 @@
   <title><%= title %></title>
 </head>
 <body>
-  <h1><%= title %></h1>
-  <%- include('../partials/errors.ejs') %>
-  <form action="/staff/<%= staff.id %>/update/" method="POST">
-    
-    <label for="fullname">Full Name:</label>
-    <input type="text" id="fullname" name="fullname" value="<%= staff.fullname %>" required>
+  <%- include('../partials/header') %>
 
-    <label for="birth">Birth Date:</label>
-    <input type="date" id="birth" name="birth" value="<%= staff.birth %>">
+  <main>
+    <h1><%= title %></h1>
+    <%- include('../partials/errors.ejs') %>
+    <form action="/staff/<%= staff.id %>/update/" method="POST">
+      
+      <label for="fullname">Full Name:</label>
+      <input type="text" id="fullname" name="fullname" value="<%= staff.fullname %>" required>
 
-    <label for="gender">Gender</label>
-    <select id="gender" name="gender">
-      <option value="" selected>-----</option>
-      <% genders.forEach(gender => { %>
-        <option value="<%= gender %>" <%= staff.gender === gender ? 'selected' : '' %>><%= gender %></option>
-      <% }); %>
-    </select>
+      <label for="birth">Birth Date:</label>
+      <input type="date" id="birth" name="birth" value="<%= staff.birth %>">
 
-    <button type="submit">Update</button>
-  </form>
-  <a href="/staff">Back to Staff List</a>
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender">
+        <option value="" selected>-----</option>
+        <% genders.forEach(gender => { %>
+          <option value="<%= gender %>" <%= staff.gender === gender ? 'selected' : '' %>><%= gender %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit">Update</button>
+    </form>
+    <a href="/staff">Back to Staff List</a>
+  </main>
 </body>
 </html>

@@ -6,32 +6,35 @@
   <title><%= title %></title>
 </head>
 <body>
-  <h1><%= title %></h1>
-  <p><%= manga.title %></p>
-  <p><%= manga.description %></p>
-  <p>Status: <%= manga.status %></p>
-  <p>Start Date: <%= format(new Date(manga.startdate), 'PPP') %></p>
-  <% if (manga.enddate) { %>
-    <p>End Date: <%= format(new Date(manga.enddate), 'PPP') %></p>
-  <% } %>
-  <p><b>Staff</b></p>
-  <ul>
-    <% manga.staff.forEach(person => { %>
-      <li>
-        <p><%= person.fullname %> - <%= person.role %></p>
-        <a href="/staff/<%= person.id %>/detail">Details</a>
-      </li>
-    <% }) %>
-  </ul>
-  <p><b>Tags</b></p>
-  <p>
-    <% manga.genres.forEach(genre => { %>
-      <a href="/?genre=<%= genre.id %>"><%= genre.title %></a>
-    <% }) %>
-  </p>
-  <a href="/">Back to list</a>
-  <form action="/<%= manga.id %>/delete" method="POST">
-    <button type="submit">Delete Entry</button>
-  </form>
+  <%- include('partials/header') %>
+  <main>
+    <h1><%= title %></h1>
+    <p><%= manga.title %></p>
+    <p><%= manga.description %></p>
+    <p>Status: <%= manga.status %></p>
+    <p>Start Date: <%= format(new Date(manga.startdate), 'PPP') %></p>
+    <% if (manga.enddate) { %>
+      <p>End Date: <%= format(new Date(manga.enddate), 'PPP') %></p>
+    <% } %>
+    <p><b>Staff</b></p>
+    <ul>
+      <% manga.staff.forEach(person => { %>
+        <li>
+          <p><%= person.fullname %> - <%= person.role %></p>
+          <a href="/staff/<%= person.id %>/detail">Details</a>
+        </li>
+      <% }) %>
+    </ul>
+    <p><b>Tags</b></p>
+    <p>
+      <% manga.genres.forEach(genre => { %>
+        <a href="/?genre=<%= genre.id %>"><%= genre.title %></a>
+      <% }) %>
+    </p>
+    <a href="/">Back to list</a>
+    <form action="/<%= manga.id %>/delete" method="POST">
+      <button type="submit">Delete Entry</button>
+    </form>
+  </main>
 </body>
 </html>

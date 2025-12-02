@@ -16,119 +16,124 @@
 </head>
 <body>
 
-  <h1><%= title %></h1>
+  <%- include('partials/header') %>
 
-  <%- include('partials/errors.ejs') %>
+  <main>
 
-  <form action="/<%= manga.id %>/update" method="POST">
+    <h1><%= title %></h1>
 
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title" value="<%= manga.title %>" required>
+    <%- include('partials/errors.ejs') %>
 
-    <label for="description">Description</label>
-    <textarea name="description" id="description"><%= manga.description %></textarea>
-    
-    <select name="status" id="status" required>
-      <% statuses.forEach(status => { %>
-        <option <%= status === manga.status ? 'selected' : '' %>><%= status %></option>
-      <% }) %>
-    </select>
-    
-    <label for="startdate">Start Date</label>
-    <input type="date" id="startdate" name="startdate" value="<%= manga.startdate %>" required>
-    
-    <label for="enddate">End Date</label>
-    <input type="date" id="enddate" name="enddate" value="<%= manga.enddate %>">
+    <form action="/<%= manga.id %>/update" method="POST">
 
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        gap: 16px;
-      "
-    >
-      <%- include('partials/filterDropdown', {
-            inputId: 'staff',
-            dataAttr: 'memberid',
-            list: staff,
-            displayProp: 'fullname',
-            valueProp: 'id',
-            containerClass: 'staff-buttons'
-      }) %>
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" value="<%= manga.title %>" required>
 
-      <%- include('partials/filterDropdown', {
-            inputId: 'roles',
-            dataAttr: 'roleid',
-            list: roles,
-            displayProp: 'title',
-            valueProp: 'id',
-            containerClass: 'roles-buttons'
-      }) %>
+      <label for="description">Description</label>
+      <textarea name="description" id="description"><%= manga.description %></textarea>
+      
+      <select name="status" id="status" required>
+        <% statuses.forEach(status => { %>
+          <option <%= status === manga.status ? 'selected' : '' %>><%= status %></option>
+        <% }) %>
+      </select>
+      
+      <label for="startdate">Start Date</label>
+      <input type="date" id="startdate" name="startdate" value="<%= manga.startdate %>" required>
+      
+      <label for="enddate">End Date</label>
+      <input type="date" id="enddate" name="enddate" value="<%= manga.enddate %>">
 
-      <button class="add-staff-role" type="button">Add</button>
-    </div>
-    <ul class="assigned-staff-roles">
-      <% manga.staff.forEach(member => { %>
-        <li data-memberid="<%= member.id %>" data-roleid="<%= member.roleid %>">
-          <%= member.fullname %> - <%= member.role %>
-          <button type="button">X</button>
-        </li>
-      <% }); %>
-    </ul>
-    <input type="hidden" name="staff" value="">
-    
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        gap: 16px;
-      "
-    >
-      <%- include('partials/filterDropdown', {
-            inputId: 'genres',
-            dataAttr: 'genreid',
-            list: genres,
-            displayProp: 'title',
-            valueProp: 'id',
-            containerClass: 'genres-buttons'
-      }) %>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 16px;
+        "
+      >
+        <%- include('partials/filterDropdown', {
+              inputId: 'staff',
+              dataAttr: 'memberid',
+              list: staff,
+              displayProp: 'fullname',
+              valueProp: 'id',
+              containerClass: 'staff-buttons'
+        }) %>
 
-      <button class="add-genre" type="button">Add</button>
-    </div>
-    <ul class="assigned-genres">
-      <% manga.genres.forEach(genre => { %>
-        <li data-genreid="<%= genre.id %>">
-          <%= genre.title %>
-          <button type="button">X</button>
-        </li>
-      <% }); %>
-    </ul>
-    <input type="hidden" name="genres" value="">
+        <%- include('partials/filterDropdown', {
+              inputId: 'roles',
+              dataAttr: 'roleid',
+              list: roles,
+              displayProp: 'title',
+              valueProp: 'id',
+              containerClass: 'roles-buttons'
+        }) %>
 
-    
+        <button class="add-staff-role" type="button">Add</button>
+      </div>
+      <ul class="assigned-staff-roles">
+        <% manga.staff.forEach(member => { %>
+          <li data-memberid="<%= member.id %>" data-roleid="<%= member.roleid %>">
+            <%= member.fullname %> - <%= member.role %>
+            <button type="button">X</button>
+          </li>
+        <% }); %>
+      </ul>
+      <input type="hidden" name="staff" value="">
+      
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 16px;
+        "
+      >
+        <%- include('partials/filterDropdown', {
+              inputId: 'genres',
+              dataAttr: 'genreid',
+              list: genres,
+              displayProp: 'title',
+              valueProp: 'id',
+              containerClass: 'genres-buttons'
+        }) %>
 
-    <button type="submit">Update Manga</button>
-  </form>
+        <button class="add-genre" type="button">Add</button>
+      </div>
+      <ul class="assigned-genres">
+        <% manga.genres.forEach(genre => { %>
+          <li data-genreid="<%= genre.id %>">
+            <%= genre.title %>
+            <button type="button">X</button>
+          </li>
+        <% }); %>
+      </ul>
+      <input type="hidden" name="genres" value="">
 
-  <%- include('partials/dialogForm', {
-    singular: 'staff',
-    plural: 'staff',
-    value: 'fullname', 
-  }) %>
+      
 
-  <%- include('partials/dialogForm', {
-    singular: 'role',
-    plural: 'roles',
-    value: 'title', 
-  }) %>
+      <button type="submit">Update Manga</button>
+    </form>
 
-  <%- include('partials/dialogForm', {
-    singular: 'genre',
-    plural: 'genres',
-    value: 'title', 
-  }) %>
+    <%- include('partials/dialogForm', {
+      singular: 'staff',
+      plural: 'staff',
+      value: 'fullname', 
+    }) %>
 
-  <a href="/">Back to Home</a>
+    <%- include('partials/dialogForm', {
+      singular: 'role',
+      plural: 'roles',
+      value: 'title', 
+    }) %>
+
+    <%- include('partials/dialogForm', {
+      singular: 'genre',
+      plural: 'genres',
+      value: 'title', 
+    }) %>
+
+    <a href="/">Back to Home</a>
+  </main>
 
 </body>
 </html>

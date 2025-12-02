@@ -6,28 +6,32 @@
   <title><%= title %></title>
 </head>
 <body>
-  <h1><%= title %></h1>
-  <p><%= staff.fullname %></p>
-  <% if (staff.birth) { %>
-    <p><%= format(new Date(staff.birth), 'PPP') %></p>
-  <% } %>
-  <% if (staff.gender) { %>
-    <p><%= staff.gender %></p>
-  <% } %>
-  <p><b>Staff Roles</b></p>
-  <ul>
-    <% staff.manga.forEach(manga => { %>
-      <li>
-        <p><%= manga.title %> - <%= manga.role %></p>
-        <a href="/<%= manga.id %>/detail">Details</a>
-      </li>
-    <% }) %>
-  </ul>
-  <div>
-    <a href="/staff">Back to Staff List</a>
-    <form action="/staff/<%= staff.id %>/delete" method="POST">
-      <button type="submit">Delete</button>
-    </form>
-  </div>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1><%= title %></h1>
+    <p><%= staff.fullname %></p>
+    <% if (staff.birth) { %>
+      <p><%= format(new Date(staff.birth), 'PPP') %></p>
+    <% } %>
+    <% if (staff.gender) { %>
+      <p><%= staff.gender %></p>
+    <% } %>
+    <p><b>Staff Roles</b></p>
+    <ul>
+      <% staff.manga.forEach(manga => { %>
+        <li>
+          <p><%= manga.title %> - <%= manga.role %></p>
+          <a href="/<%= manga.id %>/detail">Details</a>
+        </li>
+      <% }) %>
+    </ul>
+    <div>
+      <a href="/staff">Back to Staff List</a>
+      <form action="/staff/<%= staff.id %>/delete" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </main>
 </body>
 </html>

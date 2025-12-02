@@ -6,26 +6,30 @@
   <title><%= title %></title>
 </head>
 <body>
-  <h1><%= title %></h1>
-  <%- include('../partials/errors.ejs') %>
-  <form action="/staff/addFully" method="POST">
-    
-    <label for="fullname">Full Name:</label>
-    <input type="text" id="fullname" name="fullname" required>
+  <%- include('../partials/header') %>
 
-    <label for="birth">Birth Date:</label>
-    <input type="date" id="birth" name="birth">
+  <main>
+    <h1><%= title %></h1>
+    <%- include('../partials/errors.ejs') %>
+    <form action="/staff/addFully" method="POST">
+      
+      <label for="fullname">Full Name:</label>
+      <input type="text" id="fullname" name="fullname" required>
 
-    <label for="gender">Gender</label>
-    <select id="gender" name="gender">
-      <option value="">-----</option>
-      <% genders.forEach(gender => { %>
-        <option value="<%= gender %>"><%= gender %></option>
-      <% }); %>
-    </select>
+      <label for="birth">Birth Date:</label>
+      <input type="date" id="birth" name="birth">
 
-    <button type="submit">Add</button>
-  </form>
-  <a href="/staff">Back to Staff List</a>
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender">
+        <option value="">-----</option>
+        <% genders.forEach(gender => { %>
+          <option value="<%= gender %>"><%= gender %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit">Add</button>
+    </form>
+    <a href="/staff">Back to Staff List</a>
+  </main>
 </body>
 </html>
