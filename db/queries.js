@@ -169,6 +169,14 @@ const getStaffDetailById = async (id) => {
   } 
 }
 
+const addStaff = async object => {
+  await pool.query("INSERT INTO staff (fullname, birth, gender) VALUES ($1, $2, $3)", [
+    object.fullname,
+    object.birth ?? null,
+    object.gender ?? null,
+  ]);
+}
+
 const addStaffOnlyFullname = async fullname => {
   await pool.query("INSERT INTO staff (fullname) VALUES ($1)", [fullname]);
 }
@@ -223,6 +231,7 @@ module.exports = {
 
   getAllStaff,
   getStaffDetailById,
+  addStaff,
   addStaffOnlyFullname,
   delStaff,
 

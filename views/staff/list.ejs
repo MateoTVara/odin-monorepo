@@ -7,11 +7,12 @@
 </head>
 <body>
   <h1><%= title %></h1>
+  <a href="/staff/add">Add New Staff Member</a>
   <ul>
     <% staff.forEach(function(member) { %>
       <li>
         <strong><%= member.fullname %></strong>
-        <a href="/staff/<%= member.id %>">View Details</a>
+        <a href="/staff/<%= member.id %>/detail">View Details</a>
         <form action="/staff/<%= member.id %>/delete" method="POST">
           <button type="submit">Delete</button>
         </form>

@@ -3,9 +3,19 @@ const { body, validationResult, matchedData } = require('express-validator');
 
 let title;
 
+const genders = ['Male', 'Female', 'Non-binary'];
+
 const validateStaff = [
   body('fullname').trim()
     .isLength({ min: 1, max: 255 }).withMessage('Fullname must be between 1 and 255 characters.'),
+]
+
+const validateFullyStaff =[
+  body('fullname').trim()
+    .isLength({ min: 1, max: 255 }).withMessage('Fullname must be between 1 and 255 characters.')
+    .isAlphanumeric('en-US', { ignore: ' '}).withMessage('Fullname must only contain letters and numbers.'),
+  body('birth').optional({ checkFalsy: true }).isISO8601().withMessage('Birth date must be a valid date.'),
+  body('gender').optional({ checkFalsy: true }).isIn(genders).withMessage('Gender must be one of the predefined options.'),
 ]
 
 const getAll = async (req, res) => {
@@ -26,6 +36,31 @@ const getDetail = async (req, res) => {
   });
 }
 
+const getAdd = (req, res) => {
+  title = 'Add New Staff Member';
+  res.render('staff/addStaff', {
+    title,
+    genders
+  });
+}
+
+const postAddFully = [
+  validateFullyStaff,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("staff/addStaff", {
+        title: 'Add New Staff Member',
+        genders,
+        errors: errors.array(),
+      });
+    }
+    const object = matchedData(req);
+    await db.addStaff(object);
+    res.redirect('/staff');
+  }
+]
+
 const postAdd = [
   validateStaff,
   async (req, res) => {
@@ -44,6 +79,8 @@ const del = async (req, res) => {
 module.exports = {
   getAll,
   getDetail,
+  getAdd,
+  postAddFully,
   postAdd,
   del,
 }

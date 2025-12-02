@@ -4,6 +4,8 @@ const staffRouter = Router();
 
 staffRouter.get('/', staffController.getAll);
 staffRouter.get('/:id/detail', staffController.getDetail);
+staffRouter.get('/add', staffController.getAdd);
+staffRouter.post('/addFully', staffController.postAddFully);
 staffRouter.post('/add', staffController.postAdd);
 staffRouter.post('/:id/delete', staffController.del);
 
