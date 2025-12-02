@@ -181,6 +181,15 @@ const addStaffOnlyFullname = async fullname => {
   await pool.query("INSERT INTO staff (fullname) VALUES ($1)", [fullname]);
 }
 
+const updateStaff =  async object => {
+  await pool.query("UPDATE staff SET fullname = $1, birth = $2, gender = $3 WHERE id = $4", [
+    object.fullname,
+    object.birth ?? null,
+    object.gender ?? null,
+    object.id,
+  ]);
+}
+
 const delStaff = async id => {
   await pool.query("DELETE FROM staff WHERE id = $1", [id]);
 }
@@ -233,6 +242,7 @@ module.exports = {
   getStaffDetailById,
   addStaff,
   addStaffOnlyFullname,
+  updateStaff,
   delStaff,
 
   getAllGenres,

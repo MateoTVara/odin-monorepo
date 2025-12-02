@@ -71,6 +71,42 @@ const postAdd = [
   }
 ]
 
+const getUpdate = async (req, res) => {
+  const staff = await db.getStaffDetailById(req.params.id);
+  title = `Update ${staff.fullname}`;
+  const toDateValue = (d) => {
+    if (!d) return '';
+    const dt = new Date(d);
+    if (isNaN(dt)) return '';
+    return dt.toISOString().slice(0, 10);
+  }
+  staff.birth = staff.birth ? toDateValue(staff.birth) : '';
+  res.render('staff/updateStaff', {
+    title,
+    staff,
+    genders,
+  });
+}
+
+const postUpdate = [
+  validateFullyStaff,
+  async (req, res) => {
+    const errors = validationResult(req);
+    const staffId = req.params.id;
+    if (!errors.isEmpty()) {
+      return res.status(400).render("staff/updateStaff", {
+        title: `Update Staff Member`,
+        genders,
+        errors: errors.array()
+      });
+    }
+    const object = matchedData(req);
+    object.id = staffId;
+    await db.updateStaff(object);
+    res.redirect(`/staff`);
+  }
+]
+
 const del = async (req, res) => {
   await db.delStaff(req.params.id);
   res.redirect('/staff')
@@ -82,5 +118,7 @@ module.exports = {
   getAdd,
   postAddFully,
   postAdd,
+  getUpdate,
+  postUpdate,
   del,
 }

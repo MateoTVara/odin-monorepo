@@ -13,6 +13,7 @@
       <li>
         <strong><%= member.fullname %></strong>
         <a href="/staff/<%= member.id %>/detail">View Details</a>
+        <a href="/staff/<%= member.id %>/update">Update</a>
         <form action="/staff/<%= member.id %>/delete" method="POST">
           <button type="submit">Delete</button>
         </form>

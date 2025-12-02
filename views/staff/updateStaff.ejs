@@ -8,23 +8,23 @@
 <body>
   <h1><%= title %></h1>
   <%- include('../partials/errors.ejs') %>
-  <form action="/staff/addFully" method="POST">
+  <form action="/staff/<%= staff.id %>/update/" method="POST">
     
     <label for="fullname">Full Name:</label>
-    <input type="text" id="fullname" name="fullname" required>
+    <input type="text" id="fullname" name="fullname" value="<%= staff.fullname %>" required>
 
     <label for="birth">Birth Date:</label>
-    <input type="date" id="birth" name="birth">
+    <input type="date" id="birth" name="birth" value="<%= staff.birth %>">
 
     <label for="gender">Gender</label>
     <select id="gender" name="gender">
-      <option value="">-----</option>
+      <option value="" selected>-----</option>
       <% genders.forEach(gender => { %>
-        <option value="<%= gender %>"><%= gender %></option>
+        <option value="<%= gender %>" <%= staff.gender === gender ? 'selected' : '' %>><%= gender %></option>
       <% }); %>
     </select>
 
-    <button type="submit">Add</button>
+    <button type="submit">Update</button>
   </form>
   <a href="/staff">Back to Staff List</a>
 </body>
