@@ -64,6 +64,11 @@ header {
   justify-content: center;
   gap: 32px;
 
+  & a {
+    text-decoration: none;
+    color: var(--primary-text-color);
+  }
+
   & > nav > ul {
     list-style: none;
     padding-left: 0;
@@ -71,12 +76,29 @@ header {
     display: flex;
     flex-direction: row;
     gap: 8px;
+
+    & > li {
+      transition: transform 0.1s ease-in-out;
+      &:hover {
+        transform: scale(1.1);
+        & > a:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 
 main {
   flex: 1 0 auto;
+  padding-inline: 128px;
+  padding-bottom: 56px;
 
   margin-top: 56px;
   background-color: var(--primary-bg-color);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
 }

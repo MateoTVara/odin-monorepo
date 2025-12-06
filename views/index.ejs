@@ -9,6 +9,10 @@
 <body>
   <%- include('partials/header') %>
   <main>
+    <div class="manga-list-title">
+      <h1>Manga List</h1>
+      <a href="/add">Add New Manga</a>
+    </div>
     <div class="manga-list-header">
       <p>Title</p>
       <p>Status</p>
@@ -18,7 +22,7 @@
     </div>
     <ul>
       <% manga.forEach(item => { %>
-        <li class="manga-entry" onclick="document.querySelector('.actions > a:first-child').click()">
+        <li class="manga-entry" onclick="document.querySelector('.actions > a[href=\'/<%= item.id %>/detail\']').click()">
           <p><%= item.title %></p>
           <p><%= item.status %></p>
           <p><%= format(new Date(item.startdate), 'PPP') %></p>
