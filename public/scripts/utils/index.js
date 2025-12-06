@@ -32,7 +32,7 @@ const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
   });
 
   input.addEventListener('focus', () => {
-    buttonsContainer.style.display = 'block';
+    buttonsContainer.style.display = 'flex';
   });
 
   input.addEventListener('blur', () => {
@@ -43,14 +43,14 @@ const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
       input.value = '';
     } else if (id) {
       const selectedButton = [...buttons].find(btn => btn.dataset[dataId] === id);
-      input.value = selectedButton.textContent;
+      input.value = selectedButton.textContent.trim();
     }
   });
-
+  
   input.addEventListener('input', () => {
     const items = [...buttons].map(btn => ({
       id: btn.getAttribute(`data-${dataId}`),
-      title: btn.textContent,
+      title: btn.textContent.trim(),
     }));
     const query = input.value.toLowerCase();
     const filteredItems = items.filter(item => {
@@ -63,7 +63,7 @@ const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
         button.textContent = item.title;
         button.dataset[dataId] = item.id;
         button.addEventListener('mousedown', () => {
-          input.value = button.textContent;
+          input.value = button.textContent.trim();
           input.dataset[dataId] = button.dataset[dataId];
         });
         return button;
@@ -73,7 +73,7 @@ const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
 
   buttons.forEach(btn => {
     btn.addEventListener('mousedown', () => {
-      input.value = btn.textContent;
+      input.value = btn.textContent.trim();
       input.dataset[dataId] = btn.dataset[dataId];
     });
   });

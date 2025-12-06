@@ -1,15 +1,16 @@
-<div style="position: relative;">
-  <div style="display: flex; flex-direction: row; gap: 4px;">
-    <input type="text" id="<%= inputId %>" data-<%= dataAttr %>="">
+<link rel="stylesheet" href="/styles/partials/filterDropDown.css">
+
+<div class="filter-dropdown">
+  <div class="input-selection">
+    <input type="text" id="<%= inputId %>" data-<%= dataAttr %>="" placeholder="Select <%= placeholder %>">
     <button type="button">+</button>
   </div>
 
-  <div
-    class="<%= containerClass || (inputId + '-buttons') %>"
-    style="position: absolute; display: none;"
-  >
+  <div class="<%= containerClass || (inputId + '-buttons') %> filter-options">
     <% list.forEach(item => { %>
-      <button type="button" data-<%= dataAttr %>="<%= item[valueProp] %>"><%= item[displayProp] %></button>
+      <button type="button" data-<%= dataAttr %>="<%= item[valueProp] %>">
+        <%= item[displayProp] %>
+      </button>
     <% }); %>
   </div>
 </div>

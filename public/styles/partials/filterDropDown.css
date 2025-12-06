@@ -1,0 +1,29 @@
+.filter-dropdown {
+  position: relative;
+}
+
+.input-selection {
+  display: flex; 
+  flex-direction: row; 
+  gap: 4px;
+
+  & > button {
+    width: 30px;
+  }
+}
+
+.filter-options {
+  width: calc(100% - 34px);
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  position: absolute;
+  z-index: 1;
+
+  display: none;
+  flex-direction: column;
+
+  & > button {
+    border: none;
+  }
+}

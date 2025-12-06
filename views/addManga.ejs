@@ -56,7 +56,8 @@
               list: staff,
               displayProp: 'fullname',
               valueProp: 'id',
-              containerClass: 'staff-buttons'
+              containerClass: 'staff-buttons',
+              placeholder: 'staff member'
         }) %>
 
         <%- include('partials/filterDropdown', {
@@ -65,7 +66,8 @@
               list: roles,
               displayProp: 'title',
               valueProp: 'id',
-              containerClass: 'roles-buttons'
+              containerClass: 'roles-buttons',
+              placeholder: 'role'
         }) %>
 
         <button class="add-staff-role" type="button">Add</button>
@@ -88,7 +90,8 @@
               list: genres,
               displayProp: 'title',
               valueProp: 'id',
-              containerClass: 'genres-buttons'
+              containerClass: 'genres-buttons',
+              placeholder: 'genre'
         }) %>
 
         <button class="add-genre" type="button">Add</button>
