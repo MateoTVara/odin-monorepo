@@ -1,0 +1,107 @@
+main > h1 {
+  padding: 8px 16px;
+  border-bottom: 5px solid #ccc;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-block: 16px 8px;
+}
+
+
+
+/* Roles Section */
+
+.staff-info {
+  background-color: #1c1c1c;
+  padding: 16px;
+  margin-block: 16px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 32px;
+  row-gap: 32px;
+
+  & > * {
+    position: relative;
+    padding: 4px 8px;
+    background-color: #3c3c3c;
+    border-radius: 8px;
+
+    & > span {
+      position: absolute;
+      bottom: 30px;
+      left: 5%;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+  }
+}
+
+.staff-role {
+  background-color: #1c1c1c;
+  padding: 16px 32px;
+  margin-block: 8px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  & > p:first-child,
+  & > a:last-child {
+    padding: 8px 16px;
+    background-color: #3c3c3c;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  & > a:last-child {
+    transition: background-color 0.1s;
+    &:hover {
+      background-color: #555;
+    }
+  }
+}
+
+
+
+/* Actions Section */
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.back-to-list {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.entry-delete {
+  margin-top: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #b22222;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.entry-delete:hover {
+  background-color: #8b1a1a;
+}

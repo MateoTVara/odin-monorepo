@@ -3,38 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/detail.css">
   <title><%= title %></title>
 </head>
 <body>
   <%- include('partials/header') %>
   <main>
     <h1><%= title %></h1>
-    <p><%= manga.title %></p>
-    <p><%= manga.description %></p>
-    <p>Status: <%= manga.status %></p>
-    <p>Start Date: <%= format(new Date(manga.startdate), 'PPP') %></p>
-    <% if (manga.enddate) { %>
-      <p>End Date: <%= format(new Date(manga.enddate), 'PPP') %></p>
-    <% } %>
-    <p><b>Staff</b></p>
+    <div class="manga-details">
+      <p>Status: <%= manga.status %></p>
+      <p>Start Date: <%= format(new Date(manga.startdate), 'PPP') %></p>
+      <% if (manga.enddate) { %>
+        <p>End Date: <%= format(new Date(manga.enddate), 'PPP') %></p>
+      <% } %>
+    </div>
+    <p class="description"><%= manga.description %></p>
+    <p class="section-title"><b>Staff</b></p>
     <ul>
       <% manga.staff.forEach(person => { %>
-        <li>
+        <li class="staff-member">
           <p><%= person.fullname %> - <%= person.role %></p>
           <a href="/staff/<%= person.id %>/detail">Details</a>
         </li>
       <% }) %>
     </ul>
-    <p><b>Tags</b></p>
-    <p>
+    <p class="section-title"><b>Tags</b></p>
+    <p class="tags">
       <% manga.genres.forEach(genre => { %>
-        <a href="/?genre=<%= genre.id %>"><%= genre.title %></a>
+        <a class="tag" href="/?genre=<%= genre.id %>"><%= genre.title %></a>
       <% }) %>
     </p>
-    <a href="/">Back to list</a>
-    <form action="/<%= manga.id %>/delete" method="POST">
-      <button type="submit">Delete Entry</button>
-    </form>
+    <div class="actions">
+      <a class="back-to-list" href="/">Back to List</a>
+      <form action="/<%= manga.id %>/delete" method="POST">
+        <button class="entry-delete" type="submit">Delete Entry</button>
+      </form>
+    </div>
   </main>
 </body>
 </html>

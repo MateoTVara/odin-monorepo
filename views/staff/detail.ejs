@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/staff/details.css">
   <title><%= title %></title>
 </head>
 <body>
@@ -10,26 +11,36 @@
 
   <main>
     <h1><%= title %></h1>
-    <p><%= staff.fullname %></p>
-    <% if (staff.birth) { %>
-      <p><%= format(new Date(staff.birth), 'PPP') %></p>
-    <% } %>
-    <% if (staff.gender) { %>
-      <p><%= staff.gender %></p>
-    <% } %>
-    <p><b>Staff Roles</b></p>
-    <ul>
+
+    <div class="staff-info">
+      <% if (staff.birth) { %>
+        <p>
+          <%= format(new Date(staff.birth), 'PPP') %>
+          <span>Birthdate</span>
+        </p>
+      <% } %>
+      <% if (staff.gender) { %>
+        <p>
+          <%= staff.gender %>
+          <span>Gender</span>
+        </p>
+      <% } %>
+    </div>
+
+    <h2 class="section-title">Staff Roles</h2>
+    <ul class="staff-roles">
       <% staff.manga.forEach(manga => { %>
-        <li>
+        <li class="staff-role">
           <p><%= manga.title %> - <%= manga.role %></p>
           <a href="/<%= manga.id %>/detail">Details</a>
         </li>
       <% }) %>
     </ul>
-    <div>
-      <a href="/staff">Back to Staff List</a>
+
+    <div class="actions">
+      <a class="back-to-list" href="/staff">Back to Staff List</a>
       <form action="/staff/<%= staff.id %>/delete" method="POST">
-        <button type="submit">Delete</button>
+        <button class="entry-delete" type="submit">Delete</button>
       </form>
     </div>
   </main>

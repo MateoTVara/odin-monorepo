@@ -58,6 +58,7 @@ header {
   background-color: var(--secondary-bg-color);
   position: fixed;
   top: 0;
+  z-index: 1;
   
   display: flex;
   flex-direction: row;
@@ -101,4 +102,10 @@ main {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding-inline: 16px;
+  }
 }
