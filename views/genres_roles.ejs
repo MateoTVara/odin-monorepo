@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/forms.css">
   <link rel="stylesheet" href="/styles/genres_roles.css">
+  <link rel="stylesheet" href="/styles/partials/dialogForm.css">
+  <script type="module" src="/scripts/genres_roles.js" defer></script>
   <title><%= title %></title>
 </head>
 <body>
@@ -12,8 +15,8 @@
     <div class="title">
       <h1><%= title %></h1>
       <div>
-        <a href="/add-genre">Add Genre</a>
-        <a href="/add-role">Add Role</a>
+        <button id="add-genre-btn">Add Genre</button>
+        <button id="add-role-btn">Add Role</button>
       </div>
     </div>
 
@@ -45,6 +48,9 @@
         <% }) %>
       </ul>
     </div>
+
+    <%- include('partials/dialogAddForm', { singular: 'genre', plural: 'genres', value: 'title' }) %>
+    <%- include('partials/dialogAddForm', { singular: 'role', plural: 'roles', value: 'title' }) %>
   </main>
 </body>
 </html>

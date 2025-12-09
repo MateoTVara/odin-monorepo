@@ -12,6 +12,21 @@ const $ = (selector) => {
 };
 
 /**
+ * Sets up a dialog to open and close when the open button is clicked or when clicking outside the dialog.
+ * @param {HTMLElement} openBtn - The button that opens the dialog.
+ * @param {HTMLDialogElement} dialog - The dialog element to be controlled.
+ */
+const setupDialog = (openBtn, dialog) => {
+  openBtn.addEventListener('click', () => {
+    dialog.showModal();
+  });
+
+  dialog.addEventListener('click', e => {
+    if (e.target === dialog) dialog.close();
+  });
+}
+
+/**
  * Sets up a filterable dropdown for the given input element.
  * @param {HTMLInputElement} input - The input element to attach the dropdown to.
  * @param {HTMLDialogElement} dialog - The ID of the dialog element containing the dropdown buttons.
@@ -79,4 +94,4 @@ const setupFilterDropdown = (input, dialog, containerClass, dataId) => {
   });
 }
   
-export { $, setupFilterDropdown }
+export { $, setupDialog, setupFilterDropdown }

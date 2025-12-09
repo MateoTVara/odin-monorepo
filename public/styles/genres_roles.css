@@ -20,12 +20,13 @@
   align-items: center;
 
   div {
-    > a {
+    > button {
       padding: 8px 16px;
-      color: var(--primary-text-color);
+      background-color: transparent;
       text-decoration: none;
       border-radius: 4px;
       font-weight: bold;
+      color: var(--primary-text-color);
       border: 2px solid var(--primary-text-color);
       transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
 
