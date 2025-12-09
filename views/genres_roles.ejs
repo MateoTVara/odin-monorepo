@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/genres_roles.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <div class="title">
+      <h1><%= title %></h1>
+      <div>
+        <a href="/add-genre">Add Genre</a>
+        <a href="/add-role">Add Role</a>
+      </div>
+    </div>
+
+    <div class="lists">
+      <ul>
+        <% genres.forEach(genre => { %>
+          <li class="entry">
+            <p><%= genre.title %></p>
+            <div class="actions">
+              <a href="">U</a>
+              <form action="" method="POST">
+                <button type="submit">D</button>
+              </form>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+      <ul>
+        <% roles.forEach(role => { %>
+          <li class="entry">
+            <p><%= role.title %></p>
+            <div class="actions">
+              <a href="">U</a>
+              <form action="" method="POST">
+                <button type="submit">D</button>
+              </form>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>

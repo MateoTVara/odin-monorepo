@@ -62,17 +62,20 @@
 }
 
 .actions {
+  gap: 12px;
 
   & > a,
   & > form > button {
-    margin: 0 8px;
-    padding: 8px 12px;
+    width: 32px;
+    height: 32px;
     background-color: black;
     color: var(--primary-text-color);
     border: none;
     cursor: pointer;
     transition: background-color 0.1s ease-in-out;
     text-decoration: none;
+    align-content: center;
+    text-align: center;
   }
 
   & > a:nth-child(2):hover {

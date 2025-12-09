@@ -217,6 +217,17 @@ const del = async (req, res) => {
   res.redirect('/');
 }
 
+const getGenresAndRoles = async (req, res) => {
+  title = 'Genres and Roles';
+  const genres = await db.getAllGenres();
+  const roles = await db.getAllRoles();
+  res.render('genres_roles', {
+    title,
+    genres,
+    roles,
+  });
+}
+
 
 module.exports = {
   getAll,
@@ -226,4 +237,6 @@ module.exports = {
   getUpdate,
   postUpdate,
   del,
+
+  getGenresAndRoles,
 }

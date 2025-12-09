@@ -9,5 +9,6 @@ mangaRouter.post('/add', mangaController.postAdd);
 mangaRouter.get('/:id/update', mangaController.getUpdate);
 mangaRouter.post('/:id/update', mangaController.postUpdate);
 mangaRouter.post('/:id/delete', mangaController.del);
+mangaRouter.get('/genres&roles', mangaController.getGenresAndRoles);
 
 module.exports = mangaRouter;
