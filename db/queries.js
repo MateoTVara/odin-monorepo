@@ -207,8 +207,12 @@ const addGenre = async title => {
   await pool.query("INSERT INTO genres (title) VALUES ($1)", [title]);
 }
 
+const updateGenre = async (id, title) => {
+  await pool.query("UPDATE genres SET title = $1 WHERE id = $2", [title, id]);
+}
+
 const delGenre = async id => {
-  await pool.query("DELETE FROM staff WHERE id = $1", [id]);
+  await pool.query("DELETE FROM genres WHERE id = $1", [id]);
 }
 
 
@@ -222,6 +226,10 @@ const getAllRoles = async () => {
 
 const addRole = async title => {
   await pool.query("INSERT INTO roles (title) VALUES ($1)", [title]);
+}
+
+const updateRoles = async (id, title) => {
+  await pool.query("UPDATE roles SET title = $1 WHERE id = $2", [title, id]);
 }
 
 const delRole = async id => {
@@ -247,10 +255,12 @@ module.exports = {
 
   getAllGenres,
   addGenre,
+  updateGenre,
   delGenre,
 
   getAllRoles,
   addRole,
+  updateRoles,
   delRole,
 }
 
