@@ -233,6 +233,7 @@ const updateRoles = async (id, title) => {
 }
 
 const delRole = async id => {
+  await pool.query("DELETE FROM manga_staff WHERE role_id = $1", [id]);
   await pool.query("DELETE FROM roles WHERE id = $1", [id]);
 }
 

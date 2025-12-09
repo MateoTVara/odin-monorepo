@@ -3,23 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/staff/staffForms.css">
   <title><%= title %></title>
 </head>
 <body>
   <%- include('../partials/header') %>
 
-  <main>
+  <main class="main-content">
     <h1><%= title %></h1>
     <%- include('../partials/errors.ejs') %>
-    <form action="/staff/addFully" method="POST">
+    <form class="form" action="/staff/addFully" method="POST">
       
-      <label for="fullname">Full Name:</label>
-      <input type="text" id="fullname" name="fullname" required>
+      <div class="form-group">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required>
+      </div>
 
-      <label for="birth">Birth Date:</label>
-      <input type="date" id="birth" name="birth">
+      <div class="form-group">
+        <label for="birth">Birth Date:</label>
+        <input type="date" id="birth" name="birth">
+      </div>
 
-      <label for="gender">Gender</label>
       <select id="gender" name="gender">
         <option value="">-----</option>
         <% genders.forEach(gender => { %>
@@ -27,9 +32,12 @@
         <% }); %>
       </select>
 
-      <button type="submit">Add</button>
+      <div class="actions">
+        <a class="cancel" href="/staff">Cancel</a>
+        <button class="submit" type="submit">Add</button>
+      </div>
     </form>
-    <a href="/staff">Back to Staff List</a>
+    
   </main>
 </body>
 </html>

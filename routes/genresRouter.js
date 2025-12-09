@@ -3,5 +3,6 @@ const genresController = require('../controllers/genresController');
 const genresRouter = Router();
 
 genresRouter.post('/add', genresController.postAdd);
+genresRouter.post('/:id/delete', genresController.postDelete);
 
 module.exports = genresRouter;

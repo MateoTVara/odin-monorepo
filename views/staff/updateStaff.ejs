@@ -3,23 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/staff/staffForms.css">
   <title><%= title %></title>
 </head>
 <body>
   <%- include('../partials/header') %>
 
-  <main>
+  <main class="main-content">
     <h1><%= title %></h1>
     <%- include('../partials/errors.ejs') %>
-    <form action="/staff/<%= staff.id %>/update/" method="POST">
+    <form class="form" action="/staff/<%= staff.id %>/update/" method="POST">
       
-      <label for="fullname">Full Name:</label>
-      <input type="text" id="fullname" name="fullname" value="<%= staff.fullname %>" required>
+      <div class="form-group">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" value="<%= staff.fullname %>" required>
+      </div>
 
-      <label for="birth">Birth Date:</label>
+      <div class="form-group">
+        <label for="birth">Birth Date:</label>
       <input type="date" id="birth" name="birth" value="<%= staff.birth %>">
+      </div>
 
-      <label for="gender">Gender</label>
       <select id="gender" name="gender">
         <option value="" selected>-----</option>
         <% genders.forEach(gender => { %>
@@ -27,9 +32,11 @@
         <% }); %>
       </select>
 
-      <button type="submit">Update</button>
+      <div class="actions">
+        <a class="cancel" href="/staff">Cancel</a>
+        <button class="submit" type="submit">Update</button>
+      </div>
     </form>
-    <a href="/staff">Back to Staff List</a>
   </main>
 </body>
 </html>

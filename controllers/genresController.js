@@ -18,6 +18,13 @@ const postAdd = [
   }
 ]
 
+const postDelete = async (req, res) => {
+  const id = req.params.id;
+  await db.delGenre(id);
+  res.redirect('/genres&roles');
+}
+
 module.exports = {
   postAdd,
+  postDelete,
 }

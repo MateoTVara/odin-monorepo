@@ -24,7 +24,7 @@
             <p><%= genre.title %></p>
             <div class="actions">
               <a href="">U</a>
-              <form action="" method="POST">
+              <form action="genres/<%= genre.id %>/delete" method="POST">
                 <button type="submit">D</button>
               </form>
             </div>
@@ -37,7 +37,7 @@
             <p><%= role.title %></p>
             <div class="actions">
               <a href="">U</a>
-              <form action="" method="POST">
+              <form action="roles/<%= role.id %>/delete" method="POST">
                 <button type="submit">D</button>
               </form>
             </div>
