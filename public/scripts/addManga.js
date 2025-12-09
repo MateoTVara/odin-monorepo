@@ -64,13 +64,17 @@ addStaffRole.addEventListener('click', () => {
 
   if (staffId && roleId) {
     const entryLi = document.createElement('li');
-    entryLi.textContent = `${staffInput.value} - ${rolesInput.value}`;
     entryLi.dataset.memberid = staffId;
     entryLi.dataset.roleid = roleId;
+
+    const p = document.createElement('p');
+    p.textContent = `${staffInput.value} - ${rolesInput.value}`;
 
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
     deleteBtn.textContent = 'X';
+    
+    entryLi.appendChild(p);
     entryLi.appendChild(deleteBtn);
 
     deleteBtn.addEventListener('click', () => {
@@ -122,13 +126,16 @@ addGenre.addEventListener('click', () => {
 
   if (genreId) {
     const entryLi = document.createElement('li');
-    entryLi.textContent = genreInput.value;
     entryLi.dataset.genreid = genreId;
     
+    const p = document.createElement('p');
+    p.textContent = genreInput.value;
+
     const deleteBtn = document.createElement('button');
     deleteBtn.type = 'button';
     deleteBtn.textContent = 'X';
 
+    entryLi.appendChild(p);
     entryLi.appendChild(deleteBtn);
 
     deleteBtn.addEventListener('click', () => {

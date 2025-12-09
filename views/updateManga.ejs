@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="/scripts/addManga.js" defer></script>
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/partials/dialogForm.css">
+  <link rel="stylesheet" href="/styles/mangaForms.css">
   <title><%= title %></title>
   <style>
     form {
@@ -18,19 +21,23 @@
 
   <%- include('partials/header') %>
 
-  <main>
+  <main class="main-content">
 
     <h1><%= title %></h1>
 
     <%- include('partials/errors.ejs') %>
 
-    <form action="/<%= manga.id %>/update" method="POST">
+    <form class="form" action="/<%= manga.id %>/update" method="POST">
 
-      <label for="title">Title</label>
-      <input type="text" id="title" name="title" value="<%= manga.title %>" required>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="<%= manga.title %>" required>
+      </div>
 
-      <label for="description">Description</label>
-      <textarea name="description" id="description"><%= manga.description %></textarea>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description"><%= manga.description %></textarea>
+      </div>
       
       <select name="status" id="status" required>
         <% statuses.forEach(status => { %>
@@ -38,11 +45,17 @@
         <% }) %>
       </select>
       
-      <label for="startdate">Start Date</label>
-      <input type="date" id="startdate" name="startdate" value="<%= manga.startdate %>" required>
-      
-      <label for="enddate">End Date</label>
-      <input type="date" id="enddate" name="enddate" value="<%= manga.enddate %>">
+      <div class="dates-selections">
+        <div class="form-group">
+          <label for="startdate">Start Date</label>
+          <input type="date" id="startdate" name="startdate" value="<%= manga.startdate %>" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="enddate">End Date</label>
+          <input type="date" id="enddate" name="enddate" value="<%= manga.enddate %>">
+        </div>
+      </div>
 
       <div
         style="
@@ -114,7 +127,10 @@
 
       
 
-      <button type="submit">Update Manga</button>
+      <div class="actions">
+        <a class="cancel" href="/">Cancel</a>
+        <button class="submit" type="submit">Update Manga</button>
+      </div>
     </form>
 
     <%- include('partials/dialogForm', {
@@ -134,8 +150,6 @@
       plural: 'genres',
       value: 'title', 
     }) %>
-
-    <a href="/">Back to Home</a>
   </main>
 
 </body>
