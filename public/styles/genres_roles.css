@@ -57,7 +57,7 @@
   justify-content: end;
   gap: 12px;
 
-  & > a,
+  & > button,
   & > form > button {
     width: 32px;
     height: 32px;
@@ -71,7 +71,7 @@
     align-content: center;
   }
 
-  & > a:nth-child(1):hover {
+  & > button:nth-child(1):hover {
     background-color: #333;
   }
 

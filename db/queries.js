@@ -228,7 +228,7 @@ const addRole = async title => {
   await pool.query("INSERT INTO roles (title) VALUES ($1)", [title]);
 }
 
-const updateRoles = async (id, title) => {
+const updateRole = async (id, title) => {
   await pool.query("UPDATE roles SET title = $1 WHERE id = $2", [title, id]);
 }
 
@@ -261,7 +261,7 @@ module.exports = {
 
   getAllRoles,
   addRole,
-  updateRoles,
+  updateRole,
   delRole,
 }
 

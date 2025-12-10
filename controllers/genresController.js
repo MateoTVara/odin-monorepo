@@ -18,6 +18,16 @@ const postAdd = [
   }
 ]
 
+const postUpdate = [
+  validateGenres,
+  async (req, res) => {
+    const id = req.params.id;
+    const { title } = matchedData(req);
+    await db.updateGenre(id, title);
+    res.redirect('/genres&roles');
+  }
+]
+
 const postDelete = async (req, res) => {
   const id = req.params.id;
   await db.delGenre(id);
@@ -26,5 +36,6 @@ const postDelete = async (req, res) => {
 
 module.exports = {
   postAdd,
+  postUpdate,
   postDelete,
 }

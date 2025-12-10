@@ -26,7 +26,14 @@
           <li class="entry">
             <p><%= genre.title %></p>
             <div class="actions">
-              <a href="">U</a>
+              <!-- update button now carries data attributes -->
+              <button
+                class="update-btn"
+                data-plural="genres"
+                data-id="<%= genre.id %>"
+                data-value="<%= genre.title %>"
+              >U</button>
+
               <form action="genres/<%= genre.id %>/delete" method="POST">
                 <button type="submit">D</button>
               </form>
@@ -39,7 +46,14 @@
           <li class="entry">
             <p><%= role.title %></p>
             <div class="actions">
-              <a href="">U</a>
+              <!-- update button for roles -->
+              <button
+                class="update-btn"
+                data-plural="roles"
+                data-id="<%= role.id %>"
+                data-value="<%= role.title %>"
+              >U</button>
+
               <form action="roles/<%= role.id %>/delete" method="POST">
                 <button type="submit">D</button>
               </form>
@@ -51,6 +65,10 @@
 
     <%- include('partials/dialogAddForm', { singular: 'genre', plural: 'genres', value: 'title' }) %>
     <%- include('partials/dialogAddForm', { singular: 'role', plural: 'roles', value: 'title' }) %>
+
+    <!-- include one update dialog per resource (no server-side id/currentValue) -->
+    <%- include('partials/dialogUpdateForm', { singular: 'genre', plural: 'genres', value: 'title' }) %>
+    <%- include('partials/dialogUpdateForm', { singular: 'role', plural: 'roles', value: 'title' }) %>
   </main>
 </body>
 </html>
