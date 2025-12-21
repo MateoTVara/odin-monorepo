@@ -35,6 +35,12 @@ app.use(passport.session());
 
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  res.locals.errors = [];
+  next();
+});
+
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
@@ -71,6 +77,9 @@ app.use((err, req, res, next) => {
 
 const indexRouter = require('./routes/indexRouter');
 app.use('/', indexRouter);
+
+const messagesRouter = require('./routes/messagesRouter');
+app.use('/messages', messagesRouter);
 
 app.listen(PORT, (err) => {
   if (err) throw err;

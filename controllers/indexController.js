@@ -26,7 +26,6 @@ const getIndex = async (req, res) => {
     res.render('pages/index', {
       title: 'Home Page',
       views: req.session.views,
-      user: req.user,
     });
   } catch (error) {
     console.error('Error fetching index data:', error);
@@ -37,11 +36,9 @@ const getAuth = async (req, res) => {
   try {
     res.render('pages/auth', {
       title: 'Authentication',
-      errors: [],
-      data: {},
     });
   } catch (error) {
-    console.error('Error fetching login data:', error);
+    next(error);
   }
 }
 
@@ -53,27 +50,35 @@ const postSignUp = [
       return res.status(400).render('pages/auth', {
         title: 'Authentication',
         errors: errors.array(),
-        data: req.body,
+        data: {
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          signup_username: req.body.username,
+        },
       });
     }
 
-    const receivedUser = matchedData(req);
+    const data = matchedData(req);
 
     try {
-      const userExists = await users.getUserByUsername(receivedUser.username) ? true : false;
+      const userExists = await users.getUserByUsername(data.username) ? true : false;
       
       if (userExists) {
         return res.status(400).render('pages/auth', {
           title: 'Authentication',
           errors: [{ msg: 'Username already taken' }],
-          data: receivedUser,
+          data: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            signup_username: data.username,
+          },
         });
       }
 
-      const hashedPassword = await bcrypt.hash(receivedUser.password, 10);
+      const hashedPassword = await bcrypt.hash(data.password, 10);
 
       const newUser = await users.insert({
-        ...receivedUser,
+        ...data,
         password: hashedPassword,
       });
 
@@ -82,15 +87,27 @@ const postSignUp = [
         return res.redirect('/');
       })
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 ]
 
-const postLogin = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/auth',
-});
+const postLogin = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.status(400).render('pages/auth', {
+        title: 'Authentication',
+        errors: [{ msg: info && info.message ? info.message : 'Login failed' }],
+        data: { login_username: req.body.username },
+      });
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.redirect('/');
+    });
+  })(req, res, next);
+};
 
 const getLogout = (req, res, next) => {
   req.logout((err) => {
@@ -99,10 +116,21 @@ const getLogout = (req, res, next) => {
   res.redirect('/');
 }
 
+const getNewMessage = (req, res, next) => {
+  try {
+    res.render('pages/new-msg', {
+      title: 'New Message',
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getIndex,
   getAuth,
   postSignUp,
   postLogin,
   getLogout,
+  getNewMessage,
 }

@@ -1,0 +1,8 @@
+<header>
+  <h1>Members <span>Only</span></h1>
+  <% if (!user) { %>
+    <a href="/auth">Login</a>
+  <% } else { %>
+    <a href="/logout">Logout</a>
+  <% } %>
+</header>

@@ -1,0 +1,26 @@
+<%- include('../partials/header', { user }) %>
+<%- include('../partials/errors', { errors }) %>
+<form action="/messages/add" method="POST">
+  <div>
+    <label for="title">Title</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      value="<%= typeof data !== 'undefined' ? data.title : '' %>"
+      required
+    >
+  </div>
+  <div>
+    <label for="message">Message</label>
+    <textarea
+      id="message"
+      name="message"
+      required
+    >
+      <%= typeof data !== 'undefined' ? data.message : '' %>
+    </textarea>
+  </div>
+  <button type="submit">Submit</button>
+</form>
+<a href="/">Back to Home</a>
