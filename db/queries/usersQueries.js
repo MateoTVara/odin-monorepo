@@ -33,7 +33,7 @@ const getUserByUsername = async (username) => {
  * @param {string} param0.password - Hashed password
  * @returns {Promise<Object>} Promise that resolves to the newly inserted user
  */
-const insertUser = async ({ first_name, last_name, username, password }) => {
+const insert = async ({ first_name, last_name, username, password }) => {
   const query = 'INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4) RETURNING *';
   const values = [first_name, last_name, username, password];
   const { rows:[user] } = await pool.query(query, values);
@@ -43,5 +43,5 @@ const insertUser = async ({ first_name, last_name, username, password }) => {
 module.exports = {
   getUserById,
   getUserByUsername,
-  insert: insertUser,
+  insert,
 }

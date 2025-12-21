@@ -37,7 +37,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  res.locals.errors = [];
+  res.locals.errors = req.session.errors || [];
+  delete req.session.errors;
   next();
 });
 

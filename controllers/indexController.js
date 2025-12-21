@@ -23,7 +23,7 @@ const validateUser = [
 const getIndex = async (req, res, next) => {
   try {
     req.session.views = (req.session.views ?? 0) + 1;
-    const msgs = await messages.getAllWithAuthorsNames(req.user ? req.user.is_member : false);
+    const msgs = req.isMember ? await messages.getAllWithAuthorsNames() : await messages.getAll();
 
     res.render('pages/index', {
       title: 'Home Page',

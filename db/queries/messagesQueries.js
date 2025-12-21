@@ -1,27 +1,29 @@
 const pool = require('../pool');
 
 /**
+ * Get all messages
+ * @returns {Promise<Array>} Promise that resolves to a list of messages
+ */
+const getAll = async () => {
+  const query = 'SELECT * FROM messages ORDER BY created_at DESC';
+  const { rows: messages } = await pool.query(query);
+  return messages;
+}
+
+/**
  * Get all messages with authors' full names if user is a member
  * @param {boolean} userIsMember - Indicates if the requesting user is a member
  * @returns {Promise<Array>} Promise that resolves to a list of messages with author names or 'Anonymous'
  */
-const getAllWithAuthorsNames = async (userIsMember = false) => {
-  if (userIsMember) {
-    const { rows: messages } = await pool.query(`
-      SELECT m.*, CONCAT(u.first_name, ' ', u.last_name) as author_fullname
-      FROM messages m
-      INNER JOIN users u ON u.id = m.user_id
-      ORDER BY m.created_at DESC
-    `);
-    return messages;
-  } else {
-    const { rows: messages } = await pool.query(`
-      SELECT *, 'Anonymous' as author_fullname
-      FROM messages
-      ORDER BY created_at DESC
-    `);
-    return messages;
-  }
+const getAllWithAuthorsNames = async () => {
+  const query = `
+    SELECT m.*, CONCAT(u.first_name, ' ', u.last_name) AS author_fullname
+    FROM messages m
+    JOIN users u ON m.user_id = u.id
+    ORDER BY m.created_at DESC
+  `;
+  const { rows: messages } = await pool.query(query);
+  return messages;
 }
 
 /**
@@ -39,7 +41,16 @@ const add = async ({ user_id, title, message }) => {
   return newMsg;
 }
 
+const deleteById = async (id) => {
+  const query = 'DELETE FROM messages WHERE id = $1 RETURNING *';
+  const values = [id];
+  const { rows: [deletedMsg] } = await pool.query(query, values);
+  return deletedMsg;
+}
+
 module.exports = {
+  getAll,
   getAllWithAuthorsNames,
   add,
+  deleteById,
 }

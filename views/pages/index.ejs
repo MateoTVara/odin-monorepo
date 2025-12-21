@@ -1,4 +1,5 @@
 <%- include('../partials/header', { user }) %>
+<%- include('../partials/errors', { errors }) %>
 <p>Views: <%= views %></p>
 <p>User: <%= user ? `${user.first_name} ${user.last_name}` : 'Guest' %></p>
 
@@ -10,9 +11,14 @@
     <ul>
       <% msgs.forEach((msg) => { %>
         <li>
+          <% if (user && user.is_admin) { %>
+            <form action="/messages/<%= msg.id %>/delete" method="POST">
+              <button type="submit">X</button>
+            </form>
+          <% } %>
           <strong><%= msg.title %></strong>
           <p><%= msg.message %></p>
-          <p>From <em><%= msg.author_fullname %></em></p>
+          <p>From <em><%= typeof msg.author_fullname !== 'undefined' ? msg.author_fullname : 'Anonymous' %></em></p>
           <p>Posted on <em><%= msg.created_at.toLocaleString() %></em></p>
         </li>
       <% }); %>

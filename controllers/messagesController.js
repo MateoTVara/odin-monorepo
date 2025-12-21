@@ -36,6 +36,20 @@ const postAdd = [
   }
 ]
 
+const postDelete = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deleted = await messages.deleteById(id);
+    
+    if (!deleted) return res.status(404).send('Message not found');
+    
+    return res.redirect('/');
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   postAdd,
+  postDelete,
 }
