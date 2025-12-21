@@ -1,6 +1,14 @@
 const { Client } = require('pg');
-const { argv, exit } = require('node:process');
+const { argv, exit, env } = require('node:process');
 const { DB_CONNECTION_STRING } = require('./config');
+
+require('dotenv').config();
+
+const {
+  ADMIN_HASHED_PASSWORD,
+  MEMBER_HASHED_PASSWORD,
+  USER_HASHED_PASSWORD,
+} = env;
 
 const SQL = `
 CREATE TABLE IF NOT EXISTS users (
@@ -9,7 +17,8 @@ CREATE TABLE IF NOT EXISTS users (
   last_name VARCHAR ( 255 ),
   username VARCHAR ( 255 ),
   password VARCHAR ( 255 ),
-  is_member BOOLEAN DEFAULT FALSE
+  is_member BOOLEAN DEFAULT FALSE,
+  is_admin BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS messages (
@@ -34,6 +43,17 @@ WITH (OIDS=FALSE);
 ALTER TABLE "user_sessions" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 CREATE INDEX "IDX_session_expire" ON "user_sessions" ("expire");
+
+INSERT INTO users (first_name, last_name, username, password, is_member, is_admin) VALUES
+('Mateo', 'Torres', 'admin', '${ADMIN_HASHED_PASSWORD}', true, true),
+('Jane', 'Smith', 'janesmith', '${MEMBER_HASHED_PASSWORD}', true, false),
+('John', 'Doe', 'johndoe', '${USER_HASHED_PASSWORD}', false, false);
+
+INSERT INTO messages (user_id, title, message) VALUES
+(1, 'Welcome to the Club', 'Hello everyone! I am excited to be part of this exclusive members-only club. Looking forward to connecting with all of you!'),
+(2, 'First Post', 'Hi all, this is my first post here. Happy to join the community and share my thoughts!'),
+(1, 'Event Announcement', 'We are thrilled to announce our upcoming members-only event! Stay tuned for more details.'),
+(3, 'Greetings', 'Hello! Just wanted to say hi to everyone here. Looking forward to engaging with you all.');
 `;
 
 const usage = () => {

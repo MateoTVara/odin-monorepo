@@ -1,6 +1,25 @@
 <%- include('../partials/header', { user }) %>
 <p>Views: <%= views %></p>
 <p>User: <%= user ? `${user.first_name} ${user.last_name}` : 'Guest' %></p>
+
+<main>
+  <h2>Messages</h2>
+  <% if (msgs.length === 0) { %>
+    <p>No messages yet.</p>
+  <% } else { %>
+    <ul>
+      <% msgs.forEach((msg) => { %>
+        <li>
+          <strong><%= msg.title %></strong>
+          <p><%= msg.message %></p>
+          <p>From <em><%= msg.author_fullname %></em></p>
+          <p>Posted on <em><%= msg.created_at.toLocaleString() %></em></p>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</main>
+
 <% if (user) { %>
   <a href="/new-message">New Message</a>
 <% } %>

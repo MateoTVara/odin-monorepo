@@ -2,6 +2,7 @@ const { body, validationResult, matchedData } = require('express-validator');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const users = require('../db/queries/usersQueries');
+const messages = require('../db/queries/messagesQueries');
 
 const validateUser = [
   body('first_name').trim()
@@ -19,20 +20,22 @@ const validateUser = [
     .custom((value, { req }) => value === req.body.password).withMessage('Passwords do not match')
 ]
 
-const getIndex = async (req, res) => {
+const getIndex = async (req, res, next) => {
   try {
     req.session.views = (req.session.views ?? 0) + 1;
+    const msgs = await messages.getAllWithAuthorsNames(req.user ? req.user.is_member : false);
 
     res.render('pages/index', {
       title: 'Home Page',
       views: req.session.views,
+      msgs,
     });
   } catch (error) {
-    console.error('Error fetching index data:', error);
+    next(error);
   }
 }
 
-const getAuth = async (req, res) => {
+const getAuth = async (req, res, next) => {
   try {
     res.render('pages/auth', {
       title: 'Authentication',
