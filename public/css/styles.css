@@ -1,6 +1,8 @@
 @import url('./reset.css');
 @import url('./vars.css');
 @import url('./header.css');
+@import url('./forms.css');
+@import url('./views/join.css');
 
 body {
   display: flex;
