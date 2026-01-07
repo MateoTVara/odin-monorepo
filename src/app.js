@@ -47,8 +47,9 @@ app.use((req, res, next) => {
   next();
 });
 
-passport.use(
-  new LocalStrategy(async (email, password, done) => {
+passport.use(new LocalStrategy(
+  { usernameField: 'email' },
+  async (email, password, done) => {
     try {
       const user = await usersService.findUserByEmail(email);
 
@@ -60,8 +61,8 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
-);
+  }
+));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
