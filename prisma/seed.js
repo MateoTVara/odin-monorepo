@@ -9,14 +9,28 @@ const { SEED_ADMIN_PASSWORD } = env;
 
 const seed = async () => {
   try {
-    await prisma.user.createMany({
-      data: [
-        {
+    const admin = await prisma.user.findFirst({
+      where: { email: 'admin@example.com' },
+    });
+    
+    let adminUser = admin;
+
+    if (!adminUser) {
+      adminUser = await prisma.user.create({
+        data: {
           email: 'admin@example.com',
           password: SEED_ADMIN_PASSWORD,
           name: 'super',
           lastname: 'admin',
-        }
+        },
+      });
+    }
+
+    await prisma.folder.createMany({
+      data: [
+        { name: 'Documents', ownerId: adminUser.id },
+        { name: 'Pictures', ownerId: adminUser.id },
+        { name: 'Projects', ownerId: adminUser.id },
       ],
       skipDuplicates: true,
     });

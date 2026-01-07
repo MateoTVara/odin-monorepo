@@ -1,4 +1,3 @@
-// const { prisma } = require('../../lib/prisma');
 import { prisma } from "../../lib/prisma.js";
 
 /**
@@ -9,19 +8,19 @@ import { prisma } from "../../lib/prisma.js";
  * @method createUser - Creates a new user.
  */
 class UsersService {
-  findUserById = async (id) => {
+  readById = async id => {
     return await prisma.user.findUnique({
       where: { id },
     });
   }
 
-  findUserByEmail= async (email) => {
+  readByEmail= async email => {
     return await prisma.user.findUnique({
       where: { email },
     });
   }
 
-  createUser = async ({ email, password, name = '', lastname = '' }) => {
+  create = async ({ email, password, name = '', lastname = '' }) => {
     return prisma.user.create({
       data: {
         email,

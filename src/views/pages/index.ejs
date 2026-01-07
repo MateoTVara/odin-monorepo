@@ -1,7 +1,85 @@
 <%- include('../partials/errors.ejs') %>
 
+<% let folderId %>
+
 <h1><%= title %></h1>
 
 <p> <%= user.email %> </p>
 
+<% if ( user.folders && user.folders.length) { %>
+  <table
+    style="
+      border-spacing: 0 16px;
+    "
+  >
+    <tr>
+      <th>N°</th>
+      <th>Name</th>
+      <th>Last Updated</th>
+      <th>Created At</th>
+    </tr>
+    <% user.folders.forEach((folder, i) => { %>
+      <tr class="entry" data-folder-id="<%= folder.id %>">
+        <td style="border: 2px solid black;"><%= i+1 %></td>
+        <td style="border: 2px solid black;"><%= folder.name %></td>
+        <td style="border: 2px solid black;"><%= folder.updatedAt %></td>
+        <td style="border: 2px solid black;"><%= folder.createdAt %></td>
+      </tr>
+    <% }) %>
+  </table>
+<% } %>
+
+<div
+  id="menu"
+  style="
+    position: fixed;
+    display: none;
+    transform: translate(-10px, -10px);
+  "
+>
+  <button>Edit</button>
+  <form id="delete" method="POST">
+    <button type="submit">Delete</button>
+  </form>
+</div>
+
 <a href="/logout">Logout</a>
+
+<script>
+
+  const menu = document.querySelector("#menu");
+  const menuDelete = menu.querySelector("#delete");
+
+  document.querySelectorAll(".entry").forEach(entry => {
+    entry.addEventListener("contextmenu", e => {
+      e.preventDefault();
+
+      const folderId = entry.dataset.folderId;
+      menuDelete.action = `/folders/${folderId}/delete`;
+
+      const menuRect = menu.getBoundingClientRect();
+      let { clientX: x, clientY: y } = e;
+
+      if (x + menuRect.width > window.innerWidth) {
+        x = window.innerWidth - menuRect.width;
+      }
+
+      if (y + menuRect.height > window.innerHeight) {
+        y = window.innerHeight - menuRect.height;
+      }
+
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y}px`;
+      menu.style.display = "block";
+    });
+  });
+
+  document.addEventListener("click", e => {
+    menu.style.display = "none";
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") menu.style.display = "none";
+  });
+
+</script>

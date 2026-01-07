@@ -1,0 +1,9 @@
+import { Router } from "express";
+import routerController from "../controllers/foldersController.js"
+import { authNeeded } from "../middlewares/auth.js";
+
+const foldersRouter = Router();
+
+foldersRouter.post('/:id/delete', authNeeded, routerController.postDelete);
+
+export default foldersRouter;

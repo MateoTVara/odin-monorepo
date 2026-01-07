@@ -51,7 +51,7 @@ passport.use(new LocalStrategy(
   { usernameField: 'email' },
   async (email, password, done) => {
     try {
-      const user = await usersService.findUserByEmail(email);
+      const user = await usersService.readByEmail(email);
 
       if (!user) return done(null, false, { message: 'Incorrect email.' });
 
@@ -70,7 +70,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await usersService.findUserById(id);
+    const user = await usersService.readById(id);
     done(null, user);
   } catch (error) {
     done(error);
@@ -84,6 +84,9 @@ app.use((err, req, res, next) => {
 
 import indexRouter from './routes/indexRouter.js';
 app.use('/', indexRouter);
+
+import foldersRouter from './routes/foldersRouter.js';
+app.use('/folders', foldersRouter);
 
 app.listen(PORT, err => {
   if (err) {

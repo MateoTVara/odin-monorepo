@@ -2,13 +2,14 @@ import { body, validationResult, matchedData } from "express-validator";
 import usersService from "../services/usersService.js";
 import passport from "passport";
 import bcryptjs from "bcryptjs";
+import foldersService from "../services/foldersService.js";
 
 class IndexController {
   #validateUser = [
     body('email')
       .isEmail().withMessage('Invalid email address.')
       .custom(async (email) => {
-        const existingUser = await usersService.findUserByEmail(email);
+        const existingUser = await usersService.readByEmail(email);
         if (existingUser) {
           throw new Error('Email already in use.');
         }
@@ -32,8 +33,13 @@ class IndexController {
    * @param {import('express').Request} req 
    * @param {import('express').Response} res 
    */
-  getIndex = (req, res) => {
-    res.render('pages/index', { title: 'Home'});
+  getIndex = async (req, res) => {
+
+    req.user.folders = await foldersService.readManyByOwnerId(req.user.id);
+    
+    res.render('pages/index', { 
+      title: 'Home',
+    });
   };
 
 
@@ -64,7 +70,7 @@ class IndexController {
       try {
         const hashedPassword = await bcryptjs.hash(userData.password, 10);
 
-        const newUser = await usersService.createUser({
+        const newUser = await usersService.create({
           ...userData,
           password: hashedPassword,
         });
@@ -112,8 +118,11 @@ class IndexController {
   getLogout = async (req, res, next) => {
     req.logout((error) => {
       if (error) return next(error);
+      req.session.destroy((err) => {
+        if (err) return next(err);
+        res.redirect('/auth');
+      });
     });
-    res.redirect('/auth');
   };
 }
 
