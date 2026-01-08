@@ -37,7 +37,7 @@
     transform: translate(-10px, -10px);
   "
 >
-  <button>Edit</button>
+  <button id="edit">Edit Name</button>
   <form id="delete" method="POST">
     <button type="submit">Delete</button>
   </form>
@@ -49,12 +49,92 @@
 
   const menu = document.querySelector("#menu");
   const menuDelete = menu.querySelector("#delete");
+  const menuEdit = document.querySelector("#edit");
+
+  let timer = null;
+
+  const placeCaretAtEnd = (el) => {
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(el);
+    range.collapse(false);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
+  const startRename = ({ nameCell, currentEntryId }) => {
+    if (nameCell.isContentEditable) return;
+
+    const originalName = nameCell.textContent;
+
+    const restablish = () => {
+      nameCell.textContent = originalName;
+      nameCell.contentEditable = "false";
+      return;
+    };
+
+    nameCell.contentEditable = "true";
+    nameCell.focus();
+    placeCaretAtEnd(nameCell);
+
+    const handleKeyDown = e => {
+      switch (e.key) {
+        case "Enter":
+          e.preventDefault();
+          nameCell.blur();
+          removeEventListener("keydown", handleKeyDown);
+          break;
+      
+        case "Escape":
+          restablish();
+          break;
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    nameCell.addEventListener("blur", async nameCellEvent => {
+      try {
+        const newName = nameCell.textContent.trim();
+
+        if (!newName || newName === originalName) restablish();
+
+        const response = await fetch(`/folders/${currentEntryId}/update`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            newName: nameCell.textContent.trim(),
+          })
+        });
+
+        console.log(await response.json()); // Debug
+      } catch (error) {
+        console.error(error);
+      } finally {
+        nameCell.contentEditable = "false";
+      }
+    }, { once: true });
+  };
+
+  menuEdit.addEventListener("click", e => {
+    const currentEntryId = menu.dataset.currentEntryId;
+    const entryObj = {
+      nameCell: document.querySelector(`.entry[data-folder-id="${currentEntryId}"]>td:nth-child(2)`),
+      currentEntryId,
+    };
+
+    startRename(entryObj);
+  });
 
   document.querySelectorAll(".entry").forEach(entry => {
+    const folderId = entry.dataset.folderId;
+    const nameCell = entry.querySelector("td:nth-child(2)");
+
     entry.addEventListener("contextmenu", e => {
       e.preventDefault();
 
-      const folderId = entry.dataset.folderId;
+      menu.dataset.currentEntryId = folderId;
       menuDelete.action = `/folders/${folderId}/delete`;
 
       const menuRect = menu.getBoundingClientRect();
@@ -72,14 +152,51 @@
       menu.style.top = `${y}px`;
       menu.style.display = "block";
     });
+
+    entry.addEventListener("dblclick", () => {
+      clearTimeout(timer);
+    });
+
+    nameCell.addEventListener("click", e => {
+      e.stopPropagation();
+      timer = setTimeout(() => {
+        const entryObj = {
+          nameCell,
+          currentEntryId: folderId,
+        };
+        startRename(entryObj);
+      }, 800);
+    });
   });
 
   document.addEventListener("click", e => {
     menu.style.display = "none";
+    clearTimeout(timer);
+  });
+
+  document.addEventListener("contextmenu", e => {
+    clearTimeout(timer);
   });
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") menu.style.display = "none";
+    clearTimeout(timer);
+  });
+
+  let startX, startY;
+
+  document.addEventListener("mousedown", e => {
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  document.addEventListener("mousemove", e => {
+    if (
+      Math.abs(e.clientX - startX > 4) ||
+      Math.abs(e.clientY - startY > 4)
+    ) {
+      clearTimeout(timer);
+    }
   });
 
 </script>

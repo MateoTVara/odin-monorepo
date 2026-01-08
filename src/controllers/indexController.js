@@ -5,7 +5,8 @@ import bcryptjs from "bcryptjs";
 import foldersService from "../services/foldersService.js";
 
 class IndexController {
-  #validateUser = [
+
+  #validateUserSignUp = [
     body('email')
       .isEmail().withMessage('Invalid email address.')
       .custom(async (email) => {
@@ -56,7 +57,7 @@ class IndexController {
 
 
   postSignUp = [
-    this.#validateUser,
+    this.#validateUserSignUp,
     async (req, res, next) => { 
       const errors = validationResult(req);
       
