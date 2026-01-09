@@ -1,3 +1,11 @@
+dialog {
+  padding: 0;
+
+  & > div {
+    padding: 16px;
+  }
+}
+
 table {
   border-spacing: 0 16px;
 }

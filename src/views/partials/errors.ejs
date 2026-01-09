@@ -1,7 +1,5 @@
-<% if (errors && errors.length > 0) { %>
-  <ul>
-    <% errors.forEach(error => { %>
-      <li><%= error.msg || String(error) %></li>
-    <% }); %>
-  </ul>
-<% } %>
+<ul id="errors">
+  <% errors.forEach(error => { %>
+    <li><%= error.msg || String(error) %></li>
+  <% }); %>
+</ul>

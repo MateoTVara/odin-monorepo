@@ -1,4 +1,5 @@
-import { $ } from "../lib/utils.js";
+import { $, $$ } from "../lib/utils.js";
+import errorsManager from "../partials/errors.js";
 
 const startRename = ({ nameCell, currentEntryId }) => {
   if (nameCell.isContentEditable) return;
@@ -99,7 +100,7 @@ const menuManager = {
     this.menu.style.display = "none";
   },
 
-  bindMenuEvents() {
+  bindEvents() {
     menuManager.menuEdit.addEventListener("click", () => {
       const currentEntryId = menuManager.menu.dataset.currentEntryId;
       const nameCell = $(`.entry[data-folder-id="${currentEntryId}"]>${tableManager.nameCellsSelector}`);
@@ -116,7 +117,7 @@ const tableManager = {
   table: $("table"),
   nameCellsSelector: "td:nth-child(2)",
   
-  bindTableEvents() {
+  bindEvents() {
     this.table.addEventListener("click", e => {
       const entry = e.target.closest(".entry");
       if (!entry) return;
@@ -147,44 +148,109 @@ const tableManager = {
 
 
 
-const bindGlobalEvents = () => {
-  document.addEventListener("click", e => {
-    menuManager.close();
-  });
+const dialogManager = {
+  dialog: $("dialog"),
+  showBtn: $("#showDialog"),
+  closeBtns: $$(".closeDialog"),
+  form: $("#createForm"),
 
-  document.addEventListener("contextmenu", e => {
-    menuManager.close();
-  });
+  closeDialog() {
+    this.dialog.close();
+    errorsManager.errorsUl.replaceChildren();
+    $("input", this.form).value = "";
+  },
+  
+  bindEvents() {
+    this.dialog.addEventListener("click", e => {
+      if (e.target == this.dialog) this.closeDialog();
+    });
 
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") menuManager.close();
-  });
+    this.showBtn.addEventListener("click", () => this.dialog.showModal());
 
-  let startX, startY;
+    this.closeBtns.forEach(closeBtn => {
+      closeBtn.addEventListener("click", () => this.closeDialog());
+    });
 
-  document.addEventListener("mousedown", e => {
-    startX = e.clientX;
-    startY = e.clientY;
-  });
+    this.form.addEventListener("submit", async e => {
+      e.preventDefault();
+      errorsManager.errorsUl.replaceChildren();
+      const payload = Object.fromEntries(new FormData(this.form).entries());
 
-  document.addEventListener("mousemove", e => {
-    if (
-      Math.abs(e.clientX - startX > 4) ||
-      Math.abs(e.clientY - startY > 4)
-    ) {
-      clearTimeout(menuManager.timer);
-    }
-  });
+      try {
+        const res = await fetch(this.form.action, {
+          method: this.form.method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+
+        if (res.ok && data.ok) {
+          this.closeDialog();
+          return window.location.reload();
+        }
+
+        data.errors.forEach(error => {
+          const li = document.createElement("li");
+          li.textContent = error.msg || String(error);
+          errorsManager.errorsUl.appendChild(li);
+        });
+        
+      } catch (error) {
+        console.error(`An error ocurred:\n${error}`);
+      }
+    });
+  },
 };
 
 
 
 
 
+const globalManager = {
+  bindEvents() {
+    document.addEventListener("click", e => {
+      menuManager.close();
+    });
+
+    document.addEventListener("contextmenu", e => {
+      menuManager.close();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") menuManager.close();
+    });
+
+    let startX, startY;
+
+    document.addEventListener("mousedown", e => {
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+
+    document.addEventListener("mousemove", e => {
+      if (
+        Math.abs(e.clientX - startX > 4) ||
+        Math.abs(e.clientY - startY > 4)
+      ) {
+        clearTimeout(menuManager.timer);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", e => {
+      errorsManager.errorsUl = $("#errors");
+    });
+  },
+}
+
+
+
+
+
 const init = () => {
-  bindGlobalEvents();
-  menuManager.bindMenuEvents();
-  tableManager.bindTableEvents();
+  menuManager.bindEvents();
+  tableManager.bindEvents();
+  dialogManager.bindEvents();
+  globalManager.bindEvents();
 };
 
 init();

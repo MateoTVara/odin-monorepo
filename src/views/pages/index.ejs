@@ -1,10 +1,10 @@
-<%- include('../partials/errors.ejs') %>
-
 <% let folderId %>
 
 <h1><%= title %></h1>
 
 <p> <%= user.email %> </p>
+
+<button id="showDialog">Create folder</button>
 
 <% if ( user.folders && user.folders.length) { %>
   <table>
@@ -25,13 +25,31 @@
   </table>
 <% } %>
 
-<div
-  id="menu"
->
-  <button id="edit">Edit Name</button>
+<div id="menu">
+  <button id="edit">Rename</button>
   <form id="delete" method="POST">
     <button type="submit">Delete</button>
   </form>
 </div>
+
+<dialog>
+  <div>
+    <%- include('../partials/errors.ejs') %>
+    <div>
+      <p>Create Folder</p>
+      <button class="closeDialog">X</button>
+    </div>
+    <form action="/folders/create" method="POST" id="createForm">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" name="name" required>
+      </div>
+      <div>
+        <button type="submit">Create</button>
+        <button type="button" class="closeDialog">Cancel</button>
+      </div>
+    </form>
+  </div>
+</dialog>
 
 <a href="/logout">Logout</a>
