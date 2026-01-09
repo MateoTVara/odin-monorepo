@@ -38,8 +38,10 @@ class IndexController {
 
     req.user.folders = await foldersService.readManyByOwnerId(req.user.id);
     
-    res.render('pages/index', { 
+    res.render('pages/index', {
       title: 'Home',
+      styles: ['pages/index'],
+      scripts: ['pages/index'],
     });
   };
 

@@ -44,6 +44,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.errors = req.session.errors || [];
+  res.locals.styles = req.styles || [];
+  res.locals.scripts = req.scripts || [];
   delete req.session.errors;
   next();
 });

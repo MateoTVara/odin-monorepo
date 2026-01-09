@@ -1,0 +1,15 @@
+table {
+  border-spacing: 0 16px;
+}
+
+.entry {
+  & td {
+    border: 2px solid black;
+  }
+}
+
+#menu {
+  position: fixed;
+  display: none;
+  transform: translate(-10px, -10px);
+}
