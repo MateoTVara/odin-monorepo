@@ -3,6 +3,7 @@ import usersService from "../services/usersService.js";
 import passport from "passport";
 import bcryptjs from "bcryptjs";
 import foldersService from "../services/foldersService.js";
+import entriesService from "../services/entriesService.js";
 
 class IndexController {
 
@@ -36,7 +37,7 @@ class IndexController {
    */
   getIndex = async (req, res) => {
 
-    req.user.folders = await foldersService.readManyByOwnerId(req.user.id);
+    req.user.entries = await entriesService.readManyByOwnerIdAndNoParent(req.user.id);
     
     res.render('pages/index', {
       title: 'Home',

@@ -26,20 +26,29 @@ const seed = async () => {
       });
     }
 
-    await prisma.folder.createMany({
-      data: [
-        { name: 'Documents', ownerId: adminUser.id },
-        { name: 'Pictures', ownerId: adminUser.id },
-        { name: 'Projects', ownerId: adminUser.id },
-      ],
-      skipDuplicates: true,
-    });
+    const folderNames = ["Documents", "Pictures", "Projects"];
+
+    for (const name of folderNames) {
+      const exists = await prisma.entry.findFirst({
+        where: { name, ownerId: adminUser.id }
+      });
+
+      if (exists) continue;
+
+      await prisma.entry.create({
+        data: {
+          name,
+          owner: { connect: { id: adminUser.id } },
+          folder: { create: {} },
+        },
+      });
+    }
 
     const allUsers = await prisma.user.findMany({
       include: {
-        folders: true,
+        entries: true
       },
-    })
+    });
     console.log('All users:', JSON.stringify(allUsers, null, 2));
 
     console.log('Done!');

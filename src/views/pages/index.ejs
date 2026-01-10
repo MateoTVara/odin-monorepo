@@ -14,13 +14,13 @@
     <th>Last Updated</th>
     <th>Created At</th>
   </tr>
-  <% if (user.folders.length) { %>
-    <% user.folders.forEach((folder, i) => { %>
-      <tr class="entry" data-folder-id="<%= folder.id %>">
+  <% if (user.entries.length) { %>
+    <% user.entries.forEach((entry, i) => { %>
+      <tr class="entry" data-folder-id="<%= entry.id %>">
         <td><%= i+1 %></td>
-        <td><%= folder.name %></td>
-        <td><%= folder.updatedAt %></td>
-        <td><%= folder.createdAt %></td>
+        <td><%= entry.name %></td>
+        <td><%= entry.updatedAt %></td>
+        <td><%= entry.createdAt %></td>
       </tr>
     <% }) %>
   <% } else { %>
