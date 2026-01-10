@@ -88,9 +88,6 @@ app.use((err, req, res, next) => {
 import indexRouter from './routes/indexRouter.js';
 app.use('/', indexRouter);
 
-import foldersRouter from './routes/foldersRouter.js';
-app.use('/folders', foldersRouter);
-
 import entriesRouter from './routes/entriesRouter.js';
 app.use('/entries', entriesRouter);
 

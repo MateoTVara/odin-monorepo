@@ -11,8 +11,8 @@ class EntriesService {
     return await prisma.entry.create({
       data: {
         name,
-        parentId,
         owner: { connect: { id: ownerId } },
+        parent: parentId ? { connect: { id: parentId } } : undefined,
         folder: { create: {} },
       }
     });
@@ -23,8 +23,8 @@ class EntriesService {
     return await prisma.entry.create({
       data: {
         name,
-        parentId,
         owner: { connect: { id: ownerId } },
+        parent: parentId ? { connect: { id: parentId } } : undefined,
         file: { create: { size, mime, url } },
       },
     });
@@ -71,7 +71,7 @@ class EntriesService {
       where: { id },
       data: {
         name: newName,
-        parentId: newParentId,
+        parent: newParentId ? { connect: { id: newParentId } } : { disconnect: true },
         file: { update: {
           size: newSize,
           mime: newMime,
