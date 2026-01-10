@@ -10,6 +10,12 @@ class FoldersService {
     });
   };
 
+  readById = async id => {
+    return await prisma.folder.findUnique({
+      where: { id }
+    });
+  };
+
   readManyByOwnerId = async ownerId => {
     return await prisma.folder.findMany({
       where: { ownerId },

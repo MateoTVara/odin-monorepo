@@ -6,14 +6,15 @@
 
 <button id="showDialog">Create folder</button>
 
-<% if ( user.folders && user.folders.length) { %>
-  <table>
-    <tr>
-      <th>N°</th>
-      <th>Name</th>
-      <th>Last Updated</th>
-      <th>Created At</th>
-    </tr>
+<table>
+
+  <tr>
+    <th>N°</th>
+    <th>Name</th>
+    <th>Last Updated</th>
+    <th>Created At</th>
+  </tr>
+  <% if (user.folders.length) { %>
     <% user.folders.forEach((folder, i) => { %>
       <tr class="entry" data-folder-id="<%= folder.id %>">
         <td><%= i+1 %></td>
@@ -22,8 +23,12 @@
         <td><%= folder.createdAt %></td>
       </tr>
     <% }) %>
-  </table>
-<% } %>
+  <% } else { %>
+    <tr>
+      <td colspan="4">No entries</td>
+    </tr>
+  <% } %>
+</table>
 
 <div id="menu">
   <button id="edit">Rename</button>
