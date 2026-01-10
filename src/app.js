@@ -91,6 +91,9 @@ app.use('/', indexRouter);
 import foldersRouter from './routes/foldersRouter.js';
 app.use('/folders', foldersRouter);
 
+import entriesRouter from './routes/entriesRouter.js';
+app.use('/entries', entriesRouter);
+
 app.listen(PORT, err => {
   if (err) {
     console.error('Failed to start server:', err);

@@ -51,7 +51,7 @@ const startRename = ({ nameCell, currentEntryId }) => {
         return;
       };
 
-      const response = await fetch(`/folders/${currentEntryId}/update`, {
+      const response = await fetch(`/entries/${currentEntryId}/rename`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,9 +78,9 @@ const menuManager = {
   menuEdit: $("#edit", menu),
   timer: null,
 
-  open(x, y, folderId) {
-    this.menu.dataset.currentEntryId = folderId;
-    this.menuDelete.action = `/folders/${folderId}/delete`;
+  open(x, y, entryId) {
+    this.menu.dataset.currentEntryId = entryId;
+    this.menuDelete.action = `/entries/${entryId}/delete`;
     const menuRect = this.menu.getBoundingClientRect();
 
     if (x + menuRect.width > window.innerWidth) {
@@ -103,7 +103,7 @@ const menuManager = {
   bindEvents() {
     menuManager.menuEdit.addEventListener("click", () => {
       const currentEntryId = menuManager.menu.dataset.currentEntryId;
-      const nameCell = $(`.entry[data-folder-id="${currentEntryId}"]>${tableManager.nameCellsSelector}`);
+      const nameCell = $(`.entry[data-entry-id="${currentEntryId}"]>${tableManager.nameCellsSelector}`);
       startRename({ nameCell, currentEntryId });
     });
   },
@@ -126,7 +126,7 @@ const tableManager = {
         menuManager.timer = setTimeout(() => {
           startRename({
             nameCell: e.target,
-            currentEntryId: entry.dataset.folderId,
+            currentEntryId: entry.dataset.entryId,
           });
         }, 600);
       }
@@ -139,7 +139,7 @@ const tableManager = {
 
       const entry = e.target.closest(".entry");
       if (!entry) return;
-      menuManager.open(e.clientX, e.clientY, entry.dataset.folderId);
+      menuManager.open(e.clientX, e.clientY, entry.dataset.entryId);
     });
   },
 };

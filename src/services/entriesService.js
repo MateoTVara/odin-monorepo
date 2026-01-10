@@ -36,6 +36,8 @@ class EntriesService {
   // # R E A D #
   // ###########
 
+  readById = async id => await prisma.entry.findUnique({ where: { id } });
+
   readManyByOwnerIdAndNoParent = async ownerId => {
     return await prisma.entry.findMany({
       where: { ownerId, parentId: null }
