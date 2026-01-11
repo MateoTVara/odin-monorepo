@@ -8,6 +8,14 @@ class EntriesService {
 
   createFolder = async ({ ownerId, name, parentId = null }) => {
     await this.#assertParentIsFolder(parentId);
+
+    if (parentId) {
+      const parent = await prisma.entry.findUnique({ where: { id: parentId } });
+      if (!parent || parent.ownerId !== ownerId ) {
+        throw new Error("Invalid parent folder")
+      }
+    }
+
     return await prisma.entry.create({
       data: {
         name,

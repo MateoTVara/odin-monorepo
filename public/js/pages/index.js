@@ -174,7 +174,14 @@ const dialogManager = {
     this.form.addEventListener("submit", async e => {
       e.preventDefault();
       errorsManager.errorsUl.replaceChildren();
-      const payload = Object.fromEntries(new FormData(this.form).entries());
+
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const parentId = Number(pathParts[1]);
+
+      const payload = {
+        ...Object.fromEntries(new FormData(this.form).entries()),
+        parentId: parentId ? parentId : null,
+      };
 
       try {
         const res = await fetch(this.form.action, {
@@ -229,8 +236,8 @@ const globalManager = {
 
     document.addEventListener("mousemove", e => {
       if (
-        Math.abs(e.clientX - startX > 4) ||
-        Math.abs(e.clientY - startY > 4)
+        Math.abs((e.clientX - startX) > 4) ||
+        Math.abs((e.clientY - startY) > 4)
       ) {
         clearTimeout(menuManager.timer);
       }

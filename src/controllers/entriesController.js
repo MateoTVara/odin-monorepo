@@ -6,7 +6,8 @@ class EntriesController {
   #entryFolderNameFieldMsg = "Name must be at least 1 character long."
 
   #validateCreateFolder = [
-    body("name").trim().notEmpty().withMessage(this.#entryFolderNameFieldMsg)
+    body("name").trim().notEmpty().withMessage(this.#entryFolderNameFieldMsg),
+    body("parentId").optional({ values: "null" }).isInt().withMessage("Invalid parentId").toInt(),
   ];
 
   #validateRename = [body("newName").trim().notEmpty().withMessage(this.#entryFolderNameFieldMsg)];
@@ -22,12 +23,13 @@ class EntriesController {
         });
       }
 
-      const { name } = matchedData(req);
+      const { name, parentId } = matchedData(req);
 
       try {
         const newFolder = await entriesService.createFolder({
           ownerId: req.user.id,
           name,
+          parentId,
         });
         res.json({ ok: true, folder: newFolder });
       } catch (error) {
