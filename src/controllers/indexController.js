@@ -2,7 +2,6 @@ import { body, validationResult, matchedData } from "express-validator";
 import usersService from "../services/usersService.js";
 import passport from "passport";
 import bcryptjs from "bcryptjs";
-import foldersService from "../services/foldersService.js";
 import entriesService from "../services/entriesService.js";
 
 class IndexController {
@@ -37,10 +36,24 @@ class IndexController {
    */
   getIndex = async (req, res) => {
 
-    req.user.entries = await entriesService.readManyByOwnerIdAndNoParent(req.user.id);
+    req.user.entries = await entriesService.readRootEntries(req.user.id);
     
     res.render('pages/index', {
       title: 'Home',
+      styles: ['pages/index'],
+      scripts: ['pages/index'],
+    });
+  };
+
+
+
+  getFolder = async (req, res) => {
+    const folderId = Number(req.params.id);
+    req.user.entries = await entriesService.readFolderEntriesById(folderId);
+    const folderName = (await entriesService.readById(folderId)).name;
+
+    res.render('pages/index', {
+      title: folderName,
       styles: ['pages/index'],
       scripts: ['pages/index'],
     });

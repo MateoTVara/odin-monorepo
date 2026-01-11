@@ -38,7 +38,15 @@ class EntriesService {
 
   readById = async id => await prisma.entry.findUnique({ where: { id } });
 
-  readManyByOwnerIdAndNoParent = async ownerId => {
+  readFolderEntriesById = async id => {
+    this.#assertEntryIsFolder(id);
+
+    return await prisma.entry.findMany({
+      where: { parentId: id },
+    });
+  };
+
+  readRootEntries = async ownerId => {
     return await prisma.entry.findMany({
       where: { ownerId, parentId: null }
     });
@@ -95,17 +103,21 @@ class EntriesService {
   // # O T H E R S #
   // ###############
 
-  #assertParentIsFolder = async parentId => {
-    if (!parentId) return;
-
-    const parent = await prisma.entry.findUnique({
-      where: { id: parentId },
-      include: { file: true },
+  #assertEntryIsFolder = async id => {
+    const entry = await prisma.entry.findUnique({
+      where: { id },
+      include: { file:true },
     });
 
-    if (!parent) throw new Error("Parent entry not found");
+    if (!entry) throw new Error("Entry not found");
+    if (entry.file) throw new Error("Entry is not folder");
 
-    if (parent.file) throw new Error("Files cannot contain children");
+    return entry;
+  };
+
+  #assertParentIsFolder = async parentId => {
+    if (!parentId) return;
+    await this.#assertEntryIsFolder(parentId);
   };
 
 }

@@ -1,4 +1,3 @@
-import foldersService from "../services/foldersService.js";
 import entriesService from "../services/entriesService.js";
 
 // export const folderOwnership = async (req, res, next) => {

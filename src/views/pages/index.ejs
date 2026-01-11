@@ -16,7 +16,13 @@
   </tr>
   <% if (user.entries.length) { %>
     <% user.entries.forEach((entry, i) => { %>
-      <tr class="entry" data-entry-id="<%= entry.id %>">
+      <tr
+        class="entry"
+        data-entry-id="<%= entry.id %>"
+        ondblclick="
+          window.location.href = '/folder/<%= entry.id %>'
+        "
+      >
         <td><%= i+1 %></td>
         <td><%= entry.name %></td>
         <td><%= entry.updatedAt %></td>

@@ -26,23 +26,53 @@ const seed = async () => {
       });
     }
 
-    const folderNames = ["Documents", "Pictures", "Projects"];
+    const folders = {
+      Documents: ["Receipts", "Essays"],
+      Pictures: ["Movies", "Series", "Animes"],
+      Projects: ["Rust", "Websites", "Node", "Bun"],
+    };
 
-    for (const name of folderNames) {
+    for (const [name, subfolders] of Object.entries(folders)) {
       const exists = await prisma.entry.findFirst({
         where: { name, ownerId: adminUser.id }
       });
-
       if (exists) continue;
 
-      await prisma.entry.create({
+      const parentFolder = await prisma.entry.create({
         data: {
           name,
-          owner: { connect: { id: adminUser.id } },
+          ownerId: adminUser.id,
           folder: { create: {} },
         },
       });
+
+      for (const name of subfolders) {
+        await prisma.entry.create({
+          data: {
+            name,
+            ownerId: adminUser.id,
+            folder: { create: {} },
+            parentId: parentFolder.id,
+          },
+        });
+      }
     }
+
+    // for (const name of folderNames) {
+    //   const exists = await prisma.entry.findFirst({
+    //     where: { name, ownerId: adminUser.id }
+    //   });
+
+    //   if (exists) continue;
+
+    //   await prisma.entry.create({
+    //     data: {
+    //       name,
+    //       owner: { connect: { id: adminUser.id } },
+    //       folder: { create: {} },
+    //     },
+    //   });
+    // }
 
     const allUsers = await prisma.user.findMany({
       include: {
