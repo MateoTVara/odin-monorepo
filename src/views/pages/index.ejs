@@ -5,6 +5,10 @@
 <p> <%= user.email %> </p>
 
 <button id="showDialog">Create folder</button>
+<form action="/entries/upload" enctype="multipart/form-data" method="POST" id="file-form">
+  <input type="file" name="files" multiple>
+  <button type="submit">Submit</button>
+</form>
 
 <table>
 

@@ -213,6 +213,41 @@ const dialogManager = {
 
 
 
+const fileFormManager = {
+  form: $("#file-form"),
+
+  bindEvents() {
+    this.form.addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const parentId = Number(pathParts[1]);
+
+      const formData = new FormData(this.form);
+      if (parentId) formData.append("parentId", parentId);
+
+      try {
+        const res = await fetch(this.form.action, {
+          method: this.form.method,
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.ok) return window.location.reload();
+
+        data.errors.forEach(error => console.error(error.msg || String(error)));
+      } catch (error) {
+        
+      }
+    });
+  },
+};
+
+
+
+
+
 const globalManager = {
   bindEvents() {
     document.addEventListener("click", e => {
@@ -258,6 +293,7 @@ const init = () => {
   tableManager.bindEvents();
   dialogManager.bindEvents();
   globalManager.bindEvents();
+  fileFormManager.bindEvents();
 };
 
 init();

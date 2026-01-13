@@ -1,5 +1,6 @@
 import { body, validationResult, matchedData } from "express-validator";
 import entriesService from "../services/entriesService.js";
+import { promises as fs } from "node:fs";
 
 class EntriesController {
   
@@ -38,6 +39,32 @@ class EntriesController {
     }
   ];
 
+  /**
+   * @param {import('express').Request} req 
+   * @param {import('express').Response} res 
+   * @param {import('express').NextFunction} next 
+   */
+  postUploadFile = async (req, res, next) => {
+    const parentId = Number(req.body.parentId);
+    try {
+      for (const { originalname, mimetype, size, path } of req.files) {
+        await entriesService.createFile({
+          ownerId: Number(req.user.id),
+          name: originalname,
+          file: {
+            size,
+            mime: mimetype,
+            url: path,
+          },
+          parentId: parentId ? parentId : null,
+        });
+      }
+      res.json({ ok: true });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   postRename = [
     this.#validateRename,
     async (req, res, next) => {
@@ -67,6 +94,15 @@ class EntriesController {
 
     try {
       const deletedEntry = await entriesService.delete(entryId);
+
+      if (deletedEntry.file) {
+        try {
+          await fs.unlink(deletedEntry.file.url);
+        } catch (error) {
+          console.error("Failed to unlink file form disk", error);
+        }
+      }
+
       res.redirect('/');
     } catch (error) {
       next(error);

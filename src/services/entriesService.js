@@ -44,19 +44,24 @@ class EntriesService {
   // # R E A D #
   // ###########
 
-  readById = async id => await prisma.entry.findUnique({ where: { id } });
+  readById = async id => await prisma.entry.findUnique({
+    where: { id },
+    // include: { file: true },
+  });
 
   readFolderEntriesById = async id => {
     this.#assertEntryIsFolder(id);
 
     return await prisma.entry.findMany({
       where: { parentId: id },
+      // include: { file: true },
     });
   };
 
   readRootEntries = async ownerId => {
     return await prisma.entry.findMany({
-      where: { ownerId, parentId: null }
+      where: { ownerId, parentId: null },
+      // include: { file: true },
     });
   };
 
@@ -103,7 +108,10 @@ class EntriesService {
   // # D E L E T E #
   // ###############
 
-  delete = async id => await prisma.entry.delete({ where: { id } });
+  delete = async id => await prisma.entry.delete({
+    where: { id },
+    include: { file: true },
+  });
 
 
 
