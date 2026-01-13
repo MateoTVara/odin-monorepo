@@ -31,9 +31,11 @@
       <tr
         class="entry"
         data-entry-id="<%= entry.id %>"
-        ondblclick="
-          window.location.href = '/folder/<%= entry.id %>'
-        "
+        <% if (entry.file) { %>
+          ondblclick="window.location.href = '/files/<%= entry.id %>'"
+        <% } else { %>
+          ondblclick="window.location.href = '/folder/<%= entry.id %>'"
+        <% } %>
       >
         <td><%= i+1 %></td>
         <td><%= entry.name %></td>

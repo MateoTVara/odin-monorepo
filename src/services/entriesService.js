@@ -54,14 +54,14 @@ class EntriesService {
 
     return await prisma.entry.findMany({
       where: { parentId: id },
-      // include: { file: true },
+      include: { file: true },
     });
   };
 
   readRootEntries = async ownerId => {
     return await prisma.entry.findMany({
       where: { ownerId, parentId: null },
-      // include: { file: true },
+      include: { file: true },
     });
   };
 

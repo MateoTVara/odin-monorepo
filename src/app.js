@@ -91,10 +91,17 @@ app.use('/', indexRouter);
 import entriesRouter from './routes/entriesRouter.js';
 app.use('/entries', entriesRouter);
 
-app.listen(PORT, err => {
+import filesRouter from './routes/filesRouter.js';
+app.use('/files', filesRouter);
+
+app.listen(
+  PORT,
+  "0.0.0.0",
+  err => {
   if (err) {
-    console.error('Failed to start server:', err);
-    return;
+      console.error('Failed to start server:', err);
+      return;
+    }
+    console.log(`Server is running on http://localhost:${PORT}`);
   }
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+);
