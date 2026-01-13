@@ -76,11 +76,13 @@ const menuManager = {
   menu: $("#menu"),
   menuDelete: $("#delete", menu),
   menuEdit: $("#edit", menu),
+  menuDownload: $("a", menu),
   timer: null,
 
   open(x, y, entryId) {
     this.menu.dataset.currentEntryId = entryId;
     this.menuDelete.action = `/entries/${entryId}/delete`;
+    this.menuDownload.href = `/files/${entryId}/download`;
     const menuRect = this.menu.getBoundingClientRect();
 
     if (x + menuRect.width > window.innerWidth) {

@@ -8,6 +8,7 @@ const filesRouter = Router();
 const upload = multer({ dest: "/home/marun/Projects/odin/projects/odin-file-uploader/uploads/" });
 
 filesRouter.post('/upload', upload.array('files'), filesController.postUpload);
+filesRouter.get('/:id/download', authNeeded, filesController.getDownload);
 filesRouter.get('/:id', authNeeded, checkOwnership, filesController.get);
 
 export default filesRouter;

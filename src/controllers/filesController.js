@@ -1,4 +1,6 @@
 import filesService from "../services/filesService.js";
+import fs from "node:fs";
+import path from "node:path";
 
 class FilesController {
 
@@ -18,6 +20,28 @@ class FilesController {
         });
       }
       res.json({ ok: true });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getDownload = async (req, res, next) => {
+    try {
+      const fileId = Number(req.params.id);
+      const file = await filesService.readById(fileId);
+
+      if (!file) {
+        return res.status(400).send("File not found");
+      }
+
+      const filePath = file.url;
+      const originalName = file.entry.name;
+
+      if (!fs.existsSync(filePath)) {
+        return res.status(400).send("File missing from disk");
+      }
+
+      res.download(filePath, originalName);
     } catch (error) {
       next(error);
     }
