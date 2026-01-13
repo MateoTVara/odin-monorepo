@@ -65,6 +65,45 @@ class EntriesService {
     });
   };
 
+  readBreadcrumbs = async id => {
+    const breadcrumbs = [];
+
+    const startEntry = await prisma.entry.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        parentId: true,
+      },
+    });
+
+    if (!startEntry) return breadcrumbs;
+
+    breadcrumbs.unshift(startEntry);
+    let currentEntry = startEntry;
+
+    for (let i = 0; i < 4; i++) {
+      if (!currentEntry.parentId) break;
+
+      const parentEntry = await prisma.entry.findUnique({
+        where: { id: currentEntry.parentId },
+        select: {
+          id: true,
+          name: true,
+          parentId: true,
+        },
+      });
+
+      if (!parentEntry) break;
+
+      breadcrumbs.unshift(parentEntry);
+      currentEntry = parentEntry;
+    }
+
+    return breadcrumbs;
+  };
+
+
 
 
   // ###############

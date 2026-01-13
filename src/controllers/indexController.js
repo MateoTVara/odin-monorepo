@@ -39,6 +39,7 @@ class IndexController {
     req.user.entries = await entriesService.readRootEntries(req.user.id);
     
     res.render('pages/index', {
+      parents: [],
       title: 'Home',
       styles: ['pages/index'],
       scripts: ['pages/index'],
@@ -51,8 +52,10 @@ class IndexController {
     const folderId = Number(req.params.id);
     req.user.entries = await entriesService.readFolderEntriesById(folderId);
     const folderName = (await entriesService.readById(folderId)).name;
+    const parents = await entriesService.readBreadcrumbs(folderId);
 
     res.render('pages/index', {
+      parents,
       title: folderName,
       styles: ['pages/index'],
       scripts: ['pages/index'],

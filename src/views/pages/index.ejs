@@ -10,8 +10,16 @@
   <button type="submit">Submit</button>
 </form>
 
-<table>
+<p>
+  <a href="/">My disk</a>
+  <% if (parents && parents.length) { %>
+    <% parents.forEach(parent => { %>
+      /<a href="/folder/<%= parent.id %>"><%= parent.name %></a>
+    <% }) %>
+  <% } %>
+</p>
 
+<table>
   <tr>
     <th>N°</th>
     <th>Name</th>
