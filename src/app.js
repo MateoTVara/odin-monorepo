@@ -91,6 +91,9 @@ app.use('/', indexRouter);
 import entriesRouter from './routes/entriesRouter.js';
 app.use('/entries', entriesRouter);
 
+import foldersRouter from './routes/foldersRouter.js';
+app.use('/folders', foldersRouter);
+
 import filesRouter from './routes/filesRouter.js';
 app.use('/files', filesRouter);
 

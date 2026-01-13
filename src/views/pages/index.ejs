@@ -34,7 +34,7 @@
         <% if (entry.file) { %>
           ondblclick="window.location.href = '/files/<%= entry.id %>'"
         <% } else { %>
-          ondblclick="window.location.href = '/folder/<%= entry.id %>'"
+          ondblclick="window.location.href = '/folders/<%= entry.id %>'"
         <% } %>
       >
         <td><%= i+1 %></td>
@@ -64,7 +64,7 @@
       <p>Create Folder</p>
       <button class="closeDialog">X</button>
     </div>
-    <form action="/entries/create-folder" method="POST" id="createForm">
+    <form action="/folders/create" method="POST" id="createForm">
       <div>
         <label for="name">Name</label>
         <input type="text" name="name" required>

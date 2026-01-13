@@ -6,25 +6,25 @@ class EntriesService {
   // # C R E A T E #
   // ###############
 
-  createFolder = async ({ ownerId, name, parentId = null }) => {
-    await this.#assertParentIsFolder(parentId);
+  // createFolder = async ({ ownerId, name, parentId = null }) => {
+  //   await this.#assertParentIsFolder(parentId);
 
-    if (parentId) {
-      const parent = await prisma.entry.findUnique({ where: { id: parentId } });
-      if (!parent || parent.ownerId !== ownerId ) {
-        throw new Error("Invalid parent folder")
-      }
-    }
+  //   if (parentId) {
+  //     const parent = await prisma.entry.findUnique({ where: { id: parentId } });
+  //     if (!parent || parent.ownerId !== ownerId ) {
+  //       throw new Error("Invalid parent folder")
+  //     }
+  //   }
 
-    return await prisma.entry.create({
-      data: {
-        name,
-        owner: { connect: { id: ownerId } },
-        parent: parentId ? { connect: { id: parentId } } : undefined,
-        folder: { create: {} },
-      }
-    });
-  };
+  //   return await prisma.entry.create({
+  //     data: {
+  //       name,
+  //       owner: { connect: { id: ownerId } },
+  //       parent: parentId ? { connect: { id: parentId } } : undefined,
+  //       folder: { create: {} },
+  //     }
+  //   });
+  // };
 
   createFile = async ({ ownerId, name, file: { size, mime, url }, parentId = null }) => {
     await this.#assertParentIsFolder(parentId);
@@ -44,19 +44,20 @@ class EntriesService {
   // # R E A D #
   // ###########
 
+  // Unused but not erased, may be useful in the future
   readById = async id => await prisma.entry.findUnique({
     where: { id },
     // include: { file: true },
   });
 
-  readFolderEntriesById = async id => {
-    this.#assertEntryIsFolder(id);
+  // readFolderEntriesById = async id => {
+  //   this.#assertEntryIsFolder(id);
 
-    return await prisma.entry.findMany({
-      where: { parentId: id },
-      include: { file: true },
-    });
-  };
+  //   return await prisma.entry.findMany({
+  //     where: { parentId: id },
+  //     include: { file: true },
+  //   });
+  // };
 
   readRootEntries = async ownerId => {
     return await prisma.entry.findMany({

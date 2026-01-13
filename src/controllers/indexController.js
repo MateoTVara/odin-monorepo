@@ -3,6 +3,7 @@ import usersService from "../services/usersService.js";
 import passport from "passport";
 import bcryptjs from "bcryptjs";
 import entriesService from "../services/entriesService.js";
+import foldersService from "../services/foldersService.js";
 
 class IndexController {
 
@@ -48,19 +49,20 @@ class IndexController {
 
 
 
-  getFolder = async (req, res) => {
-    const folderId = Number(req.params.id);
-    req.user.entries = await entriesService.readFolderEntriesById(folderId);
-    const folderName = (await entriesService.readById(folderId)).name;
-    const parents = await entriesService.readBreadcrumbs(folderId);
+  // getFolder = async (req, res) => {
+  //   const folderId = Number(req.params.id);
+  //   // req.user.entries = await entriesService.readFolderEntriesById(folderId);
+  //   req.user.entries = await foldersService.readEntriesById(folderId);
+  //   const folderName = (await entriesService.readById(folderId)).name;
+  //   const parents = await entriesService.readBreadcrumbs(folderId);
 
-    res.render('pages/index', {
-      parents,
-      title: folderName,
-      styles: ['pages/index'],
-      scripts: ['pages/index'],
-    });
-  };
+  //   res.render('pages/index', {
+  //     parents,
+  //     title: folderName,
+  //     styles: ['pages/index'],
+  //     scripts: ['pages/index'],
+  //   });
+  // };
 
 
 

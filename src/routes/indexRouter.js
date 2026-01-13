@@ -6,7 +6,7 @@ import { checkOwnership } from '../middlewares/ownership.js';
 const indexRouter = Router();
 
 indexRouter.get('/', authNeeded, indexController.getIndex);
-indexRouter.get('/folder/:id', authNeeded, checkOwnership, indexController.getFolder);
+// indexRouter.get('/folder/:id', authNeeded, checkOwnership, indexController.getFolder);
 indexRouter.get('/auth', indexController.getAuth);
 indexRouter.post('/sign-up', indexController.postSignUp);
 indexRouter.post('/login', indexController.postLogin);
