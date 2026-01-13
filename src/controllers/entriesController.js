@@ -8,27 +8,6 @@ class EntriesController {
 
   #validateRename = [body("newName").trim().notEmpty().withMessage(this.#entryFolderNameFieldMsg)];
 
-  postUploadFile = async (req, res, next) => {
-    const parentId = Number(req.body.parentId);
-    try {
-      for (const { originalname, mimetype, size, path } of req.files) {
-        await entriesService.createFile({
-          ownerId: Number(req.user.id),
-          name: originalname,
-          file: {
-            size,
-            mime: mimetype,
-            url: path,
-          },
-          parentId: parentId ? parentId : null,
-        });
-      }
-      res.json({ ok: true });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   postRename = [
     this.#validateRename,
     async (req, res, next) => {
@@ -69,7 +48,7 @@ class EntriesController {
 
       res.redirect('/');
     } catch (error) {
-      // next(error);
+      next(error);
     }
   }
 

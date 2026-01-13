@@ -4,7 +4,7 @@ class FoldersService {
   
   create = async ({ ownerId, name, parentId = null }) => {
     if (parentId) {
-      await this.#validateFolder(parentId, ownerId);
+      await this.validateFolder(parentId, ownerId);
     }    
 
     return await prisma.entry.create({
@@ -18,7 +18,7 @@ class FoldersService {
   };
 
   readById = async id => {
-    await this.#validateFolder(id);
+    await this.validateFolder(id);
 
     return await prisma.folder.findUnique({
       where: { id },
@@ -27,7 +27,7 @@ class FoldersService {
   }
 
   readEntriesById = async id => {
-    await this.#validateFolder(id);
+    await this.validateFolder(id);
 
     return await prisma.entry.findMany({
       where: { parentId: id },
@@ -35,7 +35,7 @@ class FoldersService {
     });
   };
 
-  #validateFolder = async (folderId, ownerId = null) => {
+  validateFolder = async (folderId, ownerId = null) => {
     const folder = await prisma.folder.findUnique({
       where: { id: folderId },
       include: { entry: { select: { ownerId: true } } },
