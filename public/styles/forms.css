@@ -1,0 +1,61 @@
+.main-content {
+  padding-inline: 256px;
+  position: relative;
+}
+
+select {
+  width: 100%;
+  padding: 4px 12px;
+}
+
+.form {
+  background-color: #1c1c1c;
+  padding: 24px 48px;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  width: 100%;
+
+  & > textarea {
+    padding: 0px 4px;
+    resize: vertical;
+    min-height: calc(1rem + 12px);
+    max-height: 4rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.cancel {
+  background-color: #555;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.submit {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+}

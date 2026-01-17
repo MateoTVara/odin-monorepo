@@ -1,0 +1,15 @@
+<dialog id="update-<%= plural %>-dialog">
+  <!-- leave action blank; JS will set /<plural>/<id>/update -->
+  <form action="" method="POST">
+    <input type="hidden" name="redirect" id="redirect-<%= plural %>">
+    <div class="form-group">
+      <label for="update-<%= plural %>-value">New <%= singular.charAt(0).toUpperCase() + singular.slice(1) %> <%= value %>:</label>
+      <!-- give the input a plural-scoped id so the script can find it -->
+      <input type="text" id="update-<%= plural %>-value" name="<%= value %>" value="" required>
+    </div>
+    <div class="dialog-buttons">
+      <button type="submit">Update <%= singular.charAt(0).toUpperCase() + singular.slice(1) %></button>
+      <button type="button" onclick="document.getElementById('update-<%= plural %>-dialog').close()">Cancel</button>
+    </div>
+  </form>
+</dialog>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/genres_roles.css">
+  <link rel="stylesheet" href="/styles/partials/dialogForm.css">
+  <script type="module" src="/scripts/genres_roles.js" defer></script>
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <div class="title">
+      <h1><%= title %></h1>
+      <div>
+        <button id="add-genre-btn">Add Genre</button>
+        <button id="add-role-btn">Add Role</button>
+      </div>
+    </div>
+
+    <div class="lists">
+      <ul>
+        <% genres.forEach(genre => { %>
+          <li class="entry">
+            <p><%= genre.title %></p>
+            <div class="actions">
+              <!-- update button now carries data attributes -->
+              <button
+                class="update-btn"
+                data-plural="genres"
+                data-id="<%= genre.id %>"
+                data-value="<%= genre.title %>"
+              >U</button>
+
+              <form action="genres/<%= genre.id %>/delete" method="POST">
+                <button type="submit">D</button>
+              </form>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+      <ul>
+        <% roles.forEach(role => { %>
+          <li class="entry">
+            <p><%= role.title %></p>
+            <div class="actions">
+              <!-- update button for roles -->
+              <button
+                class="update-btn"
+                data-plural="roles"
+                data-id="<%= role.id %>"
+                data-value="<%= role.title %>"
+              >U</button>
+
+              <form action="roles/<%= role.id %>/delete" method="POST">
+                <button type="submit">D</button>
+              </form>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <%- include('partials/dialogAddForm', { singular: 'genre', plural: 'genres', value: 'title' }) %>
+    <%- include('partials/dialogAddForm', { singular: 'role', plural: 'roles', value: 'title' }) %>
+
+    <!-- include one update dialog per resource (no server-side id/currentValue) -->
+    <%- include('partials/dialogUpdateForm', { singular: 'genre', plural: 'genres', value: 'title' }) %>
+    <%- include('partials/dialogUpdateForm', { singular: 'role', plural: 'roles', value: 'title' }) %>
+  </main>
+</body>
+</html>

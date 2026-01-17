@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/staff/list.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <main>
+    <div class="staff-list-title">
+      <h1><%= title %></h1>
+      <a href="/staff/add">Add New Staff Member</a>
+    </div>
+    <div class="staff-list-header">
+      <p><strong>Full Name</strong></p>
+      <p><strong>Actions</strong></p>
+    </div>
+    <ul>
+      <% staff.forEach(function(member) { %>
+        <li class="staff-member" onclick="document.querySelector('.actions > a[href=\'/staff/<%= member.id %>/detail\']').click()">
+          <strong><%= member.fullname %></strong>
+          <div class="actions">
+            <a href="/staff/<%= member.id %>/detail" style="display: none;">Details</a>
+            <a href="/staff/<%= member.id %>/update">U</a>
+            <form action="/staff/<%= member.id %>/delete" method="POST">
+              <button type="submit">D</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  </main>
+</body>
+</html>

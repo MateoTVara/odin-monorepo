@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/staff/staffForms.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="main-content">
+    <h1><%= title %></h1>
+    <%- include('../partials/errors.ejs') %>
+    <form class="form" action="/staff/addFully" method="POST">
+      
+      <div class="form-group">
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="birth">Birth Date:</label>
+        <input type="date" id="birth" name="birth">
+      </div>
+
+      <select id="gender" name="gender">
+        <option value="">-----</option>
+        <% genders.forEach(gender => { %>
+          <option value="<%= gender %>"><%= gender %></option>
+        <% }); %>
+      </select>
+
+      <div class="actions">
+        <a class="cancel" href="/staff">Cancel</a>
+        <button class="submit" type="submit">Add</button>
+      </div>
+    </form>
+    
+  </main>
+</body>
+</html>

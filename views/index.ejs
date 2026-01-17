@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/index.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <div class="manga-list-title">
+      <h1>Manga List</h1>
+      <a href="/add">Add New Manga</a>
+    </div>
+    <div class="manga-list-header">
+      <p>Title</p>
+      <p>Status</p>
+      <p>Start Date</p>
+      <p>End Date</p>
+      <p>Actions</p>
+    </div>
+    <ul>
+      <% manga.forEach(item => { %>
+        <li class="manga-entry" onclick="document.querySelector('.actions > a[href=\'/<%= item.id %>/detail\']').click()">
+          <p><%= item.title %></p>
+          <p><%= item.status %></p>
+          <p><%= format(new Date(item.startdate), 'PPP') %></p>
+          <% if (item.enddate) { %>
+            <p><%= format(new Date(item.enddate), 'PPP') %></p> 
+          <% } %>
+          <div class="actions">
+            <a href="/<%= item.id %>/detail" style="display: none;">Details</a>
+            <a href="/<%= item.id %>/update">U</a>
+            <form action="/<%= item.id %>/delete" method="POST">
+              <button type="submit">D</button>
+            </form>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  </main>
+</body>
+</html>

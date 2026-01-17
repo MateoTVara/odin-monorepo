@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/staff/details.css">
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <h1><%= title %></h1>
+
+    <div class="staff-info">
+      <% if (staff.birth) { %>
+        <p>
+          <%= format(new Date(staff.birth), 'PPP') %>
+          <span>Birthdate</span>
+        </p>
+      <% } %>
+      <% if (staff.gender) { %>
+        <p>
+          <%= staff.gender %>
+          <span>Gender</span>
+        </p>
+      <% } %>
+    </div>
+
+    <h2 class="section-title">Staff Roles</h2>
+    <ul class="staff-roles">
+      <% staff.manga.forEach(manga => { %>
+        <li class="staff-role">
+          <p><%= manga.title %> - <%= manga.role %></p>
+          <a href="/<%= manga.id %>/detail">Details</a>
+        </li>
+      <% }) %>
+    </ul>
+
+    <div class="actions">
+      <a class="back-to-list" href="/staff">Back to Staff List</a>
+      <form action="/staff/<%= staff.id %>/delete" method="POST">
+        <button class="entry-delete" type="submit">Delete</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

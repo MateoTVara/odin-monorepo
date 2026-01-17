@@ -1,0 +1,81 @@
+.lists {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+
+  & > ul {
+    flex: 1 0 auto;
+    background-color: var(--secondary-bg-color);
+    padding-block: 8px;
+    height: fit-content;
+  }
+}
+
+.title {
+  padding: 24px 16px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  div {
+    > button {
+      padding: 8px 16px;
+      background-color: transparent;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      color: var(--primary-text-color);
+      border: 2px solid var(--primary-text-color);
+      transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+
+      &:hover {
+        background-color: var(--primary-text-color);
+        color: var(--primary-bg-color);
+      }
+    }
+  }
+}
+
+.entry {
+  padding: 8px 32px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > :first-child {
+    flex: 2;
+  }
+}
+
+.actions {
+  flex: 1;
+
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+
+  & > button,
+  & > form > button {
+    width: 32px;
+    height: 32px;
+    background-color: black;
+    color: var(--primary-text-color);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in-out;
+    text-decoration: none;
+    text-align: center;
+    align-content: center;
+  }
+
+  & > button:nth-child(1):hover {
+    background-color: #333;
+  }
+
+  & > form:nth-child(2) > button:hover {
+    background-color: #b30000;
+  }
+}
