@@ -1,0 +1,131 @@
+* {
+  font-family:'Courier New', Courier, monospace;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+#header {
+  background-color: #ff7f50;
+  padding: 8px;
+  text-align: center;
+}
+
+#footer {
+  align-items: center;
+  background-color: #ff7f50;
+  margin-top: auto;
+  text-align: center;
+}
+
+#footer .container {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 16px;
+}
+
+img {
+  display: block;
+  height: 32px;
+  width: 32px;
+}
+
+#overlay {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: none;
+  height: 100%;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+}
+
+#overlay p {
+  color: #ffe8d6;
+  font-size: 96px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+#board {
+  align-items: center;
+  background-color: #fff8f0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 52px;
+  padding: 32px;
+}
+
+#selections {
+  display: flex;
+  gap: 64px;
+  justify-content: center;
+  width: fit-content;
+}
+
+#selections div{
+  align-items: center;
+  background-color: transparent;
+  border: 8px solid #f4a261;
+  border-radius: 10%;
+  box-shadow: 5px 5px 10px gray;
+  display: flex;
+  flex-direction: column;
+  font-size: 160px;
+  height: 256px;
+  width: 256px;
+}
+
+#p-human, #p-computer {
+  color: #4b2e2e;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 8px;
+}
+
+#human-choice, #computer-choice {
+  text-shadow: 2px 2px black;
+}
+
+#options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+#options button {
+  align-items: center;
+  background-color: transparent;
+  border: 4px solid #f4a261;
+  border-radius: 25%;
+  box-shadow: 5px 5px 10px gray;
+  display: flex;
+  font-size: 32px;
+  height: 48px;
+  justify-content: center;
+  padding: 24px;
+  text-shadow: 2px 2px black;
+  width: 48px;
+}
+
+#options button:hover {
+  border-color: #e76f51;
+  transform: translateY(-4px);
+}
+
+#options button:active {
+  border-color: #e76f51;
+  transform: translateY(4px);
+}
