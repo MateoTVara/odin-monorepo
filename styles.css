@@ -1,0 +1,191 @@
+@font-face {
+  font-family: 'Norse';
+  src: url('assets/fonts/Norse-Bold.woff2') format('woff2'),
+      url('assets/fonts/Norse-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --text-color: #505050;
+  --label-color: #454e59;
+  --card-bg: #ffffff;
+  --shadow-color: #DDDDDD;
+  --input-border-color: #E5E7EB;
+  --button-bg-color: #596D48;
+  --button-bg-color-active: #4C5C3D;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  background-color: #f9fafb;
+}
+
+div {
+  width: calc(100vw - 38vw);
+}
+
+h2, p, button {
+  font-family: var(--font-family);
+}
+
+span{
+  font-style: italic;
+}
+
+#img {
+  position: relative;
+  height: 170vh;
+  width: 38vw;
+
+  background-image: url(assets/imgs/halie-west-25xggax4bSA-unsplash.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+#img > h1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  top: 13rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  color: white;
+  font-family: Norse, sans-serif;
+  font-size: 5rem;
+  text-align: center;
+}
+
+#img > p {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+#img > p,
+#img > p > a:link,
+#img > p > a:visited {
+  color: white;
+  font-size: 0.9rem;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+#titles > h2 {
+  font-size: 1.5rem;
+}
+
+#content > div:first-child{
+  padding: 9rem 9rem 4rem 3rem;
+}
+
+#content > div {
+  width: 100%;
+}
+
+#content > form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 5rem;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1rem 0 2rem 3rem;
+  border: 1px solid aliceblue;
+  box-shadow: 0 0.25rem 0.25rem var(--shadow-color);
+  background-color: var(--card-bg);
+}
+
+#form > div{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 100%;
+}
+
+#form > h2,
+#content > p{
+  color: var(--text-color);
+}
+
+#form > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+#content label {
+  font-family: var(--font-family);
+  font-size: 0.6rem;
+  letter-spacing: 0.15rem;
+  font-weight: bold;
+  color: var(--label-color);
+}
+
+input {
+  width: 60%;
+  border: 1px solid var(--input-border-color);
+  border-radius: 0.3rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-family: var(--font-family);
+  color: black;
+}
+
+input:user-invalid {
+  border: 1px solid red;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid blue;
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+button {
+  width: fit-content;
+  padding: 0.75rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0 2rem 3rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--button-bg-color);
+  color: white;
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  background-color: var(--button-bg-color-active);
+}
+
+#sign-in {
+  margin: 0 0 0 3rem;
+  gap: 32px;
+  font-weight: bold;
+}
+
+#sign-in > a {
+  text-decoration: none;
+  color: var(--button-bg-color);
+}
