@@ -1,0 +1,7 @@
+.actions.join-actions {
+  align-self: center;
+}
+
+.form-group > input.join {
+  text-align: center;
+}
