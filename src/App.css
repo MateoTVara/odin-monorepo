@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+#root {
+  min-height: 100dvh;
+  background-color: #091624;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
