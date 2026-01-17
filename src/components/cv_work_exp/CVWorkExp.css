@@ -1,0 +1,20 @@
+.work-exp-cv {
+  padding: 4px 16px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+
+  & > h3,
+  p:last-child {
+    grid-column: 1 / -1;
+  }
+
+  & > p:nth-child(3) {
+    text-align: end;
+  }
+
+  & > p:last-child {
+    text-align: justify;
+  }
+}

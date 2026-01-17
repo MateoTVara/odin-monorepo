@@ -1,0 +1,88 @@
+.edu-exp-container > * {
+  padding: 8px 8px;
+  margin: 0 1rem;
+}
+
+.edu-exp-card {
+  border-inline: 2px white solid;
+  border-top: 2px white solid;
+  border-bottom: 2px white solid;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 250ms ease,
+              border-bottom 250ms ease,
+              border-radius 250ms ease;
+  margin: 0 1rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 16px;
+
+  &.active {
+    border-bottom: 0px solid transparent;
+    border-radius: 12px 12px 0 0;
+  }
+
+  &:hover {
+    background-color: #202020;
+  }
+
+  & > button {
+    height: 32px;
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    transition: transform 250ms ease-in-out;
+
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
+}
+
+.content {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  align-items: center;
+  align-content: center;
+  column-gap: 16px;
+  row-gap: 8px;
+  
+  & > * {
+    text-align: center;
+    overflow: auto;
+  }
+
+  & > p:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.edu-exp-form {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: max-height 300ms ease,
+              padding 300ms ease,
+              border-bottom 300ms ease; /* debug */
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+
+  &.active {
+    z-index: -1;
+    max-height: 500px;
+    padding: 8px;
+    border-inline: 2px solid white; /* debug */
+    border-bottom: 2px solid white;
+    border-radius: 0 0 12px 12px;
+  }
+}

@@ -1,0 +1,427 @@
+/* styles.css */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* start */
+
+input {
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: none;
+  transition: outline 50ms ease;
+  
+  &:focus {
+    outline: 2px solid white;
+  }
+}
+
+textarea {
+  scrollbar-width: thin;
+  border: none;
+  border-radius: 8px;
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.separator {
+  border: 1px solid white;
+  margin-inline: 1rem;
+  margin-block: 1rem;
+}
+
+@font-face {
+  font-family: 'Baloo 2';
+  src: url('./assets/fonts/Baloo2-Regular.woff2') format('woff2'),
+      url('./assets/fonts/Baloo2-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: 'Baloo 2';
+  scrollbar-width: thin;
+  background-color: #202020;
+  color: white;
+
+  --primary-btn-bg-color: #e8e8e8;
+  --hover-primary-btn-bg-color: #d8d8d8;
+}
+
+#root {
+  height: 100dvh;
+
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: auto 1fr;
+}
+
+header {
+  grid-column: 1 / -1;
+
+  padding: 4px 16px;
+  border-bottom: 1px solid #2f2f2f;
+  box-shadow: 12px 0 12px #0f0f0f;
+  color: #009688;
+
+  display: flex;
+  justify-content: center;
+}
+
+#root > section {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  height: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-block: 2rem;
+  direction: rtl;
+
+  & > * {
+    direction: ltr;
+  }
+}
+
+/* general-info */
+
+.form > .general-info > div {
+  padding: 0 16px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+
+  & > .input-group:last-child {
+    grid-column: 1 / -1;
+
+    & textarea {
+      min-height: 6rem;
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+
+/* educational-exp */
+
+.form > .educational-exp > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 8px;
+
+  & > button {
+    color: white;
+    align-self: center;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 16px;
+    padding: 4px 8px;
+    transition: background-color 250ms ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #202020;
+    }
+  }
+}
+
+/* work-exp */
+
+.work-exp > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  & > button {
+    color: white;
+    align-self: center;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 16px;
+    padding: 4px 8px;
+    transition: background-color 250ms ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #202020;
+    }
+  }
+}
+
+/* technical-skills */
+
+.form > .technical-skills > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* other-skills */
+
+.form > .other-skills > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* form-actions */
+
+.form > .form-actions {
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background-color: #101010;
+  padding: 8px 16px;
+  justify-content: center;
+
+  display: none;
+}
+
+
+
+
+
+/* curriculum */
+
+.curriculum {
+  padding: 48px 80px;
+  position: relative;
+
+  & > .actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    
+    & > .download {
+      padding: 0;
+      background-color: transparent;
+      border: 2px solid white;
+      padding: 4px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 150ms ease;
+
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        transform: scale(1.1);
+        background-color: #202020;
+      }
+    }
+
+    & > .close {
+      display: none;
+      border-radius: 50%;
+    }
+  }
+}
+
+.curriculum-page {
+  background-color: white;
+  color: #181818;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1vw;
+  padding: 1.5vw 3vw;
+  outline: 1px solid black;
+  aspect-ratio: 1 / 1.4142;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: star;
+
+  & > .full-name {
+    font-size: 2em;
+    text-align: center;
+  }
+
+  & > .general-info > * {
+    font-size: 0.9em;
+  }
+
+  & > h2:nth-child(3) {
+    margin-top: 0rem;
+  }
+
+  & h2 {
+    font-size: 1.25em;
+    margin-top: 1em;
+  }
+
+  & h3 {
+    font-size: 1.1em;
+  }
+
+  & p {
+    font-size: 1em;
+  }
+}
+
+.curriculum-page > .general-info {
+  margin-bottom: 16px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1vw;
+
+  & > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.1vw;
+  }
+
+  & > a {
+    color: black;
+    text-decoration: none;
+
+    &:visited {
+      color: black;
+    }
+  }
+}
+
+.curriculum-page > .profile > p {
+  padding: 0 16px;
+}
+
+.curriculum-page > .educational-exp {
+  width: 100%;
+}
+
+.curriculum-page > .technical-skills,
+.curriculum-page > .other-skills {
+  & > ul {
+    padding: 0 16px;
+    list-style: none;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  #root {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .form {
+    padding-bottom: 0;
+  }
+
+  .form > .form-actions {
+    display: flex;
+
+    & > button {
+      color: white;
+      background-color: transparent;
+      border: 2px solid white;
+      border-radius: 16px;
+      padding: 4px 8px;
+      transition: background-color 250ms ease-in-out;
+    }
+  }
+
+  .curriculum {
+    padding: 24px 16px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+
+    &.active {
+      display: flex;
+      animation: slide-in 300ms ease;
+    }
+
+    & .actions {
+      position: static;
+
+      justify-content: center;
+      padding: 8px 0;
+      
+      & > .download {
+        position: static;
+        padding: 8px;
+        border: 2px solid white;
+      }
+
+      & > .close {
+        background-color: transparent;
+        padding: 8px;
+        border: 2px solid white;
+
+        display: block;
+      }
+    }
+  }
+
+  .curriculum-page {
+    font-size: 2vw;
+    padding: 3vw 4vw;
+
+    & .general-info {
+      margin-bottom: 6px;
+    }
+
+    & h2 {
+      margin-top: 0.5em;
+    }
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
