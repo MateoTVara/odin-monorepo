@@ -19,9 +19,30 @@ move_project() {
 
   mkdir -p "$category/$name"
 
-  git mv ^(Foundations|HTML_CSS|JavaScript|React|NodeJS|import_odin_projects.zsh) "$category/$name"
+  find . -maxdepth 1 \
+    -not -path './.git' \
+    -not -path './import_odin_projects.zsh' \
+    -not -path './Foundations' \
+    -not -path './HTML_CSS' \
+    -not -path './JavaScript' \
+    -not -path './React' \
+    -not -path './NodeJS' \
+    -not -path "./$category" \
+    -not -name '.' \
+    -exec git mv {} "$category/$name/" \; 2>/dev/null || true
 
-  git mv .[^.]* "$category/$name" 2>/dev/null || true
+  for dotfile in .*; do
+    if [[ -f "$dotfile" || -d "$dotfile" ]]; then
+      case "$dotfile" in
+        "."|".."|".git")
+          continue
+          ;;
+        *)
+          git mv "$dotfile" "$category/$name/" 2>/dev/null || true
+          ;;
+      esac
+    fi
+  done
 
   git commit -m "Move $name into $category/"
 }
