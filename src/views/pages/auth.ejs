@@ -1,0 +1,45 @@
+<%- include('../partials/errors.ejs') %>
+
+<form action="/login" method="POST">
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+  </div>
+  <div class="form-group">
+    <label for="passwor">Password</label>
+    <input type="password" name="password" id="password">
+  </div>
+  <div class="actions">
+    <a href="#">Don't have an account yet?</a>
+    <button type="submit">Login</button>
+  </div>
+</form>
+
+
+
+<form action="/sign-up" method="POST">
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+  </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+  </div>
+  <div class="form-group">
+    <label for="lastname">Lastname</label>
+    <input type="text" name="lastname" id="lastname">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password">
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword">Confirm Password</label>
+    <input type="text" name="confirmPassword" id="confirmPassword">
+  </div>
+  <div class="actions">
+    <a href="#">Already have an account?</a>
+    <button type="submit">Sign Up</button>
+  </div>
+</form>

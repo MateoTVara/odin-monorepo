@@ -1,0 +1,19 @@
+<h1><%= title %></h1>
+
+<% if (file) { %>
+  <p><%= file.entry.name %></p>
+
+  <% const u = 1024 %>
+  <% if (file.size > (u**3)) { %>
+    <p>Size: <%= (file.size / (u**3)).toFixed(2) %> GB</p>
+  <% } else if (file.size > (u**2)) { %>
+    <p>Size: <%= (file.size / (u**2)).toFixed(2) %> MB</p>
+  <% } else if (file.size > u) { %>
+    <p>Size: <%= (file.size / u).toFixed(2) %> KB</p>
+  <% } else { %>
+    <p>Size: <%= file.size %> B</p>
+  <% } %>
+  
+  <p>Mime: <%= file.mime %></p>
+  <p>Uploaded At: <%= file.uploadedAt %></p>
+<% } %>
