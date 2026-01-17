@@ -1,0 +1,96 @@
+/* about.css */
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+}
+
+.about-container > .hero-div {
+  background-color: var(--card-bg);
+  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.1);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero-div > * {
+  flex: 1;
+}
+
+.hero-div > .concept-div > h1 {
+  font-size: clamp(1.6rem, calc(1rem + 3.2vw), 4rem);
+}
+
+.hero-div > .concept-div > p,
+form label,
+form button,
+form input,
+form textarea {
+  font-size: clamp(1rem, calc(0.6rem + 1.6vw), 1.4rem);
+}
+
+form h2 {
+  font-size: clamp(1.2rem, calc(0.8rem + 2.8vw), 3.5rem);
+  color: var(--primary-color);
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+form > .name-email-div {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.name-email-div > div,
+form > .form-element {
+  display: flex;
+  flex-direction: column;
+}
+
+form > .form-element {
+  width: 100%;
+}
+
+form label {
+  font-size: clamp(1rem, calc(0.6rem + 1.6vw), 1.4rem);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+form input,
+form textarea {
+  padding: 0.25rem 0.5rem;
+}
+
+form input:focus,
+form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+form > button {
+  width: fit-content;
+  padding: 0.4rem 1.5rem;
+  border: 0;
+  border-radius: 1rem;
+}
