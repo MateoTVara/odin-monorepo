@@ -1,0 +1,257 @@
+// script.js
+
+///////////////////////////////////
+//        DOM REFERENCES         //
+///////////////////////////////////
+
+const divDisplay = document.querySelector("#display");
+const divMenu = document.querySelector("#menu");
+const divLeft = document.querySelector("#left");
+const divRight = document.querySelector("#right");
+const divOperator = document.querySelector("#operator");
+
+
+///////////////////////////////////
+//       BUTTON CONFIGS          //
+///////////////////////////////////
+
+
+const ids = [
+  ["ms", "mr", "m-minus", "m-plus"],
+  ["ac", "percent", "sqrt-x", "divide"],   // AC, %, √, ÷
+  ["seven", "eight", "nine", "multiply"],  // 7 8 9 ×
+  ["four", "five", "six", "subtract"],     // 4 5 6 −
+  ["one", "two", "three", "add"],          // 1 2 3 +
+  ["zero", "decimal", "power", "equals"]   // 0 . ^ =
+];
+
+const classes = [
+  ["operator", "operator", "operator", "operator"],       // mc, mr, m-, m+
+  ["operator", "operator", "operator", "operator"],       // AC, √X, %, ÷
+  ["number",   "number",   "number",   "operator"],       // 7, 8, 9, x
+  ["number",   "number",   "number",   "operator"],       // 4, 5, 6, -
+  ["number",   "number",   "number",   "operator"],       // 1, 2, 3, +
+  ["number",   "number",   "operator", "operator"]        // 0, ., ^, =
+];
+
+const options = [
+  ["MS", "MR", "M-", "M+"],
+  ["AC", "%", "√", "÷"],
+  ["7", "8", "9", "*"],
+  ["4", "5", "6", "-"],
+  ["1", "2", "3", "+"],
+  ["0", ".", "^", "="]
+];
+
+const backgrounds = [
+  ["smoke", "smoke", "smoke", "smoke"],
+  ["smoke", "smoke", "smoke", "yellow"],
+  ["white", "white", "white", "yellow"],
+  ["white", "white", "white", "yellow"],
+  ["white", "white", "white", "yellow"],
+  ["white", "white", "white", "yellow"]
+];
+
+
+///////////////////////////////////
+//         APP STATE             //
+///////////////////////////////////
+
+
+let aNum;
+let bNum;
+let operator;
+let memVar = 0;
+
+
+///////////////////////////////////
+//           RENDERING           //
+///////////////////////////////////
+
+
+for (let i = 0; i < 6; i++){
+  let rowDiv = document.createElement("div");
+  rowDiv.classList = "row";
+
+  for (let j = 0; j < 4; j++){
+    let optionDiv = document.createElement("button");
+    optionDiv.id = ids[i][j];
+    optionDiv.classList = `${classes[i][j]}`;
+    optionDiv.textContent = options[i][j];
+    optionDiv.style.backgroundColor = backgrounds[i][j];
+    rowDiv.append(optionDiv);
+  };
+
+  divMenu.append(rowDiv);
+};
+
+
+//////////////////////////////////
+//        EVENT HANDLING        //
+//////////////////////////////////
+
+document.addEventListener("keydown", (e) => {
+  const key = e.key;
+  if (key === "Enter") {
+    e.preventDefault();
+    document.querySelector("#equals").click();
+    return;
+  };
+  if ("0123456789.".includes(key)){
+    if (divRight.textContent.includes(".") && key === ".") return;
+
+    if (divRight.textContent === "Can't divide by 0" ||
+        divRight.textContent === "Radicant can't be negative") {
+      divRight.textContent = key;
+      resetFontSize();
+    } else {
+      divRight.textContent += key;
+    };
+  };    
+  console.log(key);
+});
+
+divMenu.addEventListener("click", (e) => {
+  const target = e.target;
+  if (target.tagName !== "BUTTON") return;
+
+  if (target.id === "ms") {
+    memVar = parseFloat(divRight.textContent);
+    return;
+  };
+
+  if (target.id === "mr") {
+    divRight.textContent += memVar;
+    return;
+  };
+
+  if (target.id === "m-minus") {
+    memVar -= parseFloat(divRight.textContent);
+    return;
+  };
+
+  if (target.id === "m-plus") {
+    memVar += parseFloat(divRight.textContent);
+    return;
+  };
+
+  if (target.id === "ac") {
+    divLeft.textContent = "";
+    divOperator.textContent = "";
+    divRight.textContent = "";
+  };
+
+  if (target.classList.contains("operator") && !(divRight.textContent) && !(divLeft.textContent)) return;
+
+  if (target.classList.contains("number")){
+    if (parseFloat(divRight.textContent) === 0                || 
+        divRight.textContent === "Can't divide by 0"          ||
+        divRight.textContent === "Radicant can't be negative") {
+      divRight.textContent = target.textContent;
+      resetFontSize();
+    }
+    else {
+      if (divRight.textContent.includes(".") && target.id === "decimal"){} 
+      else {
+        divRight.textContent += target.textContent;
+      };
+    };
+  }
+  else if (target.classList.contains("operator") && divRight.textContent && divLeft.textContent){
+    if (target.id === "equals") {
+      divRight.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
+      divLeft.textContent = "";
+      divOperator.textContent = "";
+    }
+    else {
+      divLeft.textContent = operate(divOperator.textContent, parseFloat(divLeft.textContent), parseFloat(divRight.textContent));
+      divRight.textContent = "";
+      divOperator.textContent = target.textContent;
+    };
+  } 
+  else if(target.classList.contains("operator") && !(divRight.textContent)){
+    if (target.id === "equals") return
+    else {
+      divOperator.textContent = target.textContent;
+    };
+  }
+  else {
+    if (target.id === "equals") {}
+    else {
+      divOperator.textContent = target.textContent;
+      divLeft.textContent = divRight.textContent;
+      divRight.textContent = "";
+    };
+  };
+});
+
+
+///////////////////////////////////
+//           UTILITIES           //
+///////////////////////////////////
+
+
+function showError(message) {
+  divRight.textContent = message;
+  divRight.style.fontSize = "1.2rem";
+}
+
+function resetFontSize() {
+  divRight.style.fontSize = "";
+}
+
+function add(a, b){
+  return a + b;
+};
+
+function substract(a, b){
+  return a - b;
+};
+
+function multiply(a, b){
+  return a * b;
+};
+
+function divide(a, b){
+  if (b === 0) {
+    showError("Can't divide by 0");
+    return "Can't divide by 0";
+  }
+  return a / b;
+};
+
+function power(a, b){
+  if (b === 0) return 1;
+  return a ** b;
+};
+
+function root(a, b){
+  if (b < 0) {
+    showError("Radicant can't be negative");
+    return "Radicant can't be negative";
+  }
+  return b ** (1 / a);
+};
+
+function percent(a, b){
+  return (a / 100) * b;
+};
+
+function operate(ope, a, b){
+  switch (ope){
+    case "+":
+      return add(a, b);
+    case "-":
+      return substract(a, b);
+    case "*":
+      return multiply(a, b);
+    case "÷":
+      return divide(a, b);
+    case "^":
+      return power(a, b);
+    case "√":
+      return root(a, b);
+    case "%":
+      return percent(a, b);
+  };
+};
