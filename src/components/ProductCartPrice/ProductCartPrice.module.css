@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+
+  & > p:first-child {
+    flex: 1;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: start;
+  }
+
+  & > div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

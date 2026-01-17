@@ -1,0 +1,17 @@
+.main {
+  padding: 2rem;
+  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  justify-content: center;
+  gap: 3rem;
+}
+
+.loading {
+  display: grid;
+  justify-content: center;
+}
+
+.loadingIcon {
+  margin-block: 5rem;
+}
