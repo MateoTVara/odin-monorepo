@@ -7,6 +7,11 @@ move_project() {
   local repo="$2"
   local category="$3"
 
+  if [[ -d "$category/$name" ]]; then
+    echo "⏭️  $name already imported, skipping"
+    return
+  fi
+
   echo "▶ Importing $name into $category"
 
   git remote add "$name" "$repo" 2>/dev/null || true
@@ -81,5 +86,6 @@ move_project BasicInfoSite git@github.com:MateoTVara/odin-basic-informational-si
 move_project MiniMessageBoard git@github.com:MateoTVara/odin-mini-message-board.git NodeJS
 move_project ManagementApp git@github.com:MateoTVara/odin-management-application.git NodeJS
 move_project MembersOnly git@github.com:MateoTVara/odin-members-only.git NodeJS
+move_project FileUploader git@github.com:MateoTVara/odin-file-uploader.git NodeJS
 
 echo "✅ All Odin projects imported successfully"
