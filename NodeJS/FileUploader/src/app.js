@@ -9,6 +9,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcryptjs from 'bcryptjs';
 import expressLayouts from 'express-ejs-layouts';
+import { format } from 'date-fns';
 
 configDotenv();
 
@@ -42,6 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
+  res.locals.format = format;
   res.locals.user = req.user;
   res.locals.errors = req.session.errors || [];
   res.locals.styles = req.styles || [];

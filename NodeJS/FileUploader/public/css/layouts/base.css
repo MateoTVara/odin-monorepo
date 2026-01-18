@@ -1,0 +1,23 @@
+body {
+  --border-color: #3D444D;
+  --bg-primary-color: #010409;
+  --bg-secondary-color: #0D1117;
+  --bg-tertiary-color: #151B23;
+  --font-color: #E9EFF5;
+  --font-color-muted: #858B95;
+
+
+  background-color: var(--bg-primary-color);
+  color: var(--font-color);
+  min-height: 100dvh;
+  font-family: sans-serif;
+
+  & > main {
+    padding: 12px 20px;
+  }
+
+  & * {
+    background-color: inherit;
+    color: inherit;
+  }
+}

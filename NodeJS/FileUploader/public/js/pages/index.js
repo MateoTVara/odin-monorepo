@@ -95,11 +95,11 @@ const menuManager = {
 
     this.menu.style.left = `${x}px`;
     this.menu.style.top = `${y}px`;
-    this.menu.style.display = "block";
+    this.menu.classList.add("opened");
   },
 
   close() {
-    this.menu.style.display = "none";
+    this.menu.classList.remove("opened");
   },
 
   bindEvents() {
@@ -135,13 +135,19 @@ const menuManager = {
 
 
 const tableManager = {
-  table: $("table"),
-  nameCellsSelector: "td:nth-child(2)",
+  table: $("#table"),
+  nameCellsSelector: "span:nth-child(2)",
   
   bindEvents() {
     this.table.addEventListener("click", e => {
       const entry = e.target.closest(".entry");
       if (!entry) return;
+
+      if (e.target.tagName === "BUTTON") {
+        e.stopPropagation();
+        menuManager.open(e.clientX, e.clientY, entry.dataset.entryId, entry.dataset.entryType);
+        return;
+      }
 
       if (e.target.matches(this.nameCellsSelector)) {
         menuManager.timer = setTimeout(() => {
@@ -275,6 +281,7 @@ const fileFormManager = {
 const globalManager = {
   bindEvents() {
     document.addEventListener("click", e => {
+      if (e.target.closest("#menu")) return;
       menuManager.close();
     });
 
