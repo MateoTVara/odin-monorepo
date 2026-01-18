@@ -6,7 +6,7 @@
 
 <button id="showDialog">Create folder</button>
 <form action="/files/upload" enctype="multipart/form-data" method="POST" id="file-form">
-  <input type="file" name="files" multiple>
+  <input type="file" name="files" multiple required>
   <button type="submit">Submit</button>
 </form>
 
@@ -31,6 +31,7 @@
       <tr
         class="entry"
         data-entry-id="<%= entry.id %>"
+        data-entry-type="<%= entry.file ? 'file' : 'folder' %>"
         <% if (entry.file) { %>
           ondblclick="window.location.href = '/files/<%= entry.id %>'"
         <% } else { %>

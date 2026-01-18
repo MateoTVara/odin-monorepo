@@ -46,11 +46,11 @@ class EntriesController {
         }
       }
 
-      res.redirect('/');
+      res.json({ ok: true });
     } catch (error) {
       next(error);
     }
-  }
+  };
 
 }
 

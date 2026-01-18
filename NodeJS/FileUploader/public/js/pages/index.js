@@ -79,10 +79,10 @@ const menuManager = {
   menuDownload: $("a", menu),
   timer: null,
 
-  open(x, y, entryId) {
+  open(x, y, entryId, entryType) {
     this.menu.dataset.currentEntryId = entryId;
     this.menuDelete.action = `/entries/${entryId}/delete`;
-    this.menuDownload.href = `/files/${entryId}/download`;
+    this.menuDownload.href = `/${entryType === 'file' ? 'files' : 'folders'}/${entryId}/download`;
     const menuRect = this.menu.getBoundingClientRect();
 
     if (x + menuRect.width > window.innerWidth) {
@@ -93,9 +93,9 @@ const menuManager = {
       y = window.innerHeight - menuRect.height;
     }
 
-    menu.style.left = `${x}px`;
-    menu.style.top = `${y}px`;
-    menu.style.display = "block";
+    this.menu.style.left = `${x}px`;
+    this.menu.style.top = `${y}px`;
+    this.menu.style.display = "block";
   },
 
   close() {
@@ -103,10 +103,29 @@ const menuManager = {
   },
 
   bindEvents() {
-    menuManager.menuEdit.addEventListener("click", () => {
-      const currentEntryId = menuManager.menu.dataset.currentEntryId;
+    this.menuEdit.addEventListener("click", () => {
+      const currentEntryId = this.menu.dataset.currentEntryId;
       const nameCell = $(`.entry[data-entry-id="${currentEntryId}"]>${tableManager.nameCellsSelector}`);
       startRename({ nameCell, currentEntryId });
+    });
+
+    this.menuDelete.addEventListener("click", async e => {
+      e.preventDefault();
+      const entryId = this.menu.dataset.currentEntryId;
+      try {
+        const response = await fetch(this.menuDelete.action, {
+          method: 'POST'
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+          const entryRow = $(`.entry[data-entry-id="${entryId}"]`);
+          entryRow.remove();
+          menuManager.close();
+        }
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
     });
   },
 };
@@ -141,7 +160,7 @@ const tableManager = {
 
       const entry = e.target.closest(".entry");
       if (!entry) return;
-      menuManager.open(e.clientX, e.clientY, entry.dataset.entryId);
+      menuManager.open(e.clientX, e.clientY, entry.dataset.entryId, entry.dataset.entryType);
     });
   },
 };
@@ -236,7 +255,10 @@ const fileFormManager = {
 
         const data = await res.json();
 
-        if (res.ok && data.ok) return window.location.reload();
+        if (res.ok && data.ok) {
+          $("input", this.form).value = '';
+          return window.location.reload();
+        };
 
         data.errors.forEach(error => console.error(error.msg || String(error)));
       } catch (error) {
