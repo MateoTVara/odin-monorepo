@@ -1,6 +1,8 @@
 import { body, validationResult, matchedData } from "express-validator";
 import foldersService from "../services/foldersService.js";
 import entriesService from "../services/entriesService.js";
+import archiver from "archiver";
+import * as fs from "node:fs";
 
 class FoldersController {
 
@@ -51,6 +53,54 @@ class FoldersController {
       styles: ['pages/index'],
       scripts: ['pages/index'],
     });
+  };
+
+
+
+  getDownload = async (req, res, next) => {
+    const addFolderToArchive = async (folderId, archive, basePath) => {
+      const entries = await foldersService.readEntriesById(folderId);
+
+      for (const entry of entries) {
+        const entryPath = `${basePath}/${entry.name}`;
+        if (entry.file) {
+          archive.append(
+            fs.createReadStream(entry.file.url),
+            { name: entryPath }
+          );
+        }
+
+        if (entry.folder) {
+          archive.append(Buffer.alloc(0), { name: `${entryPath}/` });
+          await addFolderToArchive(entry.id, archive, entryPath);
+        }
+      }
+    };
+
+    try {
+      const folderId = Number(req.params.id);
+      const folder = await foldersService.readById(folderId);
+
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${folder.entry.name}.zip"`
+      )
+
+      const archive = archiver('zip');
+
+      archive.on("error", (err) => {
+        next(err);
+      });
+
+      archive.pipe(res);
+
+      await addFolderToArchive(folderId, archive, folder.entry.name);
+
+      await archive.finalize();
+    } catch (error) {
+      next(error);
+    }
   };
 }
 

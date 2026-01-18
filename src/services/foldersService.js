@@ -31,7 +31,7 @@ class FoldersService {
 
     return await prisma.entry.findMany({
       where: { parentId: id },
-      include: { file: true },
+      include: { file: true, folder: true },
     });
   };
 

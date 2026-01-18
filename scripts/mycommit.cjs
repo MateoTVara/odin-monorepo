@@ -1,4 +1,4 @@
-const { exec } = require('node:child_process');
+const { exec, execSync } = require('node:child_process');
 const { argv, exit } = require('node:process');
 const path = require('node:path');
 
@@ -21,10 +21,12 @@ const rootDir = path.resolve(__dirname, '..');
 const mycommit = () => {
     try {
         console.log('Creating temps and saving git info...');
-        exec(`mkdir -p ${path.join(rootDir, 'temps')}`);
-        exec(`git diff --staged > ${path.join(rootDir, 'temps', 'staged.diff')}`);
-        exec(`git log > ${path.join(rootDir, 'temps', 'commits.log')}`);
-        exec(`node ${path.join(rootDir, 'scripts', 'printDirTree.cjs')} > ${path.join(rootDir, 'temps', 'project_tree.log')}`);
+        execSync(`mkdir -p ${path.join(rootDir, 'temps')}`);
+        execSync(`git diff --staged > ${path.join(rootDir, 'temps', 'staged.diff')}`);
+        execSync(`git log -- ${path.join(rootDir)} > ${path.join(rootDir, 'temps', 'commits.log')}`);
+        execSync(`echo "" >> ${path.join(rootDir, 'temps', 'commits.log')}`)
+        execSync(`git log f285f19^2 >> ${path.join(rootDir, 'temps', 'commits.log')}`);
+        execSync(`node ${path.join(rootDir, 'scripts', 'printDirTree.cjs')} > ${path.join(rootDir, 'temps', 'project_tree.log')}`);
         console.log('Temps created in temps/ directory.');
     } catch (error) {
         console.error('Error creating temps:', error);

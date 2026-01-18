@@ -5,7 +5,8 @@ import { checkOwnership } from "../middlewares/ownership.js";
 
 const foldersRouter = Router();
 
-foldersRouter.get('/:id',authNeeded, checkOwnership, foldersController.getById);
+foldersRouter.get('/:id', authNeeded, checkOwnership, foldersController.getById);
+foldersRouter.get('/:id/download', authNeeded, foldersController.getDownload);
 foldersRouter.post('/create', authNeeded, foldersController.postCreate);
 
 export default foldersRouter;
