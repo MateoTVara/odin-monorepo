@@ -15,8 +15,11 @@ body {
   color: var(--font-color);
   min-height: 100dvh;
   font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
 
   & > main {
+    flex: 1;
     position: relative;
     padding: 12px 20px;
   }

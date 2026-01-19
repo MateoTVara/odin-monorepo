@@ -1,19 +1,54 @@
-<h1><%= title %></h1>
+<a href="javascript:history.back()" class="breadcrumb-back">
+  Back
+</a>
 
-<% if (file) { %>
-  <p><%= file.entry.name %></p>
+<div id="file-container">
+  <% if (file) { %>
+    <div class="file-header">
+      <div class="file-icon">
+        <svg width="80" height="80" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+          <use href="/assets/icons.svg#icon-file" />
+        </svg>
+      </div>
+      
+      <div class="file-title">
+        <h1><%= file.entry.name %></h1>
+      </div>
+    </div>
 
-  <% const u = 1024 %>
-  <% if (file.size > (u**3)) { %>
-    <p>Size: <%= (file.size / (u**3)).toFixed(2) %> GB</p>
-  <% } else if (file.size > (u**2)) { %>
-    <p>Size: <%= (file.size / (u**2)).toFixed(2) %> MB</p>
-  <% } else if (file.size > u) { %>
-    <p>Size: <%= (file.size / u).toFixed(2) %> KB</p>
-  <% } else { %>
-    <p>Size: <%= file.size %> B</p>
+    <div class="file-info">
+      <div class="info-row">
+        <span class="label">File Size</span>
+        <span class="value">
+          <% const u = 1024 %>
+          <% if (file.size > (u**3)) { %>
+            <%= (file.size / (u**3)).toFixed(2) %> GB
+          <% } else if (file.size > (u**2)) { %>
+            <%= (file.size / (u**2)).toFixed(2) %> MB
+          <% } else if (file.size > u) { %>
+            <%= (file.size / u).toFixed(2) %> KB
+          <% } else { %>
+            <%= file.size %> B
+          <% } %>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">File Type</span>
+        <span class="value"><%= file.mime %></span>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Uploaded</span>
+        <span class="value"><%= format(file.uploadedAt, 'MMM dd, yyyy HH:mm') %></span>
+      </div>
+    </div>
+
+    <div class="file-actions">
+      <a href="/files/<%= file.id %>/download" class="btn-primary" download>
+        📥 Download
+      </a>
+      <button onclick="history.back()">Back</button>
+    </div>
   <% } %>
-  
-  <p>Mime: <%= file.mime %></p>
-  <p>Uploaded At: <%= file.uploadedAt %></p>
-<% } %>
+</div>

@@ -178,8 +178,8 @@ const tableManager = {
 const dialogManager = {
   dialog: $("dialog"),
   showBtns: $$(".show-dialog"),
-  closeBtns: $$(".closeDialog"),
-  form: $("#createForm"),
+  closeBtns: $$(".close-dialog"),
+  form: $("#create-form"),
 
   closeDialog() {
     this.dialog.close();
