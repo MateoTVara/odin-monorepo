@@ -1,0 +1,35 @@
+#errors {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  isolation: isolate;
+  background-color: transparent;
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  
+  &:empty {
+    display: none;
+  }
+
+  .error {
+    background-color: var(--font-color-red-muted);
+    color: white;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeOut 0.5s ease-in-out 3s forwards;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(100% + 16px));
+  }
+}

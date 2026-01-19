@@ -228,6 +228,7 @@ const dialogManager = {
         data.errors.forEach(error => {
           const li = document.createElement("li");
           li.textContent = error.msg || String(error);
+          li.classList.add("error");
           errorsManager.errorsUl.appendChild(li);
         });
         

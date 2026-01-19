@@ -1,0 +1,1 @@
+import errorsManager from "../partials/errors.js";

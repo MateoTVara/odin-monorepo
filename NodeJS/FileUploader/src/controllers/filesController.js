@@ -36,7 +36,10 @@ class FilesController {
       }
 
       const filePath = file.url;
-      const originalName = file.entry.name;
+      // Sanitize filename to prevent header injection
+      const originalName = file.entry.name
+        .replace(/[\r\n"]/g, '') // Remove CR, LF, and quotes
+        .replace(/[^\w\s.-]/g, '_'); // Replace special chars with underscore
 
       if (!fs.existsSync(filePath)) {
         return res.status(400).send("File missing from disk");
