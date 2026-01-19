@@ -1,23 +1,27 @@
-<% let folderId %>
-
-<h1><%= title %></h1>
-
-<p> <%= user.email %> </p>
-
-<button id="showDialog">Create folder</button>
-<form action="/files/upload" enctype="multipart/form-data" method="POST" id="file-form">
+<button class="show-dialog">Create folder</button>
+<form action="/files/upload" enctype="multipart/form-data" method="POST" class="file-form">
   <input type="file" name="files" multiple required>
   <button type="submit">Submit</button>
 </form>
 
-<p>
-  <a href="/">My disk</a>
+<span id="breadcrumb">
+  <a href="/">
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 128 128"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <use href="/assets/icons.svg#icon-house" />
+    </svg>
+    My disk
+  </a>
   <% if (parents && parents.length) { %>
     <% parents.forEach(parent => { %>
-      /<a href="/folders/<%= parent.id %>"><%= parent.name %></a>
+      <span>/</span><a href="/folders/<%= parent.id %>"><%= parent.name %></a>
     <% }) %>
   <% } %>
-</p>
+</span>
 
 <div id="table">
   <div id="table-header">
@@ -45,17 +49,8 @@
             viewBox="0 0 128 128"
             xmlns="http://www.w3.org/2000/svg"
           >
-          <g>
-            <path style="fill:#F3AB47;" d="M46.19,27.93v-1.74c0-3.47-2.08-4.19-4.36-3.78l-19.1,3.45c-2.29,0.41-3.97,2.47-3.97,4.87v4.44
-              c0,1.62-1.13,3.01-2.68,3.29l-0.34,0.06c-1.34,0.24-2.33,1.44-2.33,2.85l1.08,74.03c0,0-0.08,1.18,1.03,1.26
-              c1.15,0.08,2.02-0.8,3.17-1.07l89.64-21.36c1.34-0.24,2.33-1.44,2.33-2.85V25.35c0-1.79-1.56-3.15-3.27-2.85l-56.31,9.69
-              C48.53,32.64,46.19,31.68,46.19,27.93z"/>
-            <path style="fill:#FFE36C;" d="M112.56,91.65l2.02-59.65c0-1.79-1.56-3.15-3.27-2.85l-56.27,9.62c-2.62,0.45-4.59,2.64-4.75,5.29
-              l-0.23,3.77c-0.18,3.02-2.43,5.52-5.41,6.02l-22.65,3.81c-2.24,0.38-3.89,2.32-3.89,4.6l-2.59,54.38c0,0,0.33,0.14,4.04-0.8
-              l89.2-21.11C110.11,94.51,111.65,93.25,112.56,91.65z"/>
-            <path style="fill:none;stroke:#FFF9C4;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;" d="M21.63,58.73l22.76-3.89
-              c5.7-1.27,6.61-3.43,6.6-7.97L51,45.7c0.18-3.42,1.84-5.44,5.21-6.02l55.67-9.65"/>
-          </g>
+            <use href="/assets/icons.svg#icon-<%= entry.file ? 'file' : 'folder' %>" />
+              
           </svg>
         </span>
         <span><%= entry.name %></span>
@@ -64,9 +59,9 @@
       </div>
     <% }) %>
   <% } else { %>
-    <tr>
-      <td colspan="4">No entries</td>
-    </tr>
+    <span class="no entries">
+      No entries found.
+    </span>
   <% } %>
   </div>
 
@@ -98,4 +93,44 @@
   </div>
 </dialog>
 
-<a href="/logout">Logout</a>
+
+
+<div id="actions">
+  <div class="actions-menu">
+    <form action="/files/upload" enctype="multipart/form-data" method="POST" class="file-form">
+      <input type="file" name="files" id="file-upload" multiple required>
+      <label for="file-upload">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 128 128"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <use href="/assets/icons.svg#icon-upload" />
+        </svg>
+        Upload
+      </label>
+    </form>
+    <button class="show-dialog">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 128 128"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <use href="/assets/icons.svg#icon-folder" />
+      </svg>
+      Folder
+    </button>
+  </div>
+  <button>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 128 128"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <use href="/assets/icons.svg#icon-plus" />
+    </svg>
+  </button>
+</div>
