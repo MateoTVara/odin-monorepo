@@ -6,6 +6,10 @@ body {
   --font-color: #E9EFF5;
   --font-color-muted: #858B95;
 
+  --font-color-red: #F85149;
+  --font-color-red-muted: #8E1519;
+  --font-color-blue: #2F81F7;
+
 
   background-color: var(--bg-primary-color);
   color: var(--font-color);
@@ -13,6 +17,7 @@ body {
   font-family: sans-serif;
 
   & > main {
+    position: relative;
     padding: 12px 20px;
   }
 

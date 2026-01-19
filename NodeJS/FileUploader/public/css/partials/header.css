@@ -1,0 +1,27 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: var(--bg-primary-color);
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--font-color-red-muted);
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: var(--bg-tertiary-color);
+      color: var(--font-color-red);
+      text-decoration: underline;
+    }
+  }
+}

@@ -177,7 +177,7 @@ const tableManager = {
 
 const dialogManager = {
   dialog: $("dialog"),
-  showBtn: $("#showDialog"),
+  showBtns: $$(".show-dialog"),
   closeBtns: $$(".closeDialog"),
   form: $("#createForm"),
 
@@ -192,7 +192,9 @@ const dialogManager = {
       if (e.target == this.dialog) this.closeDialog();
     });
 
-    this.showBtn.addEventListener("click", () => this.dialog.showModal());
+    this.showBtns.forEach(btn => {
+      btn.addEventListener("click", () => this.dialog.showModal());
+    });
 
     this.closeBtns.forEach(closeBtn => {
       closeBtn.addEventListener("click", () => this.closeDialog());
@@ -241,37 +243,90 @@ const dialogManager = {
 
 
 const fileFormManager = {
-  form: $("#file-form"),
+  forms: $$(".file-form"),
 
   bindEvents() {
-    this.form.addEventListener("submit", async e => {
-      e.preventDefault();
+    this.forms.forEach(form => {
+      const fileInput = $("input[type='file']", form);
+      const submitBtn = $("button[type='submit']", form);
 
-      const pathParts = window.location.pathname.split("/").filter(Boolean);
-      const parentId = Number(pathParts[1]);
+      // Handle file selection
+      fileInput.addEventListener("change", async e => {
+        if (!fileInput.files.length) return;
 
-      const formData = new FormData(this.form);
-      if (parentId) formData.append("parentId", parentId);
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const parentId = Number(pathParts[1]);
 
-      try {
-        const res = await fetch(this.form.action, {
-          method: this.form.method,
-          body: formData
-        });
+        const formData = new FormData(form);
+        if (parentId) formData.append("parentId", parentId);
 
-        const data = await res.json();
+        try {
+          const res = await fetch(form.action, {
+            method: form.method,
+            body: formData
+          });
 
-        if (res.ok && data.ok) {
-          $("input", this.form).value = '';
-          return window.location.reload();
-        };
+          const data = await res.json();
 
-        data.errors.forEach(error => console.error(error.msg || String(error)));
-      } catch (error) {
-        
-      }
+          if (res.ok && data.ok) {
+            fileInput.value = '';
+            return window.location.reload();
+          }
+
+          data.errors.forEach(error => console.error(error.msg || String(error)));
+        } catch (error) {
+          console.error("Upload failed:", error);
+        }
+      });
+
+      // Keep submit functionality for the main form
+      form.addEventListener("submit", async e => {
+        if (form.closest("#actions")) return; // Skip for actions menu forms
+
+        e.preventDefault();
+
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const parentId = Number(pathParts[1]);
+
+        const formData = new FormData(form);
+        if (parentId) formData.append("parentId", parentId);
+
+        try {
+          const res = await fetch(form.action, {
+            method: form.method,
+            body: formData
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.ok) {
+            $("input", form).value = '';
+            return window.location.reload();
+          }
+
+          data.errors.forEach(error => console.error(error.msg || String(error)));
+        } catch (error) {
+          console.error("Upload failed:", error);
+        }
+      });
     });
   },
+};
+
+
+
+
+
+const actionsManager = {
+  actions: $("#actions"),
+  toggleBtn: $("#actions > button"),
+  actionsMenu: $(".actions-menu"),
+
+  bindEvents() {
+    this.toggleBtn.addEventListener("click", e => {
+      this.actionsMenu.classList.toggle("opened");
+    });
+  }
 };
 
 
@@ -325,6 +380,7 @@ const init = () => {
   dialogManager.bindEvents();
   globalManager.bindEvents();
   fileFormManager.bindEvents();
+  actionsManager.bindEvents();
 };
 
 init();
