@@ -1,6 +1,7 @@
 import { configDotenv } from 'dotenv';
 import { env } from 'node:process';
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import expressSession from 'express-session';
 import { prisma } from '../lib/prisma.js';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
@@ -27,8 +28,11 @@ app.set('layout', 'layouts/base');
 app.use(expressSession({
   secret: SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 2 * 24 * 60 * 60 * 1000 }, // ms = 2 days
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 2 * 24 * 60 * 60 * 1000, // ms = 2 days
+    sameSite: 'lax',
+  },
   store: new PrismaSessionStore(prisma, {
     checkPeriod: 2 * 60 * 1000, // ms = 2 minutes
     dbRecordIdIsSessionId: true,
@@ -38,6 +42,27 @@ app.use(expressSession({
 app.use(passport.session());
 
 app.use(express.static('public'));
+
+// Rate limiting to prevent brute-force and spam
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many requests, please try again later.',
+});
+app.use(limiter);
+
+// Stricter rate limit for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 login/signup attempts per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many authentication attempts, please try again later.',
+});
+app.use('/login', authLimiter);
+app.use('/signup', authLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

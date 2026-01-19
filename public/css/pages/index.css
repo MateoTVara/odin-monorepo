@@ -5,6 +5,8 @@ dialog {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   animation: slideIn 0.3s ease-out;
+  isolation: isolate;
+  z-index: 9;
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
@@ -221,7 +223,8 @@ dialog {
   right: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  transition: gap 0.3s ease;
+  gap: 0px;
 
   & > button {
     width: 48px;
@@ -241,6 +244,10 @@ dialog {
       transform: scale(1.1);
     }
   }
+}
+
+:has(.actions-menu.opened) #actions {
+  gap: 12px;
 }
 
 .actions-menu {

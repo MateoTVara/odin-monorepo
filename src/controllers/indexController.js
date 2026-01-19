@@ -18,7 +18,7 @@ class IndexController {
         return true;
       }),
     body('password')
-      .isLength({ min: 1 }).withMessage('Password must be at least 1 characters long.'),
+      .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long.'),
     body('confirmPassword')
       .custom((confirmPassword, { req }) => {
         if (confirmPassword !== req.body.password) {
@@ -55,7 +55,10 @@ class IndexController {
    * @param {import('express').Response} res 
    */
   getAuth = (req, res) => {
-    res.render('pages/auth', { title: 'Auth' });
+    res.render('pages/auth', {
+      scripts: ['pages/auth'],
+      title: 'Auth'
+    });
   };
 
 

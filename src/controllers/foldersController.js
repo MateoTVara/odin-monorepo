@@ -82,9 +82,13 @@ class FoldersController {
       const folder = await foldersService.readById(folderId);
 
       res.setHeader('Content-Type', 'application/zip');
+      // Sanitize filename to prevent header injection
+      const safeName = folder.entry.name
+        .replace(/[\r\n"]/g, '') // Remove CR, LF, and quotes
+        .replace(/[^\w\s.-]/g, '_'); // Replace special chars with underscore
       res.setHeader(
         'Content-Disposition',
-        `attachment; filename="${folder.entry.name}.zip"`
+        `attachment; filename="${safeName}.zip"`
       )
 
       const archive = archiver('zip');
