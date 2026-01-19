@@ -1,4 +1,5 @@
 import filesService from "../services/filesService.js";
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -53,6 +54,7 @@ class FilesController {
 
     res.render('pages/file', {
       title: file.entry.name,
+      styles: ['pages/file'],
       file,
     });
   };
