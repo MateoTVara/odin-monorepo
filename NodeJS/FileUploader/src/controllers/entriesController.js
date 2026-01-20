@@ -34,18 +34,25 @@ class EntriesController {
 
   postDelete = async (req, res, next) => {
     const entryId = Number(req.params.id);
-
-    try {
-      const deletedEntry = await entriesService.delete(entryId);
-
-      if (deletedEntry.file) {
-        try {
-          await fs.unlink(deletedEntry.file.url);
-        } catch (error) {
-          console.error("Failed to unlink file form disk", error);
-        }
+    const recursiveDeletion = async entryId => {
+      const entry = await entriesService.readById(entryId);
+      
+      if (entry.file) {
+        await fs.unlink(entry.file.url);
+        await entriesService.delete(entry.id);
+        return;
       }
 
+      if (entry.folder) {
+        for (const childEntry of entry.children) {
+          await recursiveDeletion(childEntry.id);
+        }
+        await entriesService.delete(entry.id);
+      }
+    }
+
+    try {
+      await recursiveDeletion(entryId);
       res.json({ ok: true });
     } catch (error) {
       next(error);
