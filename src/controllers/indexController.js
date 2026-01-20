@@ -55,9 +55,14 @@ class IndexController {
    * @param {import('express').Response} res 
    */
   getAuth = (req, res) => {
+    const formData = req.session.formData || { type: 'login' };
+    delete req.session.formData;
+    
     res.render('pages/auth', {
+      formData,
       scripts: ['pages/auth'],
-      title: 'Auth'
+      styles: ['pages/auth'],
+      title: 'FileUploader',
     });
   };
 
@@ -70,6 +75,7 @@ class IndexController {
       
       if (!errors.isEmpty()) {
         req.session.errors = errors.array();
+        req.session.formData = { ...req.body, type: 'sign-up' };
         return res.redirect('/auth');
       }
 
@@ -93,8 +99,6 @@ class IndexController {
     }
   ];
 
-
-
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
@@ -104,8 +108,8 @@ class IndexController {
     passport.authenticate('local', (err, user, info) => {
       if (err) return next(err);
       if (!user) {
-        req.session.errors = req.session.errors || [];
-        req.session.errors.push({ msg: info?.message || 'Login failed' });
+        req.session.errors = [{ msg: info?.message || 'Login failed' }];
+        req.session.formData = { ...req.body, type: 'login' };
         return res.redirect('/auth');
       }
 

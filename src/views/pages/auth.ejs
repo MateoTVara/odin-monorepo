@@ -1,45 +1,57 @@
 <%- include('../partials/errors.ejs') %>
 
-<form action="/login" method="POST">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" required>
-  </div>
-  <div class="form-group">
-    <label for="passwor">Password</label>
-    <input type="password" name="password" id="password" required>
-  </div>
-  <div class="actions">
-    <a href="#">Don't have an account yet?</a>
-    <button type="submit">Login</button>
-  </div>
-</form>
+<div class="auth-container">
+  <form
+    action="/login"
+    method="POST"
+    class="form login <%= formData?.type === 'login' ? 'displayed' : '' %>" data-type="login"
+  >
+    <h1>Login</h1>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" value="<%= formData?.email || '' %>" >
+    </div>
+    <div class="form-group">
+      <label for="passwor">Password</label>
+      <input type="password" name="password" id="password" >
+    </div>
+    <div class="actions">
+      <button type="button">Don't have an account yet?</button>
+      <button type="submit">Login</button>
+    </div>
+  </form>
 
 
 
-<form action="/sign-up" method="POST">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email">
-  </div>
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" >
-  </div>
-  <div class="form-group">
-    <label for="lastname">Lastname</label>
-    <input type="text" name="lastname" id="lastname" >
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" >
-  </div>
-  <div class="form-group">
-    <label for="confirmPassword">Confirm Password</label>
-    <input type="password" name="confirmPassword" id="confirmPassword" >
-  </div>
-  <div class="actions">
-    <a href="#">Already have an account?</a>
-    <button type="submit">Sign Up</button>
-  </div>
-</form>
+  <form 
+    action="/sign-up"
+    method="POST"
+    class="form sign-up <%= formData?.type === 'sign-up' ? 'displayed' : '' %>" data-type="sign-up"
+  >
+    <h1>Sign Up</h1>
+    <div class="form-group">
+      <label for="email">Email<span>*</span></label>
+      <input type="email" name="email" id="email" value="<%= formData?.email || '' %>" required>
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" value="<%= formData?.name || '' %>" >
+    </div>
+    <div class="form-group">
+      <label for="lastname">Lastname</label>
+      <input type="text" name="lastname" id="lastname" value="<%= formData?.lastname || '' %>">
+    </div>
+    <div class="form-group">
+      <label for="password">Password<span>*</span></label>
+      <input type="password" name="password" id="password" required minlength="8">
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password<span>*</span></label>
+      <input type="password" name="confirmPassword" id="confirmPassword" required minlength="8">
+    </div>
+    <div class="actions">
+      <button type="button">Already have an account?</button>
+      <button type="submit">Sign Up</button>
+    </div>
+  </form>
+</div>
