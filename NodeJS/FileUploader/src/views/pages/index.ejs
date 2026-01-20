@@ -19,9 +19,11 @@
   <% } %>
 </span>
 
+
+
 <div id="table">
   <div id="table-header">
-    <span>N°</span>
+    <span></span>
     <span>Name</span>
     <span></span>
     <span>Last Updated</span>
@@ -59,7 +61,62 @@
       Empty folder. Upload files or create folders to get started.
     </span>
   <% } %>
+</div>
+
+
+
+<div id="actions">
+  <div class="actions-menu">
+    <form action="/files/upload" enctype="multipart/form-data" method="POST" class="file-form">
+      <input type="file" name="files" id="file-upload" multiple required>
+      <label for="file-upload">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 128 128"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <use href="/assets/icons.svg#icon-upload" />
+        </svg>
+        File
+      </label>
+      <div class="drop-zone">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 128 128"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <use href="/assets/icons.svg#icon-upload" />
+        </svg>
+        <span>Drop files here or click to upload</span>
+      </div>
+    </form>
+    <button class="show-dialog">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 128 128"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <use href="/assets/icons.svg#icon-folder" />
+      </svg>
+      Folder
+    </button>
   </div>
+  <button>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 128 128"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <use href="/assets/icons.svg#icon-plus" />
+    </svg>
+  </button>
+</div>
+
+
 
 <div id="menu">
   <button id="edit">Rename</button>
@@ -68,6 +125,8 @@
   </form>
   <a>Download</a>
 </div>
+
+
 
 <div id="overlay">
   <div class="dialog-content">
@@ -95,46 +154,4 @@
       </div>
     </form>
   </div>
-</div>
-
-
-
-<div id="actions">
-  <div class="actions-menu">
-    <form action="/files/upload" enctype="multipart/form-data" method="POST" class="file-form">
-      <input type="file" name="files" id="file-upload" multiple required>
-      <label for="file-upload">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 128 128"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <use href="/assets/icons.svg#icon-upload" />
-        </svg>
-        Upload
-      </label>
-    </form>
-    <button class="show-dialog">
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 128 128"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <use href="/assets/icons.svg#icon-folder" />
-      </svg>
-      Folder
-    </button>
-  </div>
-  <button>
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 128 128"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <use href="/assets/icons.svg#icon-plus" />
-    </svg>
-  </button>
 </div>
