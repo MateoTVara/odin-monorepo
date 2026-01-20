@@ -9,6 +9,9 @@ body {
   --font-color-red: #F85149;
   --font-color-red-muted: #8E1519;
   --font-color-blue: #2F81F7;
+  --font-color-blue-muted: #1C5ED6;
+  --font-color-green: #3FB950;
+  --font-color-green-muted: #1F8A3E;
 
 
   background-color: var(--bg-primary-color);
@@ -22,6 +25,8 @@ body {
   & > main {
     flex: 1;
     position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 12px 20px;
   }
 
