@@ -107,6 +107,7 @@ const menuManager = {
       const currentEntryId = this.menu.dataset.currentEntryId;
       const nameCell = $(`.entry[data-entry-id="${currentEntryId}"]>${tableManager.nameCellsSelector}`);
       startRename({ nameCell, currentEntryId });
+      this.close();
     });
 
     this.menuDelete.addEventListener("click", async e => {
@@ -244,54 +245,87 @@ const dialogManager = {
 
 
 const fileFormManager = {
-  forms: $$(".file-form"),
+  form: $(".file-form"),
+  fileInput: $(".file-form > input[type='file']"),
+  dropZone: $(".drop-zone"),
 
   bindEvents() {
-    this.forms.forEach(form => {
-      const fileInput = $("input[type='file']", form);
+    this.fileInput.addEventListener("change", async e => {
+      if (!this.fileInput.files.length) return;
 
-      // Handle file selection
-      fileInput.addEventListener("change", async e => {
-        if (!fileInput.files.length) return;
+      actionsManager.actions.classList.add("uploading");
 
-        const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const parentId = Number(pathParts[1]);
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const parentId = Number(pathParts[1]);
 
-        const formData = new FormData(form);
-        if (parentId) formData.append("parentId", parentId);
+      const formData = new FormData(this.form);
+      if (parentId) formData.append("parentId", parentId);
 
-        try {
-          const res = await fetch(form.action, {
-            method: form.method,
-            headers: {
-              'Accept': 'application/json'
-            },
-            body: formData
-          });
+      try {
+        const res = await fetch(this.form.action, {
+          method: this.form.method,
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: formData
+        });
 
-          const data = await res.json();
+        const data = await res.json();
 
-          if (res.ok && data.ok) {
-            fileInput.value = '';
-            return window.location.reload();
-          }
-
-          if (data.errors) {
-            data.errors.forEach(error => {
-              const li = document.createElement("li");
-              li.textContent = error.msg || String(error);
-              li.classList.add("error");
-              li.addEventListener('animationend', () => li.remove());
-              errorsManager.errorsUl.appendChild(li);
-            });
-          }
-          
-          fileInput.value = '';
-        } catch (error) {
-          console.error("Upload failed:", error);
+        if (res.ok && data.ok) {
+          this.fileInput.value = '';
+          return window.location.reload();
         }
-      });
+
+        if (data.errors) {
+          data.errors.forEach(error => {
+            const li = document.createElement("li");
+            li.textContent = error.msg || String(error);
+            li.classList.add("error");
+            li.addEventListener('animationend', () => li.remove());
+            errorsManager.errorsUl.appendChild(li);
+          });
+        }
+        
+        this.fileInput.value = '';
+      } catch (error) {
+        console.error("Upload failed:", error);
+      } finally {
+        actionsManager.actions.classList.remove("uploading");
+      }
     });
+
+    // Drag and drop functionality
+    if (this.dropZone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        this.dropZone.addEventListener(eventName, e => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        this.dropZone.addEventListener(eventName, () => {
+          this.dropZone.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        this.dropZone.addEventListener(eventName, () => {
+          this.dropZone.classList.remove('drag-over');
+        });
+      });
+
+      this.dropZone.addEventListener('drop', e => {
+        const files = e.dataTransfer.files;
+        this.fileInput.files = files;
+        this.fileInput.dispatchEvent(new Event('change'));
+      });
+
+      this.dropZone.addEventListener('click', () => {
+        this.fileInput.click();
+      });
+    }
   },
 };
 
