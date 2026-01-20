@@ -176,24 +176,24 @@ const tableManager = {
 
 
 const dialogManager = {
-  dialog: $("dialog"),
+  dialog: $("#overlay"),
   showBtns: $$(".show-dialog"),
   closeBtns: $$(".close-dialog"),
   form: $("#create-form"),
 
   closeDialog() {
-    this.dialog.close();
+    this.dialog.classList.remove("opened");
     errorsManager.errorsUl.replaceChildren();
     $("input", this.form).value = "";
   },
   
   bindEvents() {
     this.dialog.addEventListener("click", e => {
-      if (e.target == this.dialog) this.closeDialog();
+      if (e.target === this.dialog) this.closeDialog();
     });
 
     this.showBtns.forEach(btn => {
-      btn.addEventListener("click", () => this.dialog.showModal());
+      btn.addEventListener("click", () => this.dialog.classList.add("opened"));
     });
 
     this.closeBtns.forEach(closeBtn => {
@@ -249,7 +249,6 @@ const fileFormManager = {
   bindEvents() {
     this.forms.forEach(form => {
       const fileInput = $("input[type='file']", form);
-      const submitBtn = $("button[type='submit']", form);
 
       // Handle file selection
       fileInput.addEventListener("change", async e => {
@@ -264,6 +263,9 @@ const fileFormManager = {
         try {
           const res = await fetch(form.action, {
             method: form.method,
+            headers: {
+              'Accept': 'application/json'
+            },
             body: formData
           });
 
@@ -274,38 +276,17 @@ const fileFormManager = {
             return window.location.reload();
           }
 
-          data.errors.forEach(error => console.error(error.msg || String(error)));
-        } catch (error) {
-          console.error("Upload failed:", error);
-        }
-      });
-
-      // Keep submit functionality for the main form
-      form.addEventListener("submit", async e => {
-        if (form.closest("#actions")) return; // Skip for actions menu forms
-
-        e.preventDefault();
-
-        const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const parentId = Number(pathParts[1]);
-
-        const formData = new FormData(form);
-        if (parentId) formData.append("parentId", parentId);
-
-        try {
-          const res = await fetch(form.action, {
-            method: form.method,
-            body: formData
-          });
-
-          const data = await res.json();
-
-          if (res.ok && data.ok) {
-            $("input", form).value = '';
-            return window.location.reload();
+          if (data.errors) {
+            data.errors.forEach(error => {
+              const li = document.createElement("li");
+              li.textContent = error.msg || String(error);
+              li.classList.add("error");
+              li.addEventListener('animationend', () => li.remove());
+              errorsManager.errorsUl.appendChild(li);
+            });
           }
-
-          data.errors.forEach(error => console.error(error.msg || String(error)));
+          
+          fileInput.value = '';
         } catch (error) {
           console.error("Upload failed:", error);
         }

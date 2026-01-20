@@ -107,11 +107,6 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send('Something went wrong!');
-});
-
 import indexRouter from './routes/indexRouter.js';
 app.use('/', indexRouter);
 
@@ -123,6 +118,30 @@ app.use('/folders', foldersRouter);
 
 import filesRouter from './routes/filesRouter.js';
 app.use('/files', filesRouter);
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  
+  // Handle Multer errors
+  if (err.name === 'MulterError') {
+    const errorMessage = err.code === 'LIMIT_FILE_SIZE' 
+      ? 'File size exceeds 10MB limit'
+      : err.message;
+    
+    // Check if it's an AJAX request
+    if (req.xhr || req.headers.accept?.indexOf('json') > -1) {
+      return res.status(400).json({ 
+        ok: false, 
+        errors: [{ msg: errorMessage }] 
+      });
+    }
+    
+    req.session.errors = [errorMessage];
+    return res.redirect('back');
+  }
+  
+  res.status(500).send('Something went wrong!');
+});
 
 app.listen(
   PORT,
