@@ -14,7 +14,7 @@ class EntriesService {
 
   readById = async id => await prisma.entry.findUnique({
     where: { id },
-    // include: { file: true },
+    include: { file: true, folder: true, children: true },
   });
 
   readRootEntries = async ownerId => {
@@ -84,7 +84,7 @@ class EntriesService {
 
   delete = async id => await prisma.entry.delete({
     where: { id },
-    include: { file: true },
+    include: { file: true, folder: true, children: true },
   });
 
 }
