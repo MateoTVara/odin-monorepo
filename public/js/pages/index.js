@@ -115,10 +115,11 @@ const menuManager = {
       this.close();
       const entryId = this.menu.dataset.currentEntryId;
       try {
+        const entryRow = $(`.entry[data-entry-id="${entryId}"]`);
+        entryRow.style.opacity = "0.5";
         const response = await fetch(this.menuDelete.action, {
           method: 'POST'
         });
-        const entryRow = $(`.entry[data-entry-id="${entryId}"]`);
         entryRow.remove();
         const data = await response.json();
 
@@ -249,12 +250,32 @@ const fileFormManager = {
   form: $(".file-form"),
   fileInput: $(".file-form > input[type='file']"),
   dropZone: $(".drop-zone"),
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
+
+  validateFiles(files) {
+    for (const file of files) {
+      if (file.size > this.MAX_FILE_SIZE) {
+        const li = document.createElement("li");
+        li.textContent = `"${file.name}" exceeds 5MB limit`;
+        li.classList.add("error");
+        li.addEventListener('animationend', () => li.remove());
+        errorsManager.errorsUl.appendChild(li);
+        return false;
+      }
+    }
+    return true;
+  },
 
   bindEvents() {
     this.fileInput.addEventListener("change", async e => {
       if (!this.fileInput.files.length) return;
+      
+      if (!this.validateFiles(this.fileInput.files)) {
+        this.fileInput.value = '';
+        return;
+      }
 
-      actionsManager.actions.classList.add("uploading");
+      actionsManager.toggleBtn.classList.add("uploading");
 
       const pathParts = window.location.pathname.split("/").filter(Boolean);
       const parentId = Number(pathParts[1]);
@@ -319,8 +340,10 @@ const fileFormManager = {
 
       this.dropZone.addEventListener('drop', e => {
         const files = e.dataTransfer.files;
-        this.fileInput.files = files;
-        this.fileInput.dispatchEvent(new Event('change'));
+        if (this.validateFiles(files)) {
+          this.fileInput.files = files;
+          this.fileInput.dispatchEvent(new Event('change'));
+        }
       });
 
       this.dropZone.addEventListener('click', () => {
