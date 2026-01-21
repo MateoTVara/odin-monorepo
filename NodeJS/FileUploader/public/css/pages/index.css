@@ -175,6 +175,10 @@
     grid-area: name;
     justify-self: start;
     margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
   }
   & > span:nth-child(3) {
     grid-area: menu;

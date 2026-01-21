@@ -112,17 +112,18 @@ const menuManager = {
 
     this.menuDelete.addEventListener("click", async e => {
       e.preventDefault();
+      this.close();
       const entryId = this.menu.dataset.currentEntryId;
       try {
         const response = await fetch(this.menuDelete.action, {
           method: 'POST'
         });
+        const entryRow = $(`.entry[data-entry-id="${entryId}"]`);
+        entryRow.remove();
         const data = await response.json();
 
         if (data.ok) {
-          const entryRow = $(`.entry[data-entry-id="${entryId}"]`);
-          entryRow.remove();
-          menuManager.close();
+          console.log("Delete successful");
         }
       } catch (error) {
         console.error("Delete failed:", error);

@@ -7,8 +7,8 @@ import multer from "multer";
 const filesRouter = Router();
 
 const upload = multer({
-  dest: "/home/marun/Projects/odin/monorepo/NodeJS/FileUploader/uploads/",
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 filesRouter.post('/upload', authNeeded, upload.array('files'), filesController.postUpload);

@@ -1,6 +1,7 @@
 import { body, validationResult, matchedData } from "express-validator";
 import entriesService from "../services/entriesService.js";
 import { promises as fs } from "node:fs";
+import cloudinary from "../../lib/cloudinary.js";
 
 class EntriesController {
   
@@ -38,7 +39,7 @@ class EntriesController {
       const entry = await entriesService.readById(entryId);
       
       if (entry.file) {
-        await fs.unlink(entry.file.url);
+        const result = await cloudinary.uploader.destroy(entry.file.publicId, { resource_type: entry.file.resourceType });
         await entriesService.delete(entry.id);
         return;
       }
