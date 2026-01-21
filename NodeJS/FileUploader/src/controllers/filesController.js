@@ -9,6 +9,12 @@ class FilesController {
     const parentId = Number(req.body.parentId);
     try {
       for (const { originalname, mimetype, size, buffer } of req.files) {
+        if (size > 5 * 1024 * 1024) {
+          console.log("A file exceeds the 5MB limit");
+          req.session.errors = [{ msg: "A file exceeds the 5MB limit" }];
+          return res.json({ ok: false });
+        }
+
         await filesService.uploadFile({
           ownerId: Number(req.user.id),
           name: originalname,

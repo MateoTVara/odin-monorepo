@@ -78,7 +78,7 @@ main {
   flex-wrap: wrap;
 
   & > label {
-    flex: 0 0 140px;
+    flex: 0 0 150px;
     & > span {
       font-size: 1.2em;
       color: var(--font-color-red);
