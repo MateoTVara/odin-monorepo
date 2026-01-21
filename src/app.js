@@ -125,7 +125,7 @@ app.use((err, req, res, next) => {
   // Handle Multer errors
   if (err.name === 'MulterError') {
     const errorMessage = err.code === 'LIMIT_FILE_SIZE' 
-      ? 'File size exceeds 10MB limit'
+      ? 'File size exceeds 5MB limit'
       : err.message;
     
     // Check if it's an AJAX request

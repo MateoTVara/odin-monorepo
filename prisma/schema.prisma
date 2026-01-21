@@ -37,7 +37,7 @@ model User {
 }
 
 model Entry {
-  id   Int       @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
 
   owner   User @relation(fields: [ownerId], references: [id])
@@ -57,7 +57,7 @@ model Entry {
 }
 
 model Folder {
-  id   Int    @id
+  id Int @id
 
   entry Entry @relation(fields: [id], references: [id], onDelete: Cascade)
 
@@ -65,11 +65,13 @@ model Folder {
 }
 
 model File {
-  id         Int      @id
-  size       Int
-  mime       String
-  url        String
-  uploadedAt DateTime @default(now())
+  id           Int      @id
+  size         Int
+  mime         String
+  url          String
+  publicId     String
+  resourceType String
+  uploadedAt   DateTime @default(now())
 
   entry Entry @relation(fields: [id], references: [id], onDelete: Cascade)
 
