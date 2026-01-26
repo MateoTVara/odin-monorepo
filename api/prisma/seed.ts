@@ -1,13 +1,18 @@
 import { prisma } from "../lib/prisma";
+import bcrypt from "bcryptjs";
+import "dotenv/config";
 
 async function seed() {
+  const adminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+  const userPassword = await bcrypt.hash(process.env.USER_PASSWORD, 10);
+
   const [admin, user] = await prisma.$transaction([
     prisma.user.upsert({
       where: { username: "admin" },
       update: {},
       create: {
         username: "admin",
-        password: "securepassword",
+        password: adminPassword,
         email: "admin@example.com",
         role: "ADMIN",
       },
@@ -17,7 +22,7 @@ async function seed() {
       update: {},
       create: {
         username: "user",
-        password: "userpassword",
+        password: userPassword,
         email: "user@example.com",
       },
     }),
@@ -38,8 +43,8 @@ async function seed() {
       where: { id: 2 },
       update: {},
       create: {
-        title: "User's First Post",
-        content: "Hello, this is a post by a regular user.",
+        title: "Admin's Thoughts",
+        content: "Sharing some insights from the admin.",
         published: true,
         authorId: admin.id,
       },

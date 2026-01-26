@@ -6,17 +6,17 @@ const commentsRouter = Router();
 
 commentsRouter.post('/',
   passport.authenticate('jwt', { session: false }),
-  commentsController.create,
+  commentsController.postCreate,
 );
-commentsRouter.get('/:id', commentsController.readById);
-commentsRouter.get('/', commentsController.readAll);
+commentsRouter.get('/:id', commentsController.getById);
+commentsRouter.get('/', commentsController.getAll);
 commentsRouter.patch('/:id',
   passport.authenticate('jwt', { session: false }),
-  commentsController.update
+  commentsController.patchById
 );
 commentsRouter.delete('/:id',
   passport.authenticate('jwt', { session: false }),
-  commentsController.delete
+  commentsController.deleteById
 );
 
 export { commentsRouter };

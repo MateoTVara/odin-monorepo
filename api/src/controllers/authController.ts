@@ -35,7 +35,7 @@ class AuthController {
       token,
       user: {
         id: user.id,
-        email: user.email,
+        username: user.username,
       }
     });
   }
@@ -69,7 +69,7 @@ class AuthController {
       token,
       user: {
         id: user.id,
-        email: user.email,
+        username: user.username,
       }
     })
   }

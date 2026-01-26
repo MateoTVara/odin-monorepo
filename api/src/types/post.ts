@@ -1,8 +1,11 @@
 import { AtLeastOne } from "../utils/types";
 
-export interface CreatePost {
+export interface CreatePostBody {
   title: string;
   content: string;
+}
+
+export interface CreatePost extends CreatePostBody {
   authorId: number;
 }
 
