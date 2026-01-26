@@ -1,15 +1,10 @@
-import type { Roles } from "../../../generated/prisma/enums";
-
-interface UserContext {
-  userId: number
-  role: Roles
-}
+import { UserOwnershipContext } from "../../types";
 
 export function assertOwnership(
   ownerId: number,
-  user: UserContext
+  user: UserOwnershipContext
 ) {
   if (ownerId !== user.userId && user.role !== 'ADMIN') {
-    throw new Error('Unauthorized: You do not have permission to perform this action.');
+    throw new Error('Forbidden: You do not have permission to perform this action.');
   }
 }

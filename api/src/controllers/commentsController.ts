@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { CreateComment, CreateCommentBody, UpdateComment } from "../types";
+import type { CreateComment, CreateCommentBody, UpdateComment, UserOwnershipContext } from "../types";
 import { commentsService } from "../services";
 
 class CommentsController {
@@ -31,14 +31,32 @@ class CommentsController {
   }
 
   async patchById(req: Request<{ id: string }, {}, UpdateComment>, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    const ownershipContext: UserOwnershipContext = {
+      userId: req.user.id,
+      role: req.user.role
+    }
+
     const commentId = Number(req.params.id);
-    const updatedComment = await commentsService.update(commentId, req.body);
+    const updatedComment = await commentsService.update(commentId, req.body, ownershipContext);
     return res.json(updatedComment);
   }
 
   async deleteById(req: Request<{ id: string }>, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const ownershipContext: UserOwnershipContext = {
+      userId: req.user.id,
+      role: req.user.role
+    }
+
     const commentId = Number(req.params.id);
-    await commentsService.delete(commentId);
+    await commentsService.delete(commentId, ownershipContext);
     return res.status(204).send();
   }
 }
