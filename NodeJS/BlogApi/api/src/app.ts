@@ -1,8 +1,14 @@
+// api/src/app.ts
 import type { Request, Response, NextFunction } from 'express';
-import { commentsRouter, postsRouter } from './routes';
+import type { StrategyOptionsWithoutRequest } from 'passport-jwt';
+import type { JwtPayload } from './types';
+import { authRouter, commentsRouter, postsRouter } from './routes';
 import express from 'express';
 import cors from 'cors';
+import { Strategy as JwtStrategy, VerifiedCallback, ExtractJwt } from 'passport-jwt';
+import passport from 'passport';
 import 'dotenv/config';
+import { prisma } from '../lib/prisma';
 
 const app = express();
 
@@ -13,9 +19,30 @@ app.use(express.urlencoded({ extended: true }));
 // Enable CORS
 app.use(cors({
   origin: 'http://localhost:5173', // Dev user client origin
-}))
+}));
+
+// JWT Authentication Middleware
+const jwtOptions: StrategyOptionsWithoutRequest = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
+};
+passport.use(new JwtStrategy(jwtOptions, async (jwtPayload: JwtPayload, done: VerifiedCallback) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: jwtPayload.id }});
+    if (!user) {
+      return done(null, false);
+    }
+    if (jwtPayload.role !== user.role) {
+      return done(null, false);
+    }
+    return done(null, user);
+  } catch (error) {
+    return done(error, false);
+  }
+}));
 
 // Wireup routes
+app.use('/auth', authRouter);
 app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
 
