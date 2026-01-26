@@ -1,3 +1,5 @@
+import { Roles } from "../../generated/prisma/enums"
+
 export interface CreateUser {
   username: string
   password: string
@@ -8,4 +10,9 @@ export interface CreateUser {
 export interface VerifyUser {
   username: string
   password: string
+}
+
+export interface UserOwnershipContext {
+  userId: number
+  role: Roles
 }

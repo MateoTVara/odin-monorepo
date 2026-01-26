@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { postsService } from "../services";
-import { CreatePost, CreatePostBody, UpdatePost } from "../types";
+import { CreatePost, CreatePostBody, UpdatePost, UserOwnershipContext } from "../types";
 
 class PostsController {
   async postCreate(req: Request<{}, {}, CreatePostBody>, res: Response) {
@@ -31,14 +31,32 @@ class PostsController {
   }
 
   async patchById(req: Request<{ id: string }, {}, UpdatePost>, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const ownershipContext: UserOwnershipContext = {
+      userId: req.user.id,
+      role: req.user.role,
+    };
+
     const postId = Number(req.params.id);
-    const updatedPost = await postsService.update(postId, req.body);
+    const updatedPost = await postsService.update(postId, req.body, ownershipContext);
     res.json(updatedPost);
   }
 
   async deleteById(req: Request<{ id: string }>, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const ownershipContext: UserOwnershipContext = {
+      userId: req.user.id,
+      role: req.user.role,
+    };
+
     const postId = Number(req.params.id);
-    await postsService.delete(postId);
+    await postsService.delete(postId, ownershipContext);
     res.status(204).send();
   }
 }

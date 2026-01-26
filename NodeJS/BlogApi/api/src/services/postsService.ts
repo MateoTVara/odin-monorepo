@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma";
-import type { CreatePost, UpdatePost } from "../types";
+import type { CreatePost, UpdatePost, UserOwnershipContext } from "../types";
+import { assertOwnership } from "./helpers/ownership";
 
 class PostsService {
   async create(data: CreatePost) {
@@ -35,7 +36,17 @@ class PostsService {
     }); 
   }
 
-  async update(postId: number, data: UpdatePost) {
+  async update(postId: number, data: UpdatePost, ownershipContext: UserOwnershipContext) {
+    const existingPost = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true },
+    });
+    if (!existingPost) {
+      throw new Error('Post not found');
+    }
+
+    assertOwnership(existingPost.authorId, ownershipContext);
+    
     return prisma.post.update({
       where: { id: postId },
       data: {
@@ -44,7 +55,17 @@ class PostsService {
     });
   }
 
-  async delete(postId: number) {
+  async delete(postId: number, ownershipContext: UserOwnershipContext) {
+    const existingPost = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true },
+    });
+    if (!existingPost) {
+      throw new Error('Post not found');
+    }
+
+    assertOwnership(existingPost.authorId, ownershipContext);
+
     return prisma.post.delete({
       where: { id: postId },
     });

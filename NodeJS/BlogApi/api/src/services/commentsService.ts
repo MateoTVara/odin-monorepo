@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma";
-import type { CreateComment, UpdateComment } from "../types";
+import type { CreateComment, UpdateComment, UserOwnershipContext } from "../types";
+import { assertOwnership } from "./helpers/ownership";
 
 class CommentsService {
   async create(data: CreateComment) {
@@ -25,7 +26,13 @@ class CommentsService {
     })
   }
 
-  async update(id: number, data: UpdateComment) {
+  async update(id: number, data: UpdateComment, ownershipContext: UserOwnershipContext) {
+    const existingComment = await this.readById(id);
+    if (!existingComment) {
+      throw new Error('Comment not found');
+    }
+    assertOwnership(existingComment.authorId, ownershipContext);
+
     return await prisma.comment.update({
       where: { id },
       data: {
@@ -34,7 +41,13 @@ class CommentsService {
     })
   }
 
-  async delete(id: number) {
+  async delete(id: number, ownershipContext: UserOwnershipContext) {
+    const existingComment = await this.readById(id);
+    if (!existingComment) {
+      throw new Error('Comment not found');
+    }
+    assertOwnership(existingComment.authorId, ownershipContext);
+
     return await prisma.comment.delete({
       where: { id }
     });
