@@ -1,14 +1,22 @@
 import type { Request, Response } from "express";
 import { postsService } from "../services";
-import { CreatePost, UpdatePost } from "../types";
+import { CreatePost, CreatePostBody, UpdatePost } from "../types";
 
 class PostsController {
-  async postCreate(req: Request<{}, {}, CreatePost>, res: Response) {
-    const createdPost = await postsService.create(req.body);
+  async postCreate(req: Request<{}, {}, CreatePostBody>, res: Response) {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const authorId = req.user.id;
+    const postData: CreatePost = {
+      ...req.body,
+      authorId
+    };
+    const createdPost = await postsService.create(postData);
     res.status(201).json(createdPost);
   }
 
-  async getPublished(req: Request<{ id: string }>, res: Response) {
+  async getPublishedById(req: Request<{ id: string }>, res: Response) {
     const postId = Number(req.params.id);
     const post = await postsService.readPublishedById(postId);
     if (!post) {
@@ -22,13 +30,13 @@ class PostsController {
     res.json(posts);
   }
 
-  async patchUpdate(req: Request<{ id: string }, {}, UpdatePost>, res: Response) {
+  async patchById(req: Request<{ id: string }, {}, UpdatePost>, res: Response) {
     const postId = Number(req.params.id);
     const updatedPost = await postsService.update(postId, req.body);
     res.json(updatedPost);
   }
 
-  async delete(req: Request<{ id: string }>, res: Response) {
+  async deleteById(req: Request<{ id: string }>, res: Response) {
     const postId = Number(req.params.id);
     await postsService.delete(postId);
     res.status(204).send();

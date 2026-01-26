@@ -11,16 +11,16 @@ postsRouter.post('/',
   postsController.postCreate
 );
 postsRouter.get('/published', postsController.getAllPublished);
-postsRouter.get('/published/:id', postsController.getPublished);
+postsRouter.get('/published/:id', postsController.getPublishedById);
 postsRouter.patch('/:id',
   passport.authenticate('jwt', { session: false }),
   requireRole('ADMIN'),
-  postsController.patchUpdate,
+  postsController.patchById,
 );
 postsRouter.delete('/:id',
   passport.authenticate('jwt', { session: false }),
   requireRole('ADMIN'),
-  postsController.delete
+  postsController.deleteById
 );
 
 export { postsRouter };
