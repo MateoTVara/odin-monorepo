@@ -17,9 +17,28 @@ class PostsService {
   async readPublishedById(postId: number) {
     return prisma.post.findUnique({
       where: { id: postId, published: true },
-      include: {
-        comments: true,
-        author: true,
+      select: {
+        title: true,
+        content: true,
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            author: {
+              select: {
+                username: true
+              }
+            },
+            createdAt: true
+          }
+        },
+        author: {
+          select: {
+            username: true
+          }
+        },
+        updatedAt: true,
+        createdAt: true,
       }
     });
   }

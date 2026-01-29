@@ -7,9 +7,12 @@ import jwt from "jsonwebtoken";
 
 class AuthController {
   async signup(req: Request<{}, {}, CreateUser>, res: Response) {
-    const { username, password } = req.body;
-    if (!username || !password) {
+    const { username, password, confirmPassword } = req.body;
+    if (!username && !password) {
       return res.status(400).json({ error: "Username and password are required" });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
     }
 
     const existingUser = await usersService.findByUsername(username);
@@ -19,6 +22,7 @@ class AuthController {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    delete req.body.confirmPassword;
 
     const user = await usersService.create({
       ...req.body,
