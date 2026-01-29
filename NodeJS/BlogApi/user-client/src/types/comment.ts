@@ -1,8 +1,8 @@
+import type { User } from ".";
+
 export interface Comment {
-  id: number
-  content: string
-  postId: number
-  authorId: number
-  createdAt: Date
-  updatedAt: Date
+  id: number;
+  content: string;
+  author: User;
+  createdAt: Date;
 }

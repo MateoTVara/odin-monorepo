@@ -1,5 +1,10 @@
+/* user-client/src/index.css */
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

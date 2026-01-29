@@ -3,6 +3,7 @@ import { Roles } from "../../generated/prisma/enums"
 export interface CreateUser {
   username: string
   password: string
+  confirmPassword?: string
   email?: string
   name?: string
 }
