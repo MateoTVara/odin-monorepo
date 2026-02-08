@@ -40,7 +40,7 @@ const AuthForm = ({
       `}
     >
       <form 
-        action={action}
+        data-action={action}
         method={method}
         onSubmit={handleSubmit}
         className={`

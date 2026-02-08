@@ -2,13 +2,13 @@ import { useState } from "react";
 import FormGroup from "../components/FormGroup";
 import Header from "../components/Header";
 import AuthForm from "../components/AuthForm";
-import { useAuth } from "../context/auth/useAuth";
 import type { FormEvent } from "react";
-import type { AuthError, AuthResponse } from "../types/authResponse";
+import { useAuth } from "../context/auth/useAuth";
+import { authApi } from "../api/auth.api";
 
 const Auth = () => {
-  const { login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const { login } = useAuth();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,24 +16,25 @@ const Auth = () => {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
+    if (form.dataset.action === undefined) {
+      console.error('Form action is not defined');
+      return;
+    }
 
-      const authResponse: (AuthResponse | AuthError) = await response.json();
-      if ('error' in authResponse) {
-        console.error('Authentication error:', authResponse.error);
-      } else {
-        login(authResponse);
-        window.location.href = '/';
+    try {
+      const response = isLogin
+        ? await authApi.login(data)
+        : await authApi.signup(data);
+
+      if ('error' in response) {
+        console.error(response.error);
+        return;
       }
+
+      login(response);
+      window.location.href = '/';
     } catch (error) {
-      console.error('An unexpected error occurred:', error);
+      console.error(error);
     }
   };
 
@@ -58,7 +59,7 @@ const Auth = () => {
           `}
         >
           <AuthForm
-            action='http://localhost:3000/auth/login'
+            action='auth/login'
             method='POST'
             title='Login'
             visible={isLogin}
@@ -70,22 +71,22 @@ const Auth = () => {
             
           >
             <FormGroup
-                id='login-username'
-                label='Username'
-                name='username'
-              />
-              <FormGroup
-                id='login-password'
-                label='Password'
-                type='password'
-                name='password'
-              />
+              id='login-username'
+              label='Username'
+              name='username'
+            />
+            <FormGroup
+              id='login-password'
+              label='Password'
+              type='password'
+              name='password'
+            />
           </AuthForm>
 
 
 
           <AuthForm
-            action='http://localhost:3000/auth/signup'
+            action='auth/signup'
             method='POST'
             title='Sign Up'
             reversed={true}
@@ -97,22 +98,22 @@ const Auth = () => {
             sideButtonText='Login'
           >
             <FormGroup
-                id='signup-username'
-                label='Username'
-                name='username'
-              />
-              <FormGroup
-                id='signup-password'
-                label='Password'
-                type='password'
-                name='password'
-              />
-              <FormGroup
-                id='confirm-password'
-                label='Confirm Password'
-                type='password'
-                name='confirmPassword'
-              />
+              id='signup-username'
+              label='Username'
+              name='username'
+            />
+            <FormGroup
+              id='signup-password'
+              label='Password'
+              type='password'
+              name='password'
+            />
+            <FormGroup
+              id='confirm-password'
+              label='Confirm Password'
+              type='password'
+              name='confirmPassword'
+            />
           </AuthForm>
         </div>
       </main>

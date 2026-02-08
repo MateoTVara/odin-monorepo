@@ -1,62 +1,111 @@
-import { useEffect, useState } from "react";
+// user-client/src/pages/Post.tsx
 import { useParams } from "react-router";
-import type { PostDetail } from "../types";
 import NotFound from "./NotFound";
 import Header from "../components/Header";
+import Markdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { usePost } from "../hooks/posts/usePost";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<PostDetail | null>(null);
-  const [loading, setLoading] = useState(true);
 
+  // const [post, setPost] = useState<PostDetail | null>(null);
+  // const [loading, setLoading] = useState(true);
+  const { data: post, loading, error } = usePost(Number(id) || null);
 
-  useEffect(() => {
-    async function fetchPost() {
-      try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:3000/posts/published/${id}`);
-        const post: PostDetail = await response.json();
-        setPost(post);
-      } catch (error) {
-        console.error("Error fetching post:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPost();
-  }, [id]);
+  if (loading) return (
+    <>
+      <Header />
+      <div>Loading...</div>
+    </>
+  )
+
+  if (error || !post) return (
+    <NotFound />
+  )
 
   return (
+    // <>
+    //   {loading ? (
+    //     <>
+    //       <Header />
+    //       <div>Loading...</div>
+    //     </>
+    //   ) : post && post.author ? (
     <>
-      {loading ? (
-        <>
-          <Header />
-          <div>Loading...</div>
-        </>
-      ) : post && post.author ? (
-        <>
-          <Header />
-          <main>
-            <div>{post.author.username}</div>
-            <div>{post.title}</div>
-            <div>{post.content}</div>
-            <div>{post.createdAt.toString()}</div>
-            <div>{post.updatedAt.toString()}</div>
-            <div>
-              {post.comments.map((comment) => (
-                <div key={comment.id}>
-                  <div>{comment.author.username}</div>
-                  <div>{comment.content}</div>
-                  <div>{comment.createdAt.toString()}</div>
-                </div>
-              ))}
+      <Header />
+      <main
+        className="
+          w-full max-w-none
+          px-4 py-8
+          xl:px-32 xl:py-16
+          dark:bg-gray-900
+          prose dark:prose-invert
+        "
+      >
+        <h1
+          className="
+            text-5xl font-bold mb-4
+            xl:text-6xl
+            dark:text-white
+          "
+        >
+          {post.title}
+        </h1>
+        <div
+          className="
+            text-lg
+            dark:text-gray-300
+          "
+        >
+          By {post.author.username} on {new Date(post.createdAt).toLocaleDateString()}
+        </div>
+        <div
+          className="
+            text-sm mb-6
+            italic
+            dark:text-gray-400
+          "
+        >
+          Last updated: {new Date(post.updatedAt).toLocaleDateString()}
+        </div>
+        <Markdown
+          children={post.content}
+          components={{
+            code({ children, className }) {
+              const match = /language-(\w+)/.exec(className || '');
+              return match ? (
+                <SyntaxHighlighter
+                  PreTag="div"
+                  language={match[1]}
+                  style={vscDarkPlus}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className}>
+                  {children}
+                </code>
+              );
+            }
+          }}
+        />
+        <div>
+          {post.comments.map((comment) => (
+            <div key={comment.id}>
+              <div>{comment.author.username}</div>
+              <div>{comment.content}</div>
+              <div>{comment.createdAt.toString()}</div>
             </div>
-          </main>
-        </>
-      ) : (
-        <NotFound />
-      )}
+          ))}
+        </div>
+      </main>
     </>
+    //   ) : (
+    //     <NotFound />
+    //   )}
+    // </>
   );
 }
 

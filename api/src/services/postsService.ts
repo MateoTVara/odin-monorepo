@@ -15,7 +15,7 @@ class PostsService {
   }
 
   async readPublishedById(postId: number) {
-    return prisma.post.findUnique({
+    return await prisma.post.findUnique({
       where: { id: postId, published: true },
       select: {
         title: true,
@@ -44,7 +44,7 @@ class PostsService {
   }
   
   async readAllPublished() {
-    return prisma.post.findMany({
+    return await prisma.post.findMany({
       where: { published: true },
       select: {
         id: true,
