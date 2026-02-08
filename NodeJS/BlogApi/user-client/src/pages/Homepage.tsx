@@ -1,27 +1,11 @@
-import { useEffect, useState } from 'react';
-import type { PostPreview } from '../types';
+// user-client/src/pages/Homepage.tsx
 import PostCard from '../components/PostCard';
 import Header from '../components/Header';
+import { usePosts } from '../hooks/posts/usePosts';
 
 const Homepage = () => {
-  const [posts, setPosts] = useState<PostPreview[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        setLoading(true);
-        const response = await fetch('http://localhost:3000/posts/published');
-        const data: PostPreview[] = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPosts();
-  }, []);
+  const { data: posts, loading } = usePosts();
 
   return (
     <>

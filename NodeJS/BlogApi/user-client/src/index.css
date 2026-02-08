@@ -1,5 +1,6 @@
 /* user-client/src/index.css */
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -7,4 +8,5 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }

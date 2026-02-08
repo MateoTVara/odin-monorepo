@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcryptjs";
+import { posts } from "./seedData";
 import "dotenv/config";
 
 async function seed() {
@@ -28,30 +29,18 @@ async function seed() {
     }),
   ]);
 
-  const [post1, post2] = await prisma.$transaction([
-    prisma.post.upsert({
-      where: { id: 1 },
-      update: {},
-      create: {
-        title: "Welcome Post",
-        content: "This is the first post in our blog!",
-        published: true,
-        authorId: admin.id,
-      },
-    }),
-    prisma.post.upsert({
-      where: { id: 2 },
-      update: {},
-      create: {
-        title: "Admin's Thoughts",
-        content: "Sharing some insights from the admin.",
-        published: true,
-        authorId: admin.id,
-      },
-    }),
+  const [post1, post2, post3] = await prisma.$transaction([
+    ...Object.entries(posts).map(([key, postData], i) => {
+      return prisma.post.upsert({
+        where: { id: i + 1 },
+        update: {},
+        create: {
+          ...postData,
+        }
+      });
+    })
   ]);
 
-  // const [comment1, comment2, comment3] = 
   await prisma.$transaction([
     prisma.comment.upsert({
       where: { id: 1 },
@@ -80,9 +69,19 @@ async function seed() {
         authorId: admin.id,
       },
     }),
+    prisma.comment.upsert({
+      where: { id: 4 },
+      update: {},
+      create: {
+        content: "Looking forward to more posts.",
+        postId: post3.id,
+        authorId: user.id,
+      },
+    }),
   ]);
 
   console.log("Seeding completed.");
+  process.exit(0);
 }
 
 try {
