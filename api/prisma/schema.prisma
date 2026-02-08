@@ -39,7 +39,8 @@ model User {
 model Post {
   id        Int   @id @default(autoincrement())
   title     String
-  content   String?
+  content   String
+  summary   String
   published Boolean  @default(false)
 
   comments  Comment[]

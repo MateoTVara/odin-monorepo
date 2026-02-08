@@ -1,3 +1,4 @@
+// user-client/src/context/auth/AuthContext.tsx
 import { createContext } from 'react';
 import type { AuthResponse } from '../../types/authResponse';
 

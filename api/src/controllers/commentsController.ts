@@ -1,3 +1,4 @@
+// api/src/controllers/commentsController.ts
 import type { Request, Response } from "express";
 import type { CreateComment, CreateCommentBody, UpdateComment, UserOwnershipContext } from "../types";
 import { commentsService } from "../services";

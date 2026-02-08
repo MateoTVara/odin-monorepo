@@ -1,3 +1,4 @@
+// api/src/types/comment.ts
 import type { AtLeastOne } from "../utils/types";
 
 export interface CreateCommentBody {

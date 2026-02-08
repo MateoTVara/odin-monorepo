@@ -7,12 +7,26 @@ export const setUnauthorizedHandler = (handler: () => void): void => {
   onUnauthorized = handler;
 }
 
-export const apiFetch = async (
+const getToken = () => {
+  const authUser = localStorage.getItem('authUser');
+  const token = authUser ? JSON.parse(authUser).token : null;
+  return token;
+}
+
+const apiFetch = async (
   input: RequestInfo,
-  init?: RequestInit
+  init: RequestInit = {}
 ): Promise<Response> => 
 {
-  const res = await fetch(`${env.ApiBaseUrl}${input}`, init);
+  const token = getToken();
+
+  const res = await fetch(`${env.ApiBaseUrl}${input}`, {
+    ...init,
+    headers: {
+      ...init?.headers,
+      ...(token && { 'Authorization': `Bearer ${token}` }),
+    }
+  });
 
   if (res.status === 401) {
     onUnauthorized?.();

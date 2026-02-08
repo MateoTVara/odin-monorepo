@@ -4,11 +4,12 @@ import { assertOwnership } from "./helpers/ownership";
 
 class PostsService {
   async create(data: CreatePost) {
-    const { title, content, authorId } = data;
+    const { title, content, summary, authorId } = data;
     return await prisma.post.create({
       data: {
         title,
         content,
+        summary,
         author: { connect: { id: authorId } }
       }
     });
@@ -30,6 +31,9 @@ class PostsService {
               }
             },
             createdAt: true
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
         },
         author: {
@@ -49,7 +53,7 @@ class PostsService {
       select: {
         id: true,
         title: true,
-        content: true,
+        summary: true,
         updatedAt: true,
       }
     }); 
