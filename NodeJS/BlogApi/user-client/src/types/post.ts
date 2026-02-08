@@ -3,7 +3,7 @@ import type { User, Comment } from ".";
 export interface PostPreview {
   id: number;
   title: string;
-  content: string;
+  summary: string;
   updatedAt: Date;
 }
 

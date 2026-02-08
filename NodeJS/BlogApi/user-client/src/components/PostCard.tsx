@@ -51,7 +51,7 @@ const PostCard = ({ post }: { post: PostPreview }) => {
           {post.title}
         </h2>
         <p className="line-clamp-4 overflow-hidden">
-          {post.content}
+          {post.summary}
         </p>
         <Link
           className='font-semibold mt-auto'

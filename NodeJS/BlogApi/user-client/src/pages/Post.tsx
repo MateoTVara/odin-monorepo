@@ -6,13 +6,34 @@ import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { usePost } from "../hooks/posts/usePost";
+import { useEffect, useState, type FormEvent } from "react";
+import { commentsApi } from "../api/comments.api";
+import type { Comment } from "../types";
+import CommentItem from "../components/CommentItem";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
-
-  // const [post, setPost] = useState<PostDetail | null>(null);
-  // const [loading, setLoading] = useState(true);
   const { data: post, loading, error } = usePost(Number(id) || null);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    if (post) setComments(post.comments);
+  }, [post]);
+
+  const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const newComment = await commentsApi.create({
+      content: String(data.content),
+      postId: Number(id)
+    });
+
+    setComments(prev => [newComment,...prev]);
+    form.reset();
+  }
 
   if (loading) return (
     <>
@@ -26,13 +47,6 @@ const Post = () => {
   )
 
   return (
-    // <>
-    //   {loading ? (
-    //     <>
-    //       <Header />
-    //       <div>Loading...</div>
-    //     </>
-    //   ) : post && post.author ? (
     <>
       <Header />
       <main
@@ -91,21 +105,53 @@ const Post = () => {
             }
           }}
         />
-        <div>
-          {post.comments.map((comment) => (
-            <div key={comment.id}>
-              <div>{comment.author.username}</div>
-              <div>{comment.content}</div>
-              <div>{comment.createdAt.toString()}</div>
-            </div>
-          ))}
+
+        <div
+          className="
+            flex flex-col
+          "
+        >
+          <h2>Comments</h2>
+
+          <div>
+            <form
+              onSubmit={handleCommentSubmit}
+              className="
+                flex flex-col gap-4
+              "
+            >
+              <textarea
+                name="content"
+                id="content"
+                placeholder="Write your comment here..."
+                cols={30} rows={5}
+                className="
+                  p-2 rounded
+                  bg-gray-100 dark:bg-gray-800
+                "
+              />
+              <button
+                type="submit"
+                className="
+                  self-end
+                  px-4 py-2
+                  bg-blue-500 text-white rounded
+                  hover:bg-blue-600
+                "
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+
+          <div className="flex flex-col gap-3 mt-4">
+            {comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))}
+          </div>
         </div>
       </main>
     </>
-    //   ) : (
-    //     <NotFound />
-    //   )}
-    // </>
   );
 }
 

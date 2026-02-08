@@ -7,7 +7,17 @@ class CommentsService {
     return await prisma.comment.create({
       data: {
         ...data
-      }
+      },
+      select: {
+        id: true,
+        content: true,
+        author: {
+          select: {
+            username: true
+          },
+        },
+        createdAt: true,
+      },
     });
   }
 
