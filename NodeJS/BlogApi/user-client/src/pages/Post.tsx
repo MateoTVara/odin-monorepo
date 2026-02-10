@@ -10,11 +10,18 @@ import { useEffect, useState, type FormEvent } from "react";
 import { commentsApi } from "../api/comments.api";
 import type { Comment } from "../types";
 import CommentItem from "../components/CommentItem";
+import ErrorNotification from "../components/ErrorNotification";
+
+type FormError = {
+  id: string;
+  message: string;
+}
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
   const { data: post, loading, error } = usePost(Number(id) || null);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [formErrors, setFormErrors] = useState<FormError[]>([]);
 
   useEffect(() => {
     if (post) setComments(post.comments);
@@ -23,16 +30,25 @@ const Post = () => {
   const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    const newComment = await commentsApi.create({
-      content: String(data.content),
-      postId: Number(id)
-    });
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const newComment = await commentsApi.create({
+        content: String(data.content),
+        postId: Number(id)
+      });
 
-    setComments(prev => [newComment,...prev]);
-    form.reset();
+      setComments(prev => [newComment,...prev]);
+      form.reset();
+    } catch (err) {
+      if (err instanceof Error) {
+        setFormErrors(prev => [
+          { id: crypto.randomUUID(), message: err.message },
+          ...prev,
+        ]);
+      }
+    }
   }
 
   if (loading) return (
@@ -58,6 +74,19 @@ const Post = () => {
           prose dark:prose-invert
         "
       >
+        {formErrors.length > 0 && (
+          <div className="sticky top-4 float-right z-50 flex flex-col gap-1">
+            {formErrors.map(error => (
+              <ErrorNotification
+                key={error.id}
+                message={error.message}
+                onDone={() =>
+                  setFormErrors(prev => prev.filter(e => e.id !== error.id))
+                }
+              />
+            ))}
+          </div>
+        )}
         <h1
           className="
             text-5xl font-bold mb-4

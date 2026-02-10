@@ -1,24 +1,24 @@
 // api/src/routes/postsRouter.ts
 import { Router } from "express";
 import { postsController } from "../controllers";
-import passport from "passport";
+import { authenticateJwt } from "../middlewares/authenticateJwt";
 import { requireRole } from "../middlewares/requireRole";
 const postsRouter = Router();
 
 postsRouter.post('/',
-  passport.authenticate('jwt', { session: false }),
+  authenticateJwt,
   requireRole('ADMIN'),
   postsController.postCreate
 );
 postsRouter.get('/published', postsController.getAllPublished);
 postsRouter.get('/published/:id', postsController.getPublishedById);
 postsRouter.patch('/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticateJwt,
   requireRole('ADMIN'),
   postsController.patchById,
 );
 postsRouter.delete('/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticateJwt,
   requireRole('ADMIN'),
   postsController.deleteById
 );
