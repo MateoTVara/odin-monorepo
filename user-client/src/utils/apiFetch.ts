@@ -1,5 +1,6 @@
 // user-client/src/utils/apiFetch.ts
 import { env } from "../config/env";
+import { ApiError } from "./apiError";
 
 let onUnauthorized: (() => void) | null = null;
 
@@ -30,12 +31,21 @@ const apiFetch = async (
 
   if (res.status === 401) {
     onUnauthorized?.();
-    throw new Error('Unauthorized');
+    let message = 'Unauthorized';
+    try {
+      const errorData = await res.json();
+      message = errorData.message || message;
+    } catch (e) { }
+    throw new ApiError(res.status, message);
   }
 
   if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`API request failed: ${res.status} ${res.statusText} - ${errorText}`);
+    let message = res.statusText;
+    try {
+      const errorData = await res.json();
+      message = errorData.message || message;
+    } catch (e) { }
+    throw new ApiError(res.status, message);
   }
 
   return res;

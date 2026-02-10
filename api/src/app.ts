@@ -53,8 +53,14 @@ app.use((
   res: Response,
   _next: NextFunction
 ) => {
-  console.error('An error occurred:', err.message);
-  res.status(500).json({ error: 'Internal Server Error' });
+  let status = 500;
+  let message = "Internal server error";
+
+  if (err.name === "UnauthorizedError") {
+    [status, message] = [401, "Unauthorized"];
+  }
+
+  res.status(status).json({ message });
 });
 
 // Start the server
