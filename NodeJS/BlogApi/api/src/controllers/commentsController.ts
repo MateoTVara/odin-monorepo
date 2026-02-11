@@ -1,65 +1,120 @@
 // api/src/controllers/commentsController.ts
-import type { Request, Response } from "express";
+import type { Request, RequestHandler, Response } from "express";
 import type { CreateComment, CreateCommentBody, UpdateComment, UserOwnershipContext } from "../types";
 import { commentsService } from "../services";
+import { matchedData, body, param } from "express-validator";
+import type { IdParam } from "../types/pathParams";
+import { validateRequest } from "./helpers/validateRequest";
+import { asyncHandler } from "./helpers/asyncHandler";
 
 class CommentsController {
-  async postCreate(req: Request<{}, {}, CreateCommentBody>, res: Response) {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
+
+  private readonly validationMessages = {
+    param: {
+      id: {
+        isInt: "ID must be an integer"
+      }
+    },
+    body: {
+      content: {
+        isString: "Content must be a string",
+        isLength: {
+          min: "Content cannot be empty",
+          max: "Content cannot exceed 500 characters"
+        }
+      },
+      postId: {
+        isInt: "Post ID must be an integer",
+        notEmpty: "Post ID is required"
+      }
     }
-    const authorId = req.user.id;
-    const commentData: CreateComment = {
-      ...req.body,
-      authorId
-    };
-    const createdComment = await commentsService.create(commentData);
-    return res.status(201).json(createdComment);
   }
 
-  async getById(req: Request<{ id: string }>, res: Response) {
-    const commentId = Number(req.params.id);
-    const comment = await commentsService.readById(commentId);
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
-    return res.json(comment);
-  }
+  private readonly idParamValidator = [
+    param('id').isInt().withMessage(this.validationMessages.param.id.isInt).toInt(),
+  ]
 
-  async getAll(_req: Request, res: Response) {
+  private readonly createCommentValidators = [
+    body('content').trim()
+      .isString().withMessage(this.validationMessages.body.content.isString)
+      .isLength({ min: 1 }).withMessage(this.validationMessages.body.content.isLength.min)
+      .isLength({ max: 500 }).withMessage(this.validationMessages.body.content.isLength.max),
+    body('postId')
+      .isInt().withMessage(this.validationMessages.body.postId.isInt)
+      .notEmpty().withMessage(this.validationMessages.body.postId.notEmpty)
+      .toInt(),
+  ]
+
+  postCreate: RequestHandler[] = [
+    ...this.createCommentValidators,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      // req.user! justified by authenticateJwt middleware
+      const authorId = req.user!.id;
+      const data = matchedData<CreateCommentBody>(req)
+      const commentData: CreateComment = {
+        ...data,
+        authorId
+      };
+      const createdComment = await commentsService.create(commentData);
+      return res.status(201).json(createdComment);
+    })
+  ]
+
+  getById: RequestHandler[] = [
+    ...this.idParamValidator,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      const { id: commentId } = matchedData<IdParam>(req);
+      const comment = await commentsService.readById(commentId);
+      return res.json(comment);
+    })
+  ]
+
+  getAll: RequestHandler = asyncHandler(async (_req: Request, res: Response) => {
     const comments = await commentsService.readAll();
     return res.json(comments);
-  }
+  })
 
-  async patchById(req: Request<{ id: string }, {}, UpdateComment>, res: Response) {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    
-    const ownershipContext: UserOwnershipContext = {
-      userId: req.user.id,
-      role: req.user.role
-    }
+  private readonly updateCommentValidators = [
+    param('id').isInt().withMessage(this.validationMessages.param.id.isInt).toInt(),
+    body('content').optional().trim()
+      .isString().withMessage(this.validationMessages.body.content.isString)
+      .isLength({ min: 1 }).withMessage(this.validationMessages.body.content.isLength.min)
+      .isLength({ max: 500 }).withMessage(this.validationMessages.body.content.isLength.max),
+  ]
 
-    const commentId = Number(req.params.id);
-    const updatedComment = await commentsService.update(commentId, req.body, ownershipContext);
-    return res.json(updatedComment);
-  }
+  patchById = [
+    ...this.updateCommentValidators,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      // req.user! justified by authenticateJwt middleware
+      const user = req.user!;
+      const ownershipContext: UserOwnershipContext = {
+        userId: user.id,
+        role: user.role
+      }
+      const { id: commentId, ...data } = matchedData<IdParam & UpdateComment>(req);
+      const updatedComment = await commentsService.update(commentId, data, ownershipContext);
+      return res.json(updatedComment);
+    })
+  ]
 
-  async deleteById(req: Request<{ id: string }>, res: Response) {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const ownershipContext: UserOwnershipContext = {
-      userId: req.user.id,
-      role: req.user.role
-    }
-
-    const commentId = Number(req.params.id);
-    await commentsService.delete(commentId, ownershipContext);
-    return res.status(204).send();
-  }
+  deleteById: RequestHandler[] = [
+    ...this.idParamValidator,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      // req.user! justified by authenticateJwt middleware
+      const user = req.user!;
+      const ownershipContext: UserOwnershipContext = {
+        userId: user.id,
+        role: user.role
+      }
+      const { id: commentId } = matchedData<IdParam>(req);
+      await commentsService.delete(commentId, ownershipContext);
+      return res.status(204).send();
+    })
+  ]
 }
 
 export const commentsController = new CommentsController();

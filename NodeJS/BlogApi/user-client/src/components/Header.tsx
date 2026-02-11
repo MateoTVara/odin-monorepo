@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
     <header className="
-      flex justify-between items-center px-6 py-4 shadow-sm
+      flex justify-between items-center px-6 py-4 shadow-sm sticky top-0 z-50
       bg-white border-b border-gray-200
       dark:bg-gray-900 dark:border-gray-700 dark:text-white
     ">

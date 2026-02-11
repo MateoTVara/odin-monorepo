@@ -6,16 +6,12 @@ import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { usePost } from "../hooks/posts/usePost";
-import { useEffect, useState, type FormEvent } from "react";
-import { commentsApi } from "../api/comments.api";
+import { useEffect, useState} from "react";
+import type { FormError } from "../types/formError";
 import type { Comment } from "../types";
 import CommentItem from "../components/CommentItem";
 import ErrorNotification from "../components/ErrorNotification";
-
-type FormError = {
-  id: string;
-  message: string;
-}
+import CommentForm from "../components/CommentForm";
 
 const Post = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,30 +22,6 @@ const Post = () => {
   useEffect(() => {
     if (post) setComments(post.comments);
   }, [post]);
-
-  const handleCommentSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      const newComment = await commentsApi.create({
-        content: String(data.content),
-        postId: Number(id)
-      });
-
-      setComments(prev => [newComment,...prev]);
-      form.reset();
-    } catch (err) {
-      if (err instanceof Error) {
-        setFormErrors(prev => [
-          { id: crypto.randomUUID(), message: err.message },
-          ...prev,
-        ]);
-      }
-    }
-  }
 
   if (loading) return (
     <>
@@ -65,6 +37,18 @@ const Post = () => {
   return (
     <>
       <Header />
+      {formErrors.length > 0 && (
+        <div className="fixed top-20 right-4 z-50 w-fit flex flex-col-reverse gap-1">
+          {formErrors.map(error => (
+            <ErrorNotification
+              key={error.id}
+              id={error.id}
+              message={error.message}
+              setFormErrors={setFormErrors}
+            />
+          ))}
+        </div>
+      )}
       <main
         className="
           w-full max-w-none
@@ -74,19 +58,6 @@ const Post = () => {
           prose dark:prose-invert
         "
       >
-        {formErrors.length > 0 && (
-          <div className="sticky top-4 float-right z-50 flex flex-col gap-1">
-            {formErrors.map(error => (
-              <ErrorNotification
-                key={error.id}
-                message={error.message}
-                onDone={() =>
-                  setFormErrors(prev => prev.filter(e => e.id !== error.id))
-                }
-              />
-            ))}
-          </div>
-        )}
         <h1
           className="
             text-5xl font-bold mb-4
@@ -135,49 +106,16 @@ const Post = () => {
           }}
         />
 
-        <div
-          className="
-            flex flex-col
-          "
-        >
-          <h2>Comments</h2>
+        <CommentForm
+          postId={Number(id)}
+          setComments={setComments}
+          setFormErrors={setFormErrors}
+        />
 
-          <div>
-            <form
-              onSubmit={handleCommentSubmit}
-              className="
-                flex flex-col gap-4
-              "
-            >
-              <textarea
-                name="content"
-                id="content"
-                placeholder="Write your comment here..."
-                cols={30} rows={5}
-                className="
-                  p-2 rounded
-                  bg-gray-100 dark:bg-gray-800
-                "
-              />
-              <button
-                type="submit"
-                className="
-                  self-end
-                  px-4 py-2
-                  bg-blue-500 text-white rounded
-                  hover:bg-blue-600
-                "
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-
-          <div className="flex flex-col gap-3 mt-4">
-            {comments.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
-            ))}
-          </div>
+        <div className="flex flex-col gap-3 mt-4">
+          {comments.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} />
+          ))}
         </div>
       </main>
     </>

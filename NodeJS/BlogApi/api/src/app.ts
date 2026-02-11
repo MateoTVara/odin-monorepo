@@ -9,6 +9,10 @@ import { Strategy as JwtStrategy, VerifiedCallback, ExtractJwt } from 'passport-
 import passport from 'passport';
 import 'dotenv/config';
 import { prisma } from '../lib/prisma';
+import { AppError } from './utils/errors';
+import { Prisma } from '../generated/prisma/client';
+import jwt from "jsonwebtoken";
+const { JsonWebTokenError, TokenExpiredError } = jwt;
 
 const app = express();
 
@@ -48,19 +52,44 @@ app.use('/comments', commentsRouter);
 
 // Error handling middleware
 app.use((
-  err: Error,
+  err: unknown,
   _req: Request,
   res: Response,
   _next: NextFunction
 ) => {
-  let status = 500;
+
+  // Default fallback
+  let statusCode = 500;
   let message = "Internal server error";
 
-  if (err.name === "UnauthorizedError") {
-    [status, message] = [401, "Unauthorized"];
+  // Known application errors
+  if (err instanceof AppError) {
+    [statusCode, message] = [err.statusCode, err.message];
   }
 
-  res.status(status).json({ message });
+  // Prisma known errors (optional but professional)
+  else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") [statusCode, message] = [409, "Unique constraint failed"];
+
+    if (err.code === "P2025") [statusCode, message] = [404, "Record not found"];
+  }
+
+  else if (err instanceof TokenExpiredError) [statusCode, message] = [401, "Token expired"];
+
+  else if (err instanceof JsonWebTokenError) [statusCode, message] = [401, "Invalid token"];
+
+  // Unknown errors (programmer errors)
+  else {
+    console.error("Unexpected error:", err);
+  }
+
+  res.status(statusCode).json({
+    status: "error",
+    message,
+    ...(process.env.NODE_ENV === "development" && {
+      stack: err instanceof Error ? err.stack : undefined
+    })
+  });
 });
 
 // Start the server
