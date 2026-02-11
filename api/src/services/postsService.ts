@@ -1,5 +1,7 @@
+// api/src/services/postsService.ts
 import { prisma } from "../../lib/prisma";
 import type { CreatePost, UpdatePost, UserOwnershipContext } from "../types";
+import { NotFoundError } from "../utils/errors";
 import { assertOwnership } from "./helpers/ownership";
 
 class PostsService {
@@ -16,7 +18,7 @@ class PostsService {
   }
 
   async readPublishedById(postId: number) {
-    return await prisma.post.findUnique({
+    const post = await prisma.post.findUnique({
       where: { id: postId, published: true },
       select: {
         title: true,
@@ -45,6 +47,12 @@ class PostsService {
         createdAt: true,
       }
     });
+
+    if (!post) {
+      throw new NotFoundError('Post not found');
+    }
+    
+    return post;
   }
   
   async readAllPublished() {
@@ -59,15 +67,21 @@ class PostsService {
     }); 
   }
 
-  async update(postId: number, data: UpdatePost, ownershipContext: UserOwnershipContext) {
-    const existingPost = await prisma.post.findUnique({
+  private async readOrFail(postId: number) {
+    const post = await prisma.post.findUnique({
       where: { id: postId },
       select: { authorId: true },
     });
-    if (!existingPost) {
-      throw new Error('Post not found');
+
+    if (!post) {
+      throw new NotFoundError("Post not found");
     }
 
+    return post;
+  }
+
+  async update(postId: number, data: UpdatePost, ownershipContext: UserOwnershipContext) {
+    const existingPost = await this.readOrFail(postId);
     assertOwnership(existingPost.authorId, ownershipContext);
     
     return prisma.post.update({
@@ -79,14 +93,7 @@ class PostsService {
   }
 
   async delete(postId: number, ownershipContext: UserOwnershipContext) {
-    const existingPost = await prisma.post.findUnique({
-      where: { id: postId },
-      select: { authorId: true },
-    });
-    if (!existingPost) {
-      throw new Error('Post not found');
-    }
-
+    const existingPost = await this.readOrFail(postId);
     assertOwnership(existingPost.authorId, ownershipContext);
 
     return prisma.post.delete({

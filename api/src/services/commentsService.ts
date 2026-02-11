@@ -1,9 +1,17 @@
+// api/src/services/commentsService.ts
 import { prisma } from "../../lib/prisma";
 import type { CreateComment, UpdateComment, UserOwnershipContext } from "../types";
+import { NotFoundError } from "../utils/errors";
 import { assertOwnership } from "./helpers/ownership";
 
 class CommentsService {
   async create(data: CreateComment) {
+    const postExists = await prisma.post.findUnique({
+      where: { id: data.postId },
+      select: { id: true }
+    });
+    if (!postExists) throw new NotFoundError('Post not found');
+
     return await prisma.comment.create({
       data: {
         ...data
@@ -22,9 +30,11 @@ class CommentsService {
   }
 
   async readById(id: number) {
-    return await prisma.comment.findUnique({
+    const comment = await prisma.comment.findUnique({
       where: { id }
     });
+    if (!comment) throw new NotFoundError('Comment not found');
+    return comment;
   }
 
   async readAll() {
@@ -36,11 +46,17 @@ class CommentsService {
     })
   }
 
+  private async readOrFail(id: number) {
+    const comment = await prisma.comment.findUnique({
+      where: { id },
+      select: { authorId: true }
+    });
+    if (!comment) throw new NotFoundError('Comment not found');
+    return comment;
+  }
+
   async update(id: number, data: UpdateComment, ownershipContext: UserOwnershipContext) {
-    const existingComment = await this.readById(id);
-    if (!existingComment) {
-      throw new Error('Comment not found');
-    }
+    const existingComment = await this.readOrFail(id);
     assertOwnership(existingComment.authorId, ownershipContext);
 
     return await prisma.comment.update({
@@ -52,10 +68,7 @@ class CommentsService {
   }
 
   async delete(id: number, ownershipContext: UserOwnershipContext) {
-    const existingComment = await this.readById(id);
-    if (!existingComment) {
-      throw new Error('Comment not found');
-    }
+    const existingComment = await this.readOrFail(id);
     assertOwnership(existingComment.authorId, ownershipContext);
 
     return await prisma.comment.delete({

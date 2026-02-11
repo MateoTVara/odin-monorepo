@@ -29,22 +29,18 @@ const apiFetch = async (
     }
   });
 
-  if (res.status === 401) {
-    onUnauthorized?.();
-    let message = 'Unauthorized';
-    try {
-      const errorData = await res.json();
-      message = errorData.message || message;
-    } catch (e) { }
-    throw new ApiError(res.status, message);
-  }
-
   if (!res.ok) {
     let message = res.statusText;
+
     try {
       const errorData = await res.json();
-      message = errorData.message || message;
-    } catch (e) { }
+      message = errorData.message;
+    } catch { /* ignore JSON parse errors */ }
+
+    if (res.status === 401) {
+      onUnauthorized?.();
+    }
+
     throw new ApiError(res.status, message);
   }
 
