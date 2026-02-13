@@ -12,7 +12,7 @@ const Homepage = () => {
       <Header />
       <main
         className='
-          min-h-screen
+          min-h-[calc(100vh-4rem)]
           dark:bg-gray-900
         '
       >

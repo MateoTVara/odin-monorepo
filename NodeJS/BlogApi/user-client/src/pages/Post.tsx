@@ -51,7 +51,7 @@ const Post = () => {
       )}
       <main
         className="
-          w-full max-w-none
+          w-full max-w-none min-h-[calc(100vh-4rem)]
           px-4 py-8
           xl:px-32 xl:py-16
           dark:bg-gray-900
