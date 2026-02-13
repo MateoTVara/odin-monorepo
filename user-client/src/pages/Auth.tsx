@@ -43,7 +43,7 @@ const Auth = () => {
       <Header />
       <main
         className={`
-          flex flex-col h-screen
+          flex flex-col min-h-[calc(100vh-4rem)]
           box-border
           px-4 py-32
           xl:px-48 xl:py-12
