@@ -27,6 +27,16 @@ class UsersService {
 
     return user;
   }
+
+  async findById(id: number) {
+    const user = await prisma.user.findUnique({
+      where: { id }
+    });
+
+    if (!user) throw new NotFoundError("User not found");
+
+    return user;
+  }
 }
 
 export const usersService = new UsersService();

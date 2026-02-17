@@ -8,6 +8,27 @@ export const setUnauthorizedHandler = (handler: () => void): void => {
   onUnauthorized = handler;
 }
 
+let isRefreshing = false;
+
+const refreshAccessToken = async (): Promise<string | null> => {
+  try {
+    const res = await fetch(`${env.ApiBaseUrl}auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+
+    localStorage.setItem('authUser', JSON.stringify(data));
+
+    return data.token;
+  } catch {
+    return null;
+  }
+}
+
 const getToken = () => {
   const authUser = localStorage.getItem('authUser');
   const token = authUser ? JSON.parse(authUser).token : null;
@@ -23,6 +44,7 @@ const apiFetch = async (
 
   const res = await fetch(`${env.ApiBaseUrl}${input}`, {
     ...init,
+    credentials: 'include',
     headers: {
       ...init?.headers,
       ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -38,6 +60,16 @@ const apiFetch = async (
     } catch { /* ignore JSON parse errors */ }
 
     if (res.status === 401) {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        const newToken = await refreshAccessToken();
+        isRefreshing = false;
+
+        if (newToken) {
+          return apiFetch(input, init);
+        }
+      }
+      
       onUnauthorized?.();
     }
 
