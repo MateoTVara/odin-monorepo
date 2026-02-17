@@ -8,6 +8,8 @@ import { asyncHandler } from "./helpers/asyncHandler";
 import { validateRequest } from "./helpers/validateRequest";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { authService } from "../services/authService";
+import { tokenService } from "../services/tokenService";
 
 class AuthController {
   private readonly validationMessages = {
@@ -50,21 +52,18 @@ class AuthController {
     asyncHandler(async (req: Request, res: Response) => {
       const data = matchedData<CreateUser>(req);
 
-      const hashedPassword = await bcrypt.hash(data.password, 10);
+      const { accessToken, refreshToken, user } = await authService.signup(data);
 
-      const user = await usersService.create({
-        ...data,
-        password: hashedPassword,
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/auth/refresh"
       });
 
-      const token = jwt.sign(
-        { id: user.id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
-
       return res.status(201).json({
-        token,
+        token: accessToken,
         user: {
           id: user.id,
           username: user.username,
@@ -85,20 +84,18 @@ class AuthController {
     validateRequest,
     asyncHandler(async (req: Request, res: Response) => {
       const data = matchedData<VerifyUser>(req);
+      const { accessToken, refreshToken, user } = await authService.login(data.username, data.password);
 
-      const user = await usersService.findByUsername(data.username);
-      const isValid = await bcrypt.compare(data.password, user.password);
-
-      if (!isValid) throw new BadRequestError("Invalid username or password");
-
-      const token = jwt.sign(
-        { id: user.id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      );
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        path: "/auth/refresh"
+      });
 
       return res.json({
-        token,
+        token: accessToken,
         user: {
           id: user.id,
           username: user.username,
@@ -106,6 +103,26 @@ class AuthController {
       })
     })
   ]
+
+  refresh: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const oldToken = req.cookies.refreshToken;
+    if (!oldToken) throw new BadRequestError("Refresh token is required");
+
+    const {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken
+    } = await authService.refresh(oldToken);
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/auth/refresh"
+    });
+
+    return res.json({ token: newAccessToken});
+  });
 }
 
 export const authController = new AuthController();

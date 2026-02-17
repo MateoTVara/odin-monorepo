@@ -1,7 +1,7 @@
 // api/src/app.ts
 import type { Request, Response, NextFunction } from 'express';
 import type { StrategyOptionsWithoutRequest } from 'passport-jwt';
-import type { JwtPayload } from './types';
+import type { AccessTokenPayload } from './types';
 import { authRouter, commentsRouter, postsRouter } from './routes';
 import express from 'express';
 import cors from 'cors';
@@ -12,6 +12,8 @@ import { prisma } from '../lib/prisma';
 import { AppError } from './utils/errors';
 import { Prisma } from '../generated/prisma/client';
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
+import { rateLimit } from 'express-rate-limit';
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 
 const app = express();
@@ -19,23 +21,40 @@ const app = express();
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 
 // Enable CORS
 app.use(cors({
   origin: 'http://localhost:5173', // Dev user client origin
+  credentials: true
 }));
+
+// Apply rate limiter to all requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  ipv6Subnet: 64,
+  handler: (_req, _res, next) => {
+    next(new AppError("Too many requests, please try again later.", 429));
+  }
+});
+
+app.use(limiter);
 
 // JWT Authentication Middleware
 const jwtOptions: StrategyOptionsWithoutRequest = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
+  secretOrKey: process.env.ACCESS_JWT_SECRET,
 };
-passport.use(new JwtStrategy(jwtOptions, async (jwtPayload: JwtPayload, done: VerifiedCallback) => {
+passport.use(new JwtStrategy(jwtOptions, async (jwtPayload: AccessTokenPayload, done: VerifiedCallback) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: jwtPayload.id }});
-    if (!user) {
-      return done(null, false);
-    }
+    
+    if (!user) return done(null, false);
+    
     if (jwtPayload.role !== user.role) {
       return done(null, false);
     }
