@@ -26,7 +26,10 @@ app.use(cookieParser());
 
 // Enable CORS
 app.use(cors({
-  origin: 'http://localhost:5173', // Dev user client origin
+  origin: [
+    'http://localhost:5173', // Dev user client origin
+    'http://localhost:5174'  // Dev admin client origin
+  ],
   credentials: true
 }));
 

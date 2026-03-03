@@ -94,6 +94,8 @@ class AuthController {
         path: "/auth/refresh"
       });
 
+      console.log("Login successful, tokens issued");
+
       return res.json({
         token: accessToken,
         user: {
