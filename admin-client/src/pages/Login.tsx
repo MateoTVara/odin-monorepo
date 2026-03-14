@@ -13,7 +13,7 @@ const Login = () => {
 
     const formData = Object.fromEntries(new FormData(e.currentTarget));
 
-    const response = await apiFetchJson<AuthResponse | { error: string }>('auth/login', {
+    const response = await apiFetchJson<AuthResponse | { error: string }>('auth/admin/login', {
       method: 'POST',
       body: JSON.stringify(formData),
       headers: {
@@ -25,6 +25,8 @@ const Login = () => {
       console.error(response.error);
       return;
     }
+
+    // const decoded = jwtDecode<AuthResponse>(response.token);
 
     login(response);
 

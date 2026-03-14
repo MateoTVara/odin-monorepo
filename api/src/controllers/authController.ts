@@ -1,15 +1,11 @@
 // api/src/controllers/authController.ts
-import type { Request, RequestHandler, Response } from "express";
+import type { Request, RequestHandler, Response } from "express"
 import type { CreateUser, VerifyUser } from "../types";
-import { usersService } from "../services";
 import { body, matchedData } from "express-validator";
-import { BadRequestError } from "../utils/errors";
+import { BadRequestError, ForbiddenError } from "../utils/errors";
 import { asyncHandler } from "./helpers/asyncHandler";
 import { validateRequest } from "./helpers/validateRequest";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { authService } from "../services/authService";
-import { tokenService } from "../services/tokenService";
 
 class AuthController {
   private readonly validationMessages = {
@@ -59,7 +55,7 @@ class AuthController {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/auth/refresh"
+        path: "/auth"
       });
 
       return res.status(201).json({
@@ -91,7 +87,7 @@ class AuthController {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        path: "/auth/refresh"
+        path: "/auth"
       });
 
       console.log("Login successful, tokens issued");
@@ -102,7 +98,36 @@ class AuthController {
           id: user.id,
           username: user.username,
         }
-      })
+      });
+    })
+  ]
+
+  adminLogin: RequestHandler[] = [
+    ...this.validateLogin,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      const data = matchedData<VerifyUser>(req);
+      const { accessToken, refreshToken, user } = await authService.login(data.username, data.password);
+
+      if (user.role !== "ADMIN") {
+        throw new ForbiddenError("Admin access required");
+      }
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/auth"
+      });
+
+      return res.json({
+        token: accessToken,
+        user: {
+          id: user.id,
+          username: user.username,
+        }
+      });
     })
   ]
 
@@ -120,10 +145,26 @@ class AuthController {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: "/auth/refresh"
+      path: "/auth"
     });
 
     return res.json({ token: newAccessToken});
+  });
+
+  logout: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) throw new BadRequestError("Refresh token is required");
+
+    await authService.logout(refreshToken);
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/auth",
+    });
+
+    return res.json({ message: "Logged out successfully" });
   });
 }
 

@@ -1,8 +1,17 @@
 import { useAuth } from "../context/auth/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { apiFetchJson } from "../lib/apiFetch";
 
 const Header = () => {
   const {user, logout} = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const res = await apiFetchJson<{ message: string }>('auth/logout', { method: 'POST' });
+    console.log(res.message);
+    logout();
+    navigate("/auth/login");
+  };
 
   return (
     <header
@@ -19,14 +28,14 @@ const Header = () => {
         {user ? (
             <button
               className="px-3 py-1 bg-red-500 rounded hover:bg-red-600"
-              onClick={logout}
+              onClick={handleLogout}
             >
               Logout
             </button>
           ) : (
             <Link
               className="px-3 py-1 bg-blue-500 rounded hover:bg-blue-600" 
-              to="/login"
+              to="/auth/login"
             >
               Login
             </Link>
