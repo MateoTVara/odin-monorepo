@@ -1,3 +1,4 @@
+// admin-client/src/lib/apiFetch.ts
 import { env } from "../config/env";
 import ApiError from "./apiError";
 
@@ -34,7 +35,7 @@ const getToken = (): string | null => {
 
 let isRefreshing = false;
 
-const apiFetch = async (
+export const apiFetch = async (
   input: RequestInfo,
   init: RequestInit = {}
 ): Promise<Response> =>
