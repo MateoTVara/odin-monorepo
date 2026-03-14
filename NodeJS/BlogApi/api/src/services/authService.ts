@@ -69,6 +69,10 @@ class AuthService {
       refreshToken: newRefreshToken
     }
   }
+
+  async logout(refreshToken: string) {
+    await refreshTokenService.revoke(refreshToken);
+  }
 }
 
 export const authService = new AuthService();
