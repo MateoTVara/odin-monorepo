@@ -17,6 +17,25 @@ class PostsService {
     });
   }
 
+  async readById(postId: number) {
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: {
+        title: true,
+        content: true,
+        published: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundError('Post not found');
+    }
+
+    return post;
+  }
+
   async readPublishedById(postId: number) {
     const post = await prisma.post.findUnique({
       where: { id: postId, published: true },
@@ -53,6 +72,18 @@ class PostsService {
     }
     
     return post;
+  }
+
+  async readAll() {
+    return await prisma.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        summary: true,
+        published: true,
+        updatedAt: true,
+      }
+    });
   }
   
   async readAllPublished() {

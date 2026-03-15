@@ -3,6 +3,7 @@ import { protectedLoader } from "../lib/protectedLoader";
 import App from "../App"
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import PostEdit from "../pages/PostEdit";
 
 const routes: RouteObject[] = [
   {
@@ -10,7 +11,8 @@ const routes: RouteObject[] = [
     element: <App />,
     loader: protectedLoader,
     children: [
-      { index: true, element: <Dashboard /> }
+      { index: true, element: <Dashboard /> },
+      { path: "posts/:postId/edit", element: <PostEdit /> }
     ]
   },
   {

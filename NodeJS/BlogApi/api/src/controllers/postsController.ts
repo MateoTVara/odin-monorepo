@@ -77,6 +77,16 @@ class PostsController {
     })
   ]
 
+  getById: RequestHandler[] = [
+    ...this.idParamValidator,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      const { id: postId } = matchedData<IdParam>(req);
+      const post = await postsService.readById(postId);
+      res.json(post);
+    })
+  ]
+
   getPublishedById: RequestHandler[] = [
     ...this.idParamValidator,
     validateRequest,
@@ -86,6 +96,11 @@ class PostsController {
       res.json(post);
     })
   ]
+
+  getAll: RequestHandler = asyncHandler(async (_req: Request, res: Response) => {
+    const posts = await postsService.readAll();
+    res.json(posts);
+  })
 
   getAllPublished: RequestHandler = asyncHandler(async (_req: Request, res: Response) => {
     const posts = await postsService.readAllPublished();

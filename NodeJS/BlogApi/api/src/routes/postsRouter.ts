@@ -10,8 +10,18 @@ postsRouter.post('/',
   requireRole('ADMIN'),
   postsController.postCreate
 );
-postsRouter.get('/published', postsController.getAllPublished);
 postsRouter.get('/published/:id', postsController.getPublishedById);
+postsRouter.get('/published', postsController.getAllPublished);
+postsRouter.get('/:id',
+  authenticateJwt,
+  requireRole('ADMIN'),
+  postsController.getById
+)
+postsRouter.get('/',
+  authenticateJwt,
+  requireRole('ADMIN'),
+  postsController.getAll
+);
 postsRouter.patch('/:id',
   authenticateJwt,
   requireRole('ADMIN'),
