@@ -1,6 +1,6 @@
 // admin-client/src/pages/Dashboard.tsx
 import { useEffect, useMemo, useState, type ChangeEvent } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import postsApi from "../api/posts.api";
 import Header from "../components/Header";
 import type { PostPreview } from "../types/post";
@@ -181,12 +181,12 @@ const Dashboard = () => {
                       Updated: {new Date(post.updatedAt).toLocaleString()}
                     </p>
                     <div className="mt-4 flex gap-2">
-                      <button
-                        type="button"
+                      <Link
+                        to={`/posts/${post.id}/edit`}
                         className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
                       >
                         Edit
-                      </button>
+                      </Link>
                       <button
                         type="submit"
                         onClick={() => handleDelete(post.id)}
@@ -211,7 +211,10 @@ const Dashboard = () => {
                   </thead>
                   <tbody>
                     {filteredPosts.map((post) => (
-                      <tr key={post.id} className="border-t border-gray-200">
+                      <tr
+                        key={post.id}
+                        className={`border-t border-gray-200 ${post.published ? '' : 'bg-yellow-50'}`}
+                      >
                         <td className="px-4 py-3 font-medium text-gray-900">{post.title}</td>
                         <td className="px-4 py-3">
                           <div className="line-clamp-2 text-gray-700">
@@ -223,12 +226,12 @@ const Dashboard = () => {
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex gap-2">
-                            <button
-                              type="button"
+                            <Link
+                              to={`/posts/${post.id}/edit`}
                               className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
                             >
                               Edit
-                            </button>
+                            </Link>
                             <button
                               type="submit"
                               onClick={() => handleDelete(post.id)}
