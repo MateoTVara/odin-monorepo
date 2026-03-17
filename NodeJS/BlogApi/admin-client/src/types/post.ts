@@ -10,6 +10,7 @@ export interface PostDetail {
   title: string;
   content: string;
   published: boolean;
+  summary: string;
   createdAt: Date;
   updatedAt: Date;
 }

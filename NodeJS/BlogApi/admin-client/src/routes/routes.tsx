@@ -4,6 +4,7 @@ import App from "../App"
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import PostEdit from "../pages/PostEdit";
+import PostCreate from "../pages/PostCreate";
 
 const routes: RouteObject[] = [
   {
@@ -12,6 +13,7 @@ const routes: RouteObject[] = [
     loader: protectedLoader,
     children: [
       { index: true, element: <Dashboard /> },
+      { path: "posts/new", element: <PostCreate /> },
       { path: "posts/:postId/edit", element: <PostEdit /> }
     ]
   },
