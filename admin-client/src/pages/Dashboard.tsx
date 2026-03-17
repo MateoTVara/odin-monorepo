@@ -114,9 +114,17 @@ const Dashboard = () => {
       <Header />
       <main className="px-4 py-6">
         <section className="mx-auto w-full max-w-6xl">
-          <div className="mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Posts</h2>
-            <p className="text-sm text-gray-600">Manage your blog content.</p>
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Posts</h2>
+              <p className="text-sm text-gray-600">Manage your blog content.</p>
+            </div>
+            <Link
+              to="/posts/new"
+              className="mt-2 inline-block rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            >
+              Create New Post
+            </Link>
           </div>
 
           <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
