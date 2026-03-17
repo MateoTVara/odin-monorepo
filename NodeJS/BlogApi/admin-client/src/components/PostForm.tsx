@@ -34,42 +34,55 @@ const PostForm = ({
     <div className="container mx-auto px-4 py-8">
       <form
         onSubmit={onSubmit}
-        className="mb-6 flex items-center justify-between"
       >
-        <h1
-          className="text-3xl font-bold border-b border-gray-300 pb-2 flex items-center gap-4"
-        >
-          <input
-            type="text"
-            value={post.title || ''}
-            onChange={(e) => setPost(prev => prev ? { ...prev, title: e.target.value } : prev)}
-            className="bg-transparent border-none focus:outline-none focus:ring-0"
-          />
-          {children}
-        </h1>
         <div
-          className="flex items-center gap-4"
+          className="mb-6 flex items-center justify-between"
         >
-          <div
-            className="flex items-center gap-1"
+          <h1
+            className="text-3xl font-bold border-b border-gray-300 pb-2 flex items-center gap-4"
           >
-            <label htmlFor="published">Published</label>
             <input
-              type="checkbox"
-              id="published"
-              checked={post.published}
-              onChange={(e) => setPost(prev => prev ? { ...prev, published: e.target.checked } : prev)}
+              type="text"
+              value={post.title || ''}
+              onChange={(e) => setPost(prev => prev ? { ...prev, title: e.target.value } : prev)}
+              className="bg-transparent border-none focus:outline-none focus:ring-0"
             />
-          </div>
-          <button
-            type="submit"
-            className={`
-            rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700
-            ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''}
-            `}
+            {children}
+          </h1>
+          <div
+            className="flex items-center gap-4"
           >
-            {isSubmitting ? 'Saving...' : submitLabel}
-          </button>
+            <div
+              className="flex items-center gap-1"
+            >
+              <label htmlFor="published">Published</label>
+              <input
+                type="checkbox"
+                id="published"
+                checked={post.published}
+                onChange={(e) => setPost(prev => prev ? { ...prev, published: e.target.checked } : prev)}
+              />
+            </div>
+            <button
+              type="submit"
+              className={`
+              rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700
+              ${isSubmitting ? 'cursor-not-allowed opacity-50' : ''}
+              `}
+            >
+              {isSubmitting ? 'Saving...' : submitLabel}
+            </button>
+          </div>
+        </div>
+        <div>
+          <textarea
+            name="summary"
+            id="summary"
+            value={post.summary || ''}
+            onChange={(e) => setPost(prev => prev ? { ...prev, summary: e.target.value } : prev)}
+            placeholder="Summary"
+            className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
       </form>
       <Editor

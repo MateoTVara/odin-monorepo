@@ -37,13 +37,14 @@ const PostEdit = () => {
       setSending(true);
       await postsApi.editById(params.postId, {
         title: post.title,
+        summary: post.summary,
         content: post.content,
         published: post.published,
       });
       alert('Post updated successfully!');
     } catch (error) {
       console.error('Error updating post:', error);
-      alert('Failed to update post. Please try again.');
+      alert(`${error instanceof Error ? error.message : 'Failed to update post. Please try again.'}`);
     } finally {
       setSending(false);
     }
