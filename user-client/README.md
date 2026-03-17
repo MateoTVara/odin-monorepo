@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# User Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 public blog reader. No login required to browse published posts.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework:** React 19 + Vite (rolldown-vite)
+- **Language:** TypeScript
+- **Routing:** React Router v7
+- **Styling:** Tailwind CSS v4 + `@tailwindcss/typography`
+- **Markdown rendering:** react-markdown + react-syntax-highlighter
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js v20+
+- pnpm v10+
+- The [`api`](../api) server running on port `3000`
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Install dependencies:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   ```bash
+   pnpm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. Create a `.env` file:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   ```env
+   VITE_API_BASE_URL=http://localhost:3000/
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Script | Description |
+|---|---|
+| `pnpm dev` | Start dev server (network-accessible via `--host`) |
+| `pnpm build` | Type-check and build to `dist/` |
+| `pnpm preview` | Preview the production build |
+| `pnpm lint` | Run ESLint |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Pages
+
+| Route | Description |
+|---|---|
+| `/` | Homepage — lists all published posts |
+| `/posts/:id` | Single post view with rendered Markdown and comments |
+| `/auth` | Login page (required to post comments) |
+| `*` | 404 Not Found |
+
+## Features
+
+- Browse and read published blog posts without an account
+- Syntax-highlighted code blocks in post content
+- Authenticated users can post comments on articles
