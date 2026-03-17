@@ -22,6 +22,7 @@ class PostsService {
       where: { id: postId },
       select: {
         title: true,
+        summary: true,
         content: true,
         published: true,
         updatedAt: true,

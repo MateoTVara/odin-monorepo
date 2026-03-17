@@ -38,7 +38,7 @@ Happy blogging!`;
       navigate('/');
     } catch (error) {
       console.error('Error creating post:', error);
-      alert('Failed to create post. Please try again.');
+      alert(`${error instanceof Error ? error.message : 'Failed to create post. Please try again.'}`);
     } finally {
       setIsSending(false);
     }

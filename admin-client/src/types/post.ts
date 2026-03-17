@@ -8,9 +8,9 @@ export interface PostPreview {
 
 export interface PostDetail {
   title: string;
+  summary: string;
   content: string;
   published: boolean;
-  summary: string;
   createdAt: Date;
   updatedAt: Date;
 }
