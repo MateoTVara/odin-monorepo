@@ -27,8 +27,10 @@ app.use(cookieParser());
 // Enable CORS
 app.use(cors({
   origin: [
-    'http://localhost:5173', // Dev user client origin
-    'http://localhost:5174'  // Dev admin client origin
+    // 'http://localhost:5173', // Dev user client origin
+    'https://odin-blogapi-adminclient.vercel.app', // Prod admin client origin
+    // 'http://localhost:5174'  // Dev admin client origin
+    'https://odin-blogapi-userclient.vercel.app' // Prod user client origin
   ],
   credentials: true
 }));
