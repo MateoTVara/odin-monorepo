@@ -1,29 +1,21 @@
 import { useParams } from "react-router"
-import type { LevelDetail } from "../types/Level";
-import { useEffect, useState } from "react";
+import type { LevelDetail as LevelType } from "../features/levels/levels.types";
+import levelsApi from "../features/levels/levels.api";
+import useAsync from "../hooks/useAsync";
 
 export default function Level() {
   let params = useParams<{ id: string }>();
-  const [level, setLevel] = useState<LevelDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLevel = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:3000/levels/${params.id}`);
-        const data = await response.json();
-        setLevel(data);
-      } catch (error) {
-        console.error("Error fetching level:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchLevel();
-  }, [params.id]);
+  const { data: level, loading, error } = useAsync<LevelType>(
+    () => levelsApi.getLevel(Number(params.id)),
+    [params.id]
+  );
 
   if (loading) return <p>Loading level...</p>;
+
+  if (error) {
+    console.error("Error loading level:", error);
+    return <p>Error loading level.</p>;
+  }
 
   if (!level) return <p>Level not found.</p>;
 

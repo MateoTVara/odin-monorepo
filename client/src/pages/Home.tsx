@@ -1,30 +1,19 @@
-import { useEffect, useState } from "react";
-import type { Level } from "../types/Level";
+import type { Level } from "../features/levels/levels.types";
 import { Link } from "react-router";
+import levelsApi from "../features/levels/levels.api";
+import useAsync from "../hooks/useAsync";
 
 export default function Home() {
-  const [levels, setLevels] = useState<Level[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: levels, loading, error } = useAsync<Level[]>(levelsApi.getLevels)
 
-  useEffect(() => {
-    const fetchLevels = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("http://localhost:3000/levels");
-        const data = await response.json();
-        setLevels(data);
-      } catch (error) {
-        console.error("Error fetching levels:", error);        
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchLevels();
-  }, []);
+  if (loading) return <p>Loading levels...</p>;
 
-  if (loading) {
-    return <p>Loading levels...</p>;
+  if (error) {
+    console.error("Error loading levels:", error);
+    return <p>Error loading levels.</p>;
   }
+
+  if (!levels || levels.length === 0) return <p>No levels found.</p>;
 
   return (
     <div className="container mx-auto p-4">

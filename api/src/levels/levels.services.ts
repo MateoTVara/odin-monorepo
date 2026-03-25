@@ -1,4 +1,5 @@
 import { prisma } from "../../lib/prisma";
+import { NotFoundError } from "../errors/errors";
 
 const levelService = Object.freeze({
   async readAll() {
@@ -30,7 +31,7 @@ const levelService = Object.freeze({
       },
     });
 
-    if (!level) throw new Error("Level not found");
+    if (!level) throw new NotFoundError(`Level with ID ${levelId} not found`);
 
     return level;
   }
