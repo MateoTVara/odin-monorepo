@@ -1,4 +1,4 @@
-import type { Character } from "./Character";
+import type { Character } from "../characters/characters.types";
 
 export interface Level {
   id: number;
