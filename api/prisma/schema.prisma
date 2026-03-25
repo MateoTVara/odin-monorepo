@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Character {
+  id Int @id @default(autoincrement())
+  name String
+  img_url String
+  levels LevelCharacter[]
+  runs RunCharacter[]
+
+  @@map("characters")
+}
+
+model Level {
+  id Int @id @default(autoincrement())
+  name String
+  img_url String
+  characters LevelCharacter[]
+  runs Run[]
+
+  @@map("levels")
+}
+
+model LevelCharacter {
+  level Level @relation(fields: [level_id], references: [id])
+  level_id Int
+
+  character Character @relation(fields: [character_id], references: [id])
+  character_id Int
+
+  x Int
+  y Int
+  width Int
+  height Int
+
+  @@map("level_characters")
+  @@id([level_id, character_id])
+}
+
+model Run {
+  id Int @id @default(autoincrement())
+  session_id String
+  name String
+  start_time DateTime @default(now())
+  finish_time DateTime?
+  level_id Int
+  level Level @relation(fields: [level_id], references: [id])
+  passed Boolean @default(false)
+
+  characters RunCharacter[]
+  @@map("runs")
+}
+
+model RunCharacter {
+  run Run @relation(fields: [run_id], references: [id])
+  run_id Int
+
+  character Character @relation(fields: [character_id], references: [id])
+  character_id Int
+
+  found Boolean @default(false)
+
+  @@map("run_characters")
+  @@id([run_id, character_id])
+}
