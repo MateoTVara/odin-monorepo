@@ -25,7 +25,7 @@ export default function Home() {
               to={`/levels/${level.id}`}
               className="border rounded-lg overflow-hidden shadow-lg"
             >
-              <img src={level.img_url} alt={level.name} className="w-full h-48 object-cover" />
+              <img src={level.imgUrl} alt={level.name} className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h2 className="text-xl font-semibold">{level.name}</h2>
               </div>

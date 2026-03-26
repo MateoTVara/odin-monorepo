@@ -1,9 +1,7 @@
 export interface Character {
-  character: {
-    id: number;
-    name: string;
-    img_url: string;
-  };
+  id: number;
+  name: string;
+  imgUrl: string;
   x: number;
   y: number;
   width: number;

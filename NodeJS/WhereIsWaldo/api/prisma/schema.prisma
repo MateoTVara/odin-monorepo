@@ -13,64 +13,72 @@ datasource db {
 }
 
 model Character {
-  id Int @id @default(autoincrement())
-  name String
-  img_url String
-  levels LevelCharacter[]
-  runs RunCharacter[]
+  id      Int              @id @default(autoincrement())
+  name    String
+  imgUrl String
+  levels  LevelCharacter[]
+  runs    RunCharacter[]
 
   @@map("characters")
 }
 
 model Level {
-  id Int @id @default(autoincrement())
-  name String
-  img_url String
+  id         Int              @id @default(autoincrement())
+  name       String
+  imgUrl    String
   characters LevelCharacter[]
-  runs Run[]
+  runs       Run[]
 
   @@map("levels")
 }
 
 model LevelCharacter {
-  level Level @relation(fields: [level_id], references: [id])
-  level_id Int
+  id Int @id @default(autoincrement())
 
-  character Character @relation(fields: [character_id], references: [id])
-  character_id Int
+  level    Level @relation(fields: [levelId], references: [id])
+  levelId Int
 
-  x Int
-  y Int
-  width Int
+  character    Character @relation(fields: [characterId], references: [id])
+  characterId Int
+
+  run_character RunCharacter[]
+
+  x      Int
+  y      Int
+  width  Int
   height Int
 
+  @@unique([levelId, characterId])
   @@map("level_characters")
-  @@id([level_id, character_id])
 }
 
 model Run {
-  id Int @id @default(autoincrement())
-  session_id String
-  name String
-  start_time DateTime @default(now())
-  finish_time DateTime?
-  level_id Int
-  level Level @relation(fields: [level_id], references: [id])
-  passed Boolean @default(false)
+  id          Int       @id @default(autoincrement())
+  sessionId  String
+  name        String
+  startTime  DateTime  @default(now())
+  finishTime DateTime?
+  levelId    Int
+  level       Level     @relation(fields: [levelId], references: [id])
+  passed      Boolean   @default(false)
 
   characters RunCharacter[]
+
+  @@index([sessionId])
   @@map("runs")
 }
 
 model RunCharacter {
-  run Run @relation(fields: [run_id], references: [id])
-  run_id Int
+  run    Run @relation(fields: [runId], references: [id])
+  runId Int
 
-  character Character @relation(fields: [character_id], references: [id])
-  character_id Int
+  levelCharacter    LevelCharacter @relation(fields: [levelCharacterId], references: [id])
+  levelCharacterId Int
 
-  found Boolean @default(false)
+  foundAt    DateTime   @default(now())
+  character   Character? @relation(fields: [characterId], references: [id])
+  characterId Int?
 
+  @@id([runId, levelCharacterId])
   @@map("run_characters")
-  @@id([run_id, character_id])
 }

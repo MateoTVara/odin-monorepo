@@ -1,9 +1,9 @@
-import type { Level } from "../../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client";
 
-const levels: Omit<Level, "id">[] = [
+const levels: Prisma.LevelCreateManyInput[] = [
   {
     name: "Beginner",
-    img_url: "https://whereiswaldo.com/assets/level1-scene.webp",
+    imgUrl: "https://whereiswaldo.com/assets/level1-scene.webp",
   }
 ];
 
