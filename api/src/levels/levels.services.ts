@@ -12,14 +12,14 @@ const levelService = Object.freeze({
       select: {
         id: true,
         name: true,
-        img_url: true,
+        imgUrl: true,
         characters: {
           select: {
             character: {
               select: {
                 id: true,
                 name: true,
-                img_url: true,
+                imgUrl: true,
               },
             },
             x: true,
@@ -33,7 +33,17 @@ const levelService = Object.freeze({
 
     if (!level) throw new NotFoundError(`Level with ID ${levelId} not found`);
 
-    return level;
+    return {
+      ...level,
+      characters: level.characters.map(c => ({
+        id: c.character.id,
+        name: c.character.name,
+        imgUrl: c.character.imgUrl,
+        x: c.x, y: c.y,
+        width: c.width,
+        height: c.height,
+      }))
+    }
   }
 });
 

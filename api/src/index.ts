@@ -2,10 +2,31 @@ import express from "express";
 import cors from "cors";
 import levelsRouter from "./levels/levels.router";
 import errorMiddleware from "./errors/errors.middleware";
+import cookieParser from "cookie-parser";
+import { randomUUID } from "node:crypto";
+import runsRouter from "./runs/runs.router";
 
 const app = express();
 
+app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  let sessionId = req.cookies.session_id;
+
+  if (!sessionId) {
+    sessionId = randomUUID();
+
+    res.cookie("session_id", sessionId, {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+  }
+
+  req.sessionId = sessionId;
+  next();
+});
 
 app.use(cors({
   origin: [
@@ -15,6 +36,7 @@ app.use(cors({
 }));
 
 app.use("/levels", levelsRouter);
+app.use("/runs", runsRouter);
 
 app.use(errorMiddleware);
 
