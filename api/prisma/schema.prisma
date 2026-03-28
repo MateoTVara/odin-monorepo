@@ -17,7 +17,6 @@ model Character {
   name    String
   imgUrl String
   levels  LevelCharacter[]
-  runs    RunCharacter[]
 
   @@map("characters")
 }
@@ -76,8 +75,6 @@ model RunCharacter {
   levelCharacterId Int
 
   foundAt    DateTime   @default(now())
-  character   Character? @relation(fields: [characterId], references: [id])
-  characterId Int?
 
   @@id([runId, levelCharacterId])
   @@map("run_characters")

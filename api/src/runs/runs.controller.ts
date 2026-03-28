@@ -3,7 +3,7 @@ import asyncHandler from "../utils/asyncHandler";
 import validateRequest from "../utils/validateRequest";
 import runsValidator from "./runs.validator";
 import { matchedData } from "express-validator/lib/matched-data";
-import { CreateRunDTO } from "./runs.types";
+import { CreateRunDTO, MarkCharacterFoundDTO, MarkCharacterFoundInput } from "./runs.types";
 import runsService from "./runs.services";
 
 const runsController = Object.freeze({
@@ -17,7 +17,17 @@ const runsController = Object.freeze({
       });
       res.status(201).json(run);
     })
-  ]
+  ],
+
+  postMarkCharacterFound: [
+    ...runsValidator.markCharacterFound,
+    validateRequest,
+    asyncHandler(async (req: Request, res: Response) => {
+      const data = matchedData<MarkCharacterFoundInput>(req);
+      const foundCharacter = await runsService.markCharacterFound(data);
+      res.status(201).json(foundCharacter);
+    })
+  ],
 });
 
 export default runsController;
