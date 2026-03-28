@@ -21,6 +21,7 @@ app.use((req, res, next) => {
     res.cookie("session_id", sessionId, {
       httpOnly: true,
       sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     });
   }
 
