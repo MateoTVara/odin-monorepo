@@ -1,15 +1,18 @@
-import type { Character } from "../features/characters/characters.types";
+import { parseISO } from "date-fns";
+import type { LevelCharacter } from "../features/characters/characters.types";
 import runsApi from "../features/runs/runs.api";
+import type { CreateRunResponse } from "../features/runs/runs.types";
+import formatDuration from "../utils/formatDuration";
 
 type Props = {
-  characters: (Character & { found: boolean })[];
+  characters: (LevelCharacter & { found: boolean, elapsedTime?: string })[];
   position: { x: number; y: number } | null;
   visible: boolean;
   setVisible: (v: boolean) => void;
   // simulate character found logic, in real app this would be handled differently
-  setCharacters: React.Dispatch<React.SetStateAction<(Character & { found: boolean })[]>>;
+  setCharacters: React.Dispatch<React.SetStateAction<(LevelCharacter & { found: boolean, elapsedTime?: string })[]>>;
 
-  runId: number
+  run: CreateRunResponse
 };
 
 export default function CharactersSelector({
@@ -18,19 +21,25 @@ export default function CharactersSelector({
   visible,
   setVisible,
   setCharacters,
-  runId
+  run
 }: Props) {
   if (!visible || !position) return null;
 
-  const handleClick = async (character: Character) => {
+  const handleClick = async (character: LevelCharacter) => {
     setVisible(false);
     const response = await runsApi.markCharacterFound(position, {
-      runId, characterId: character.id
+      runId: run.id, characterId: character.id
     });
     setCharacters(prev =>
       prev.map(c => {
         if (c.id !== character.id) return c;
-        if (response) return { ...c, found: true }
+        if (response) { 
+          const start = parseISO(run.startTime);
+          const foundTime = parseISO(response.foundAt);
+          const diff = foundTime.getTime() - start.getTime();
+          const elapsedTime = formatDuration(diff);
+          return {...c, found: true, elapsedTime}
+        }
         return c;
       })
     )
@@ -44,19 +53,21 @@ export default function CharactersSelector({
         top: position.y
       }}
     >
-      {characters.map((character) => (
-        <button
-          key={character.id}
-          className="flex items-center gap-2 hover:bg-gray-200 rounded-md p-2"
-          onClick={() => handleClick(character)}
-        >
-          <img
-            src={character.imgUrl}
-            alt={character.name}
-            className="w-8 h-8 object-contain"
-          />
-          <p>{character.name}</p>
-        </button>
+      {characters
+        .filter(c => !c.found)
+        .map((character) => (
+          <button
+            key={character.id}
+            className="flex items-center gap-2 hover:bg-gray-200 rounded-md p-2"
+            onClick={() => handleClick(character)}
+          >
+            <img
+              src={character.imgUrl}
+              alt={character.name}
+              className="w-8 h-8 object-contain"
+            />
+            <p>{character.name}</p>
+          </button>
       ))}
     </div>
   );

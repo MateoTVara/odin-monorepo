@@ -59,7 +59,6 @@ model Run {
   finishTime DateTime?
   levelId    Int
   level       Level     @relation(fields: [levelId], references: [id])
-  passed      Boolean   @default(false)
 
   characters RunCharacter[]
 

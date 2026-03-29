@@ -1,3 +1,5 @@
+import type { RunCharacter } from "../characters/characters.types";
+
 export interface CreateRunRequest {
   name: string;
   levelId: number;
@@ -8,9 +10,9 @@ export interface CreateRunResponse {
   name: string;
   levelId: number;
   sessionId: string;
-  passed: boolean;
   startTime: string;
   finishTime: string | null;
+  characters: RunCharacter[]
 }
 
 export interface MarkCharacterFoundInput {

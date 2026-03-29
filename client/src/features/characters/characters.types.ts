@@ -1,4 +1,4 @@
-export interface Character {
+export interface LevelCharacter {
   id: number;
   name: string;
   imgUrl: string;
@@ -6,4 +6,9 @@ export interface Character {
   y: number;
   width: number;
   height: number;
+}
+
+export interface RunCharacter {
+  characterId: number;
+  foundAt: string;
 }
