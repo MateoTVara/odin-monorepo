@@ -4,17 +4,43 @@ import { CreateRunInput, MarkCharacterFoundInput } from "./runs.types";
 
 const runsService = Object.freeze({
   async create(data: CreateRunInput) {
-    const existingRun = await prisma.run.findFirst({
+    const runSelect = {
+      id: true,
+      name: true,
+      levelId: true,
+      sessionId: true,
+      startTime: true,
+      finishTime: true,
+      characters: {
+        select: {
+          foundAt: true,
+          levelCharacter: {
+            select: {
+              characterId: true,
+            }
+          }
+        }
+      },
+    }
+
+    let run = await prisma.run.findFirst({
       where: {
         sessionId: data.sessionId,
         levelId: data.levelId,
-        passed: false
-      }
+        finishTime: null,
+      },
+      select: runSelect,
     });
 
-    if (existingRun) return existingRun;
+    if (!run) run = await prisma.run.create({data, select: runSelect });
 
-    return await prisma.run.create({ data });
+    return {
+      ...run,
+      characters: run.characters.map(c => ({
+        foundAt: c.foundAt,
+        characterId: c.levelCharacter.characterId,
+      }))
+    };
   },
 
   async markCharacterFound(data: MarkCharacterFoundInput) {
@@ -59,10 +85,7 @@ const runsService = Object.freeze({
     if (totalCharacters === foundCharacters) {
       await prisma.run.update({
         where: { id: data.runId },
-        data: {
-          passed: true,
-          finishTime: new Date(),
-        },
+        data: { finishTime: new Date() },
       });
     }
 

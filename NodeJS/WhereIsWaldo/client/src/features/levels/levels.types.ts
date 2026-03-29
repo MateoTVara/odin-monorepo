@@ -1,4 +1,4 @@
-import type { Character } from "../characters/characters.types";
+import type { LevelCharacter } from "../characters/characters.types";
 
 export interface Level {
   id: number;
@@ -7,5 +7,5 @@ export interface Level {
 }
 
 export interface LevelDetail extends Level {
-  characters: Character[];
+  characters: LevelCharacter[];
 }
