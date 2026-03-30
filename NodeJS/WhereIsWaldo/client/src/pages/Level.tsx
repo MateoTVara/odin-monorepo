@@ -4,13 +4,14 @@ import levelsApi from "../features/levels/levels.api";
 import useAsync from "../hooks/useAsync";
 import usePlayerName from "../hooks/usePlayerName";
 import NamePrompt from "../components/NamePromp";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import runsApi from "../features/runs/runs.api";
 import CharactersSelector from "../components/CharactersSelector";
 import type { LevelCharacter } from "../features/characters/characters.types";
 import type { CreateRunResponse } from "../features/runs/runs.types";
 import formatDuration from "../utils/formatDuration";
 import { parseISO } from "date-fns";
+import Leaderboard from "../components/Leaderboard";
 
 export default function Level() {
   let params = useParams<{ id: string }>();
@@ -30,6 +31,8 @@ export default function Level() {
   })[]>([]);
 
   const [levelComplete, setLevelComplete] = useState(false);
+
+  const imageRef = useRef<HTMLImageElement>(null!);
 
   useEffect(() => {
     if (!hasName || !levelData?.id || runData) return;
@@ -138,24 +141,30 @@ export default function Level() {
       </div>
 
       <div className="w-full overflow-x-auto no-scrollbar mb-4">
-        <div className="flex justify-center min-w-max relative">
-          <img
-            src={levelData.imgUrl}
-            alt={levelData.name}
-            onClick={handleImageClick}
-            className="min-h-[70vh] max-w-none shrink-0"
-          />
-          
-          <CharactersSelector
-            characters={characters}
-            position={clickPosition}
-            visible={visibleSelector}
-            setVisible={setVisibleSelector}
-            setCharacters={setCharacters}
-            run={runData}
-          />
+        <div className="flex justify-center">
+          <div className="relative inline-block">
+            <img
+              ref={imageRef}
+              src={levelData.imgUrl}
+              alt={levelData.name}
+              onClick={handleImageClick}
+              className="min-h-[70vh] max-w-none shrink-0"
+            />
+
+            <CharactersSelector
+              characters={characters}
+              position={clickPosition}
+              visible={visibleSelector}
+              setVisible={setVisibleSelector}
+              setCharacters={setCharacters}
+              run={runData}
+              imageRef={imageRef}
+            />
+          </div>
         </div>
       </div>
+
+      <Leaderboard runs={levelData.runs}/>
 
       {!hasName && <NamePrompt saveName={saveName} />}
 

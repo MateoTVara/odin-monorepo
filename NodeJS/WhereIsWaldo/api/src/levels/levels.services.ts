@@ -26,10 +26,32 @@ const levelService = Object.freeze({
             y: true,
             width: true,
             height: true,
-          }
-        }
+          },
+        },
+        runs: {
+          where: {
+            finishTime: { not: null },
+          },
+          select: {
+            name: true,
+            startTime: true,
+            finishTime: true,
+          },
+        },
       },
     });
+
+    if (level?.runs) {
+      // compute duration and sort
+      level.runs.sort((a, b) => {
+        const durA = a.finishTime!.getTime() - a.startTime.getTime();
+        const durB = b.finishTime!.getTime() - b.startTime.getTime();
+        return durA - durB; // fastest first
+      });
+
+      // take top 10
+      level.runs = level.runs.slice(0, 10);
+    }
 
     if (!level) throw new NotFoundError(`Level with ID ${levelId} not found`);
 
@@ -42,7 +64,7 @@ const levelService = Object.freeze({
         x: c.x, y: c.y,
         width: c.width,
         height: c.height,
-      }))
+      })),
     }
   }
 });
