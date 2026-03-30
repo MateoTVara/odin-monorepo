@@ -8,4 +8,9 @@ export interface Level {
 
 export interface LevelDetail extends Level {
   characters: LevelCharacter[];
+  runs: {
+    name: string;
+    startTime: string;
+    finishTime: string;
+  }[];
 }
