@@ -140,15 +140,15 @@ export default function Level() {
         ))}
       </div>
 
-      <div className="w-full overflow-x-auto no-scrollbar mb-4">
-        <div className="flex justify-center">
-          <div className="relative inline-block">
+      <div className="w-full overflow-x-auto mb-4">
+        <div className="flex justify-center min-w-max">
+          <div className="relative">
             <img
               ref={imageRef}
               src={levelData.imgUrl}
               alt={levelData.name}
               onClick={handleImageClick}
-              className="min-h-[70vh] max-w-none shrink-0"
+              className="min-h-[70vh] max-w-none cursor-crosshair"
             />
 
             <CharactersSelector

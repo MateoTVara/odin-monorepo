@@ -12,6 +12,10 @@ const characters: Prisma.CharacterCreateManyInput[] = [
   {
     name: "Wizard",
     imgUrl: "https://whereiswaldo.com/assets/icons/wizard.png",
+  },
+  {
+    name: "Wenda",
+    imgUrl: "https://whereiswaldo.com/assets/icons/wenda.png",
   }
 ];
 
