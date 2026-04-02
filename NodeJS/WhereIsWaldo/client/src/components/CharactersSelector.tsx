@@ -15,6 +15,7 @@ type Props = {
   >;
   run: CreateRunResponse;
   imageRef: React.RefObject<HTMLImageElement> | null;
+  onCharacterFound: (x: number, y: number) => void;
 };
 
 export default function CharactersSelector({
@@ -24,7 +25,8 @@ export default function CharactersSelector({
   setVisible,
   setCharacters,
   run,
-  imageRef
+  imageRef,
+  onCharacterFound
 }: Props) {
 
   const [selectorPosition, setSelectorPosition] = useState({ x: 0, y: 0 });
@@ -63,6 +65,8 @@ export default function CharactersSelector({
       runId: run.id,
       characterId: character.id
     });
+
+    if (response) onCharacterFound(position.x, position.y);
 
     setCharacters(prev =>
       prev.map(c => {
