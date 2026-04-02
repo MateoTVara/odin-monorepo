@@ -12,6 +12,8 @@ import type { CreateRunResponse } from "../features/runs/runs.types";
 import formatDuration from "../utils/formatDuration";
 import { parseISO } from "date-fns";
 import Leaderboard from "../components/Leaderboard";
+import MagnifierCursor from "../components/MagnifierCursor";
+import useMagnifier from "../hooks/useMagnifier";
 
 export default function Level() {
   let params = useParams<{ id: string }>();
@@ -33,6 +35,15 @@ export default function Level() {
   const [levelComplete, setLevelComplete] = useState(false);
 
   const imageRef = useRef<HTMLImageElement>(null!);
+  const {
+    hoverPosition,
+    handleImageMouseMove,
+    handleImageMouseLeave,
+    enabled: magnifierEnabled,
+    toggleMagnifier,
+    MAGNIFIER_SIZE,
+    MAGNIFIER_ZOOM
+  } = useMagnifier();
 
   useEffect(() => {
     if (!hasName || !levelData?.id || runData) return;
@@ -138,6 +149,17 @@ export default function Level() {
             </div>
           </div>
         ))}
+        <div className="hidden lg:flex lg:flex-col lg:items-center lg:justify-center lg:gap-1">
+          <label
+            htmlFor="magnifier"
+            className={`flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition 
+              ${magnifierEnabled
+                ? "bg-blue-300 text-white shadow-md scale-105"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"}
+            `}
+          >🔍</label>
+          <input id="magnifier" type="checkbox" checked={magnifierEnabled} onChange={toggleMagnifier} hidden/>
+        </div>
       </div>
 
       <div className="w-full overflow-x-auto mb-4">
@@ -148,8 +170,24 @@ export default function Level() {
               src={levelData.imgUrl}
               alt={levelData.name}
               onClick={handleImageClick}
-              className="min-h-[70vh] max-w-none cursor-crosshair"
+              onMouseMove={handleImageMouseMove}
+              onMouseLeave={handleImageMouseLeave}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                toggleMagnifier();
+              }}
+              className={`min-h-[70vh] max-w-none ${magnifierEnabled ? "cursor-none" : "cursor-default"}`}
             />
+
+            {(magnifierEnabled && hoverPosition) && (
+              <MagnifierCursor 
+                size={MAGNIFIER_SIZE}
+                zoom={MAGNIFIER_ZOOM}
+                hoverPosition={hoverPosition}
+                imageUrl={levelData.imgUrl}
+                imageRef={imageRef}
+              />
+            )}
 
             <CharactersSelector
               characters={characters}

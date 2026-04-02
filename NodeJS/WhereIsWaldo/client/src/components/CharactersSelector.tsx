@@ -85,7 +85,7 @@ export default function CharactersSelector({
   return (
     <div
       ref={ref}
-      className="flex flex-col gap-1 absolute bg-white p-2 rounded-lg shadow-lg"
+      className="flex flex-col gap-1 absolute bg-white p-2 rounded-lg"
       style={{
         left: selectorPosition.x,
         top: selectorPosition.y,
