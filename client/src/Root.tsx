@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 export default function Root() {
   return (
-    <div className="bg-zinc-50">
+    <div className="bg-neutral-100 min-h-screen">
       <Header />
       <Outlet />
       <Footer />

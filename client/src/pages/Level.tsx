@@ -14,6 +14,8 @@ import { parseISO } from "date-fns";
 import Leaderboard from "../components/Leaderboard";
 import MagnifierCursor from "../components/MagnifierCursor";
 import useMagnifier from "../hooks/useMagnifier";
+import PageLoading from "../components/PageLoading";
+import PageError from "../components/PageError";
 
 export default function Level() {
   let params = useParams<{ id: string }>();
@@ -44,6 +46,20 @@ export default function Level() {
     MAGNIFIER_SIZE,
     MAGNIFIER_ZOOM
   } = useMagnifier();
+
+  const [foundAnimations, setFoundAnimations] = useState<
+    { id: number; x: number; y: number }[]
+  >([]);
+
+  const triggerFoundAnimation = (x: number, y: number) => {
+    const id = Date.now();
+
+    setFoundAnimations(prev => [...prev, { id, x, y }]);
+
+    setTimeout(() => {
+      setFoundAnimations(prev => prev.filter(a => a.id !== id));
+    }, 700);
+  };
 
   useEffect(() => {
     if (!hasName || !levelData?.id || runData) return;
@@ -106,26 +122,29 @@ export default function Level() {
     setVisibleSelector(true);
   };
 
-  if (levelLoading) return <p>Loading level...</p>;
+  if (levelLoading || runLoading) return <PageLoading />;
 
   if (levelError) {
     console.error("Error loading level:", levelError);
-    return <p>Error loading level.</p>;
+    return <PageError message="Failed to load level. Please try again later." />;
   }
 
-  if (!levelData) return <p>Level not found.</p>;
-
-  if (runLoading) return <p>Starting run...</p>;
+  if (!levelData) return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h2 className="text-2xl font-bold text-center mb-4">Level not found</h2>
+      <p className="text-lg text-center">The level you are looking for does not exist.</p>
+    </div>
+  );
 
   if (runError) {
     console.error("Error starting run:", runError);
-    return <p>Error starting run.</p>;
+    return <PageError message="Failed to start run. Please try again later." />;
   }
 
-  if (!runData) return <p>Run not found.</p>;
+  if (!runData) return <PageError message="Run not found." />;
 
   return (
-    <div className="container flex flex-col items-center mx-auto">
+    <div className="container flex flex-col items-center mx-auto px-2">
       <div className="flex gap-4 my-6">
         {characters.map((character) => (
           <div key={character.id} className="overflow-hidden relative">
@@ -164,7 +183,7 @@ export default function Level() {
 
       <div className="w-full overflow-x-auto mb-4">
         <div className="flex justify-center min-w-max">
-          <div className="relative">
+          <div className="relative border">
             <img
               ref={imageRef}
               src={levelData.imgUrl}
@@ -176,8 +195,22 @@ export default function Level() {
                 e.preventDefault();
                 toggleMagnifier();
               }}
-              className={`min-h-[70vh] max-w-none ${magnifierEnabled ? "cursor-none" : "cursor-default"}`}
+              className={`min-h-[70vh] max-w-none ${magnifierEnabled ? "cursor-none" : "cursor-crosshair"}`}
             />
+
+            {foundAnimations.map(anim => (
+              <div
+                key={anim.id}
+                className="absolute pointer-events-none"
+                style={{
+                  left: anim.x,
+                  top: anim.y,
+                  transform: "translate(-50%, -50%)"
+                }}
+              >
+                <div className="w-16 h-16 rounded-full border-4 border-green-400 animate-ping"></div>
+              </div>
+            ))}
 
             {(magnifierEnabled && hoverPosition) && (
               <MagnifierCursor 
@@ -197,12 +230,13 @@ export default function Level() {
               setCharacters={setCharacters}
               run={runData}
               imageRef={imageRef}
+              onCharacterFound={triggerFoundAnimation}
             />
           </div>
         </div>
       </div>
 
-      <Leaderboard runs={levelData.runs}/>
+      <Leaderboard levelName={levelData.name} runs={levelData.runs}/>
 
       {!hasName && <NamePrompt saveName={saveName} />}
 

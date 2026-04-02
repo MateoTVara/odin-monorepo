@@ -50,7 +50,7 @@ export default function Home() {
             "
           >
             <img src={level.imgUrl} alt={level.name} className="w-full h-48 object-cover" />
-            <div className="p-3">
+            <div className="p-3 bg-zinc-50">
               <h2 className="text-lg lg:text-xl font-semibold w-fit mx-auto">{level.name}</h2>
             </div>
           </Link>
