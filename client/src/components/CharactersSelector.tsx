@@ -61,10 +61,23 @@ export default function CharactersSelector({
 
     setVisible(false);
 
-    const response = await runsApi.markCharacterFound(position, {
-      runId: run.id,
-      characterId: character.id
-    });
+    let response = null;
+    try {
+      response = await runsApi.markCharacterFound(position, {
+        runId: run.id,
+        characterId: character.id
+      });
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "status" in err &&
+        (err as { status: number }).status === 404
+      ) return; // wrong guess
+
+      console.error(err);
+      return;
+    }
 
     if (response) onCharacterFound(position.x, position.y);
 
