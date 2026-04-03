@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { Link, useParams } from "react-router"
 import type { LevelDetail as LevelType } from "../features/levels/levels.types";
 import levelsApi from "../features/levels/levels.api";
 import useAsync from "../hooks/useAsync";
@@ -61,6 +61,7 @@ export default function Level() {
     }, 700);
   };
 
+  // Start run when playerName and levelData are available
   useEffect(() => {
     if (!hasName || !levelData?.id || runData) return;
 
@@ -101,6 +102,7 @@ export default function Level() {
     startRun();
   }, [playerName, levelData?.id, hasName]);
   
+  // Check for level completion whenever characters state changes
   useEffect(() => {
     if (characters.length === 0) return;
 
@@ -111,13 +113,23 @@ export default function Level() {
     }
   }, [characters]);
 
+  // Reset state when level changes
+  useEffect(() => {
+    setRunData(null);
+    setCharacters([]);
+    setLevelComplete(false);
+    setClickPosition(null);
+    setVisibleSelector(false);
+    setFoundAnimations([]);
+  }, [params.id]);
+
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const clickPosition = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top
     };
-    console.log("Click coordinates:", clickPosition);
+    // console.log("Click coordinates:", clickPosition);
     setClickPosition(clickPosition);
     setVisibleSelector(true);
   };
@@ -140,8 +152,10 @@ export default function Level() {
     console.error("Error starting run:", runError);
     return <PageError message="Failed to start run. Please try again later." />;
   }
-
-  if (!runData) return <PageError message="Run not found." />;
+  
+  if (hasName && !runData && !runLoading) {
+    return <PageError message="Run not found." />;
+  }
 
   return (
     <div className="container flex flex-col items-center mx-auto px-2">
@@ -222,16 +236,18 @@ export default function Level() {
               />
             )}
 
-            <CharactersSelector
-              characters={characters}
-              position={clickPosition}
-              visible={visibleSelector}
-              setVisible={setVisibleSelector}
-              setCharacters={setCharacters}
-              run={runData}
-              imageRef={imageRef}
-              onCharacterFound={triggerFoundAnimation}
-            />
+            {runData && (
+              <CharactersSelector
+                characters={characters}
+                position={clickPosition}
+                visible={visibleSelector}
+                setVisible={setVisibleSelector}
+                setCharacters={setCharacters}
+                run={runData}
+                imageRef={imageRef}
+                onCharacterFound={triggerFoundAnimation}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -255,6 +271,22 @@ export default function Level() {
               }
             </p>
 
+            {/* Action buttons */}
+            <div className="mt-6 flex gap-4 justify-center">
+              <Link to={"/"}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              >
+                Home
+              </Link>
+              <Link to={`/levels/${Number(params.id) + 1}`}
+              // reloadDocument={true}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+              >
+                Next Level
+              </Link>
+            </div>
+
+            {/* Close button */}
             <button
               onClick={() => setLevelComplete(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

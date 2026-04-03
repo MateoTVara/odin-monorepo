@@ -29,10 +29,14 @@ app.use((req, res, next) => {
   next();
 });
 
+const corsOrigin = process.env.NODE_ENV === "production"
+  ? process.env.CORS_ORIGIN
+  : "http://localhost:5173";
+
+if (!corsOrigin) throw new Error("CORS_ORIGIN is not defined");
+
 app.use(cors({
-  origin: [
-    "http://localhost:5173"
-  ],
+  origin: [corsOrigin],
   credentials: true,
 }));
 
@@ -41,10 +45,10 @@ app.use("/runs", runsRouter);
 
 app.use(errorMiddleware);
 
-app.listen(3000, (err) => {
+app.listen(process.env.PORT || 3000, (err) => {
   if (err) {
     console.error("Failed to start server:", err);
     process.exit(1);
   }
-  console.log("Server is running on port 3000");
+  console.log("Server is running on port " + (process.env.PORT || 3000));
 });

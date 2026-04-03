@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import validateRequest from "../utils/validateRequest";
 import runsValidator from "./runs.validator";
-import { matchedData } from "express-validator/lib/matched-data";
+import { matchedData } from "express-validator";
 import { CreateRunDTO, MarkCharacterFoundInput } from "./runs.types";
 import runsService from "./runs.services";
 

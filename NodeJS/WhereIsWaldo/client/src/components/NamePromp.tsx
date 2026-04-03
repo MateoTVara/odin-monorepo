@@ -11,24 +11,29 @@ export default function NamePrompt({saveName}: Props) {
   };
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="p-4 flex flex-col gap-4 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-90 rounded shadow-lg z-10"
-    >
-      <label htmlFor="name" className="text-lg font-semibold">Enter your name:</label>
-      <input
-        id="name"
-        name="name"
-        type="text"
-        className="border rounded p-2"
-        required
-      />
-      <button
-        type="submit"
-        className="bg-blue-500 text-white rounded px-4 py-2"
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-10">
+      <form
+        onSubmit={onSubmit}
+        className="
+          px-6 py-5 flex flex-col items-center gap-4 bg-white rounded
+          shadow-[0_8px_0px_black] hover:shadow-[0_10px_0px_black] transition"
       >
-        Save
-      </button>
-    </form>
+        <label htmlFor="name" className="text-lg font-semibold">Enter your username!</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Your username"
+          className="border border-zinc-500 rounded p-2"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white rounded w-fit px-4 py-2"
+        >
+          Save & Start
+        </button>
+      </form>
+    </div>
   )
 }
